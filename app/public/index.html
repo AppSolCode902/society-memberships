@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Membership Registry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#f3ede1; --surface:#fffdf8; --ink:#211c15; --muted:#71685b;
+    --line:#e4dccc; --green:#1f4d3f; --green-deep:#143229; --ochre:#a9742b;
+    --danger:#9c3b2e; --radius:14px;
+    --shadow:0 1px 2px rgba(20,40,30,.04), 0 12px 30px rgba(20,40,30,.06);
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; background:var(--bg);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(31,77,63,.04), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(169,116,43,.05), transparent 45%);
+    color:var(--ink); font-family:'Hanken Grotesk',sans-serif;
+    font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  .wrap { max-width:1040px; margin:0 auto; padding:48px 28px 80px; }
+  header.masthead {
+    border-bottom:2px solid var(--green); padding-bottom:20px; margin-bottom:36px;
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:20px; flex-wrap:wrap; animation:rise .6s ease both;
+  }
+  .masthead h1 {
+    font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,5vw,44px);
+    line-height:1.02; margin:0; color:var(--green-deep); letter-spacing:-.01em;
+  }
+  .masthead .eyebrow {
+    font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ochre); font-weight:600; margin:0 0 8px;
+  }
+  .count { font-family:'Fraunces',serif; font-size:15px; color:var(--muted); text-align:right; }
+  .count strong { color:var(--green-deep); font-size:26px; display:block; }
+  .card {
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:26px; margin-bottom:36px; animation:rise .6s ease .08s both;
+  }
+  .card h2 { font-family:'Fraunces',serif; font-weight:600; font-size:20px; margin:0 0 4px; color:var(--green-deep); }
+  .card .sub { color:var(--muted); font-size:13px; margin:0 0 22px; }
+  form .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px 20px; }
+  @media (max-width:640px){ form .grid { grid-template-columns:1fr; } }
+  .field { display:flex; flex-direction:column; gap:6px; }
+  .field.wide { grid-column:1 / -1; }
+  label { font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
+  input, select, textarea {
+    font-family:inherit; font-size:15px; color:var(--ink); background:#fbf8f1;
+    border:1px solid var(--line); border-radius:9px; padding:10px 12px;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline:none; border-color:var(--green); background:#fff;
+    box-shadow:0 0 0 3px rgba(31,77,63,.12);
+  }
+  textarea { resize:vertical; min-height:56px; }
+  .actions { margin-top:22px; display:flex; align-items:center; gap:14px; }
+  button.primary {
+    font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green);
+    border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s;
+  }
+  button.primary:hover { background:var(--green-deep); }
+  button.primary:active { transform:translateY(1px); }
+  .msg { font-size:14px; }
+  .msg.ok { color:var(--green); }
+  .msg.err { color:var(--danger); }
+  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; animation:rise .6s ease .16s both; }
+  .table-head { padding:22px 26px 0; }
+  .table-head h2 { font-family:'Fraunces',serif; font-weight:600; font-size:20px; margin:0; color:var(--green-deep); }
+  table { width:100%; border-collapse:collapse; margin-top:14px; }
+  thead th {
+    text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line);
+  }
+  tbody td { padding:14px 26px; border-bottom:1px solid #f0eade; vertical-align:middle; }
+  tbody tr { animation:fadein .4s ease both; }
+  tbody tr:hover { background:#faf6ec; }
+  tbody tr:last-child td { border-bottom:none; }
+  .name { font-weight:600; color:var(--green-deep); }
+  .pill {
+    display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px;
+    background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15);
+  }
+  .badge-payer {
+    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
+    color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px;
+  }
+  .muted { color:var(--muted); }
+  .empty { padding:40px 26px; text-align:center; color:var(--muted); }
+  @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+  @keyframes fadein { from { opacity:0; } to { opacity:1; } }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="masthead">
+      <div>
+        <p class="eyebrow">Membership Registry</p>
+        <h1>Halifax Charitable Irish Society</h1>
+      </div>
+      <div class="count"><strong id="memberCount">—</strong>members on the roll</div>
+    </header>
+
+    <section class="card">
+      <h2>Add a member</h2>
+      <p class="sub">Creates the person as the payer of a new membership. (Attaching a spouse or family member to an existing membership comes with the edit tools.)</p>
+      <form id="addForm">
+        <div class="grid">
+          <div class="field"><label>First name *</label><input name="first_name" required></div>
+          <div class="field"><label>Last name *</label><input name="last_name" required></div>
+          <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
+          <div class="field"><label>Membership type</label><select name="membership_type" id="typeSelect"></select></div>
+          <div class="field"><label>Email</label><input name="email" type="email"></div>
+          <div class="field"><label>Phone</label><input name="phone"></div>
+          <div class="field wide"><label>Street address</label><input name="street_address"></div>
+          <div class="field"><label>City</label><input name="city"></div>
+          <div class="field"><label>Province</label><input name="province"></div>
+          <div class="field"><label>Postal code</label><input name="postal_code"></div>
+          <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
+          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">Add member</button>
+          <span id="formMsg" class="msg"></span>
+        </div>
+      </form>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head"><h2>Members</h2></div>
+      <table>
+        <thead><tr><th>Name</th><th>Type</th><th>Location</th><th>Email</th></tr></thead>
+        <tbody id="memberRows"><tr><td colspan="4" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </section>
+  </div>
+
+<script>
+const api = (path, opts) => fetch(path, opts).then(async r => {
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || ('Request failed: ' + r.status));
+  return data;
+});
+const esc = (s) => (s == null ? '' : String(s).replace(/[&<>"]/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
+
+async function loadTypes() {
+  const types = await api('/api/membership-types');
+  const sel = document.getElementById('typeSelect');
+  const ordered = types.filter(t => t.type !== 'Exempt').concat(types.filter(t => t.type === 'Exempt'));
+  sel.innerHTML = ordered.map(t =>
+    `<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
+  sel.value = 'Individual';
+}
+
+async function loadMembers() {
+  const tbody = document.getElementById('memberRows');
+  try {
+    const members = await api('/api/members');
+    document.getElementById('memberCount').textContent = members.length;
+    if (!members.length) {
+      tbody.innerHTML = '<tr><td colspan="4" class="empty">No members yet — add your first above.</td></tr>';
+      return;
+    }
+    tbody.innerHTML = members.map((m, i) => `
+      <tr style="animation-delay:${i*30}ms">
+        <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
+        <td><span class="pill">${esc(m.membership_type || '—')}</span></td>
+        <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
+        <td class="muted">${esc(m.email) || '—'}</td>
+      </tr>`).join('');
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="4" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
+  }
+}
+
+document.getElementById('addForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const msg = document.getElementById('formMsg');
+  msg.textContent = ''; msg.className = 'msg';
+  const form = ev.target, body = {};
+  new FormData(form).forEach((v, k) => { if (v !== '') body[k] = v; });
+  try {
+    await api('/api/members', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    msg.textContent = 'Added ✓'; msg.className = 'msg ok';
+    form.reset(); document.getElementById('typeSelect').value = 'Individual';
+    loadMembers();
+    setTimeout(() => { msg.textContent = ''; }, 2500);
+  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+});
+
+loadTypes();
+loadMembers();
+</script>
+</body>
+</html>

@@ -20,7 +20,10 @@
 			"database_name": "membership-db",
 			"database_id": "6d8c4441-8ac7-45ed-8dd4-6fe19d1df149"
 		}
-	]
+	],
+	"assets": {
+		"directory": "./public"
+	}
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
