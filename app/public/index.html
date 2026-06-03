@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Membership Registry</title>
+<title>Halifax Charitable Irish Society</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -39,11 +39,9 @@
   }
   .count { font-family:'Fraunces',serif; font-size:15px; color:var(--muted); text-align:right; }
   .count strong { color:var(--green-deep); font-size:26px; display:block; }
-  .card {
-    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
-    box-shadow:var(--shadow); padding:26px; margin-bottom:36px; animation:rise .6s ease .08s both;
-  }
-  .card h2 { font-family:'Fraunces',serif; font-weight:600; font-size:20px; margin:0 0 4px; color:var(--green-deep); }
+  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px; margin-bottom:36px; animation:rise .6s ease .08s both; }
+  .card h2, .table-head h2, .dialog h2 { font-family:'Fraunces',serif; font-weight:600; color:var(--green-deep); }
+  .card h2 { font-size:20px; margin:0 0 4px; }
   .card .sub { color:var(--muted); font-size:13px; margin:0 0 22px; }
   form .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px 20px; }
   @media (max-width:640px){ form .grid { grid-template-columns:1fr; } }
@@ -55,44 +53,47 @@
     border:1px solid var(--line); border-radius:9px; padding:10px 12px;
     transition:border-color .15s, box-shadow .15s, background .15s;
   }
-  input:focus, select:focus, textarea:focus {
-    outline:none; border-color:var(--green); background:#fff;
-    box-shadow:0 0 0 3px rgba(31,77,63,.12);
-  }
+  input:focus, select:focus, textarea:focus { outline:none; border-color:var(--green); background:#fff; box-shadow:0 0 0 3px rgba(31,77,63,.12); }
   textarea { resize:vertical; min-height:56px; }
+  .checkbox-field { flex-direction:row; align-items:center; gap:10px; }
+  .checkbox-field input { width:auto; }
+  .checkbox-field label { text-transform:none; letter-spacing:0; font-size:14px; color:var(--ink); }
   .actions { margin-top:22px; display:flex; align-items:center; gap:14px; }
-  button.primary {
-    font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green);
-    border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s;
-  }
+  button.primary { font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green); border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s; }
   button.primary:hover { background:var(--green-deep); }
   button.primary:active { transform:translateY(1px); }
+  .btn-ghost, .btn-danger { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
+  .btn-ghost { color:var(--green); }
+  .btn-ghost:hover { background:#f1ede3; border-color:var(--green); }
+  .btn-danger { color:var(--danger); margin-left:6px; }
+  .btn-danger:hover { background:#fbeeec; border-color:var(--danger); }
   .msg { font-size:14px; }
   .msg.ok { color:var(--green); }
   .msg.err { color:var(--danger); }
-  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; animation:rise .6s ease .16s both; }
-  .table-head { padding:22px 26px 0; }
-  .table-head h2 { font-family:'Fraunces',serif; font-weight:600; font-size:20px; margin:0; color:var(--green-deep); }
+  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:36px; animation:rise .6s ease .16s both; }
+  .table-head { padding:22px 26px 0; display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+  .table-head h2 { font-size:20px; margin:0; }
+  .table-head .total { font-size:14px; color:var(--muted); }
+  .table-head .total strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
   table { width:100%; border-collapse:collapse; margin-top:14px; }
-  thead th {
-    text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
-    color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line);
-  }
+  thead th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line); }
   tbody td { padding:14px 26px; border-bottom:1px solid #f0eade; vertical-align:middle; }
   tbody tr { animation:fadein .4s ease both; }
   tbody tr:hover { background:#faf6ec; }
   tbody tr:last-child td { border-bottom:none; }
   .name { font-weight:600; color:var(--green-deep); }
-  .pill {
-    display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px;
-    background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15);
-  }
-  .badge-payer {
-    display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase;
-    color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px;
-  }
+  .pill { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15); }
+  .badge-payer { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px; }
+  .amount { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; }
   .muted { color:var(--muted); }
   .empty { padding:40px 26px; text-align:center; color:var(--muted); }
+  .row-actions { white-space:nowrap; text-align:right; }
+  .modal { position:fixed; inset:0; background:rgba(20,30,25,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50; }
+  .modal.open { display:flex; animation:fadein .2s ease; }
+  .dialog { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 20px 60px rgba(20,40,30,.25); width:100%; max-width:640px; padding:28px; animation:rise .25s ease; }
+  .dialog h2 { font-size:22px; margin:0 0 20px; }
+  .dialog .actions { justify-content:flex-end; }
+  .dialog .actions .msg { margin-right:auto; }
   @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
   @keyframes fadein { from { opacity:0; } to { opacity:1; } }
 </style>
@@ -100,16 +101,13 @@
 <body>
   <div class="wrap">
     <header class="masthead">
-      <div>
-        <p class="eyebrow">Membership Registry</p>
-        <h1>Halifax Charitable Irish Society</h1>
-      </div>
+      <div><p class="eyebrow">Membership Registry</p><h1>Halifax Charitable Irish Society</h1></div>
       <div class="count"><strong id="memberCount">—</strong>members on the roll</div>
     </header>
 
     <section class="card">
       <h2>Add a member</h2>
-      <p class="sub">Creates the person as the payer of a new membership. (Attaching a spouse or family member to an existing membership comes with the edit tools.)</p>
+      <p class="sub">Creates the person as the payer of a new membership. (Use Edit to set due dates, change type, or adjust the payer.)</p>
       <form id="addForm">
         <div class="grid">
           <div class="field"><label>First name *</label><input name="first_name" required></div>
@@ -125,20 +123,73 @@
           <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
           <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
         </div>
-        <div class="actions">
-          <button class="primary" type="submit">Add member</button>
-          <span id="formMsg" class="msg"></span>
-        </div>
+        <div class="actions"><button class="primary" type="submit">Add member</button><span id="formMsg" class="msg"></span></div>
       </form>
     </section>
 
     <section class="table-card">
       <div class="table-head"><h2>Members</h2></div>
       <table>
-        <thead><tr><th>Name</th><th>Type</th><th>Location</th><th>Email</th></tr></thead>
-        <tbody id="memberRows"><tr><td colspan="4" class="empty">Loading…</td></tr></tbody>
+        <thead><tr><th>Name</th><th>Type</th><th>Location</th><th>Email</th><th></th></tr></thead>
+        <tbody id="memberRows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
       </table>
     </section>
+
+    <section class="card">
+      <h2>Record a payment</h2>
+      <p class="sub">Logs a payment against a member's membership. This is the same record the e-transfer automation will create later.</p>
+      <form id="payForm">
+        <div class="grid">
+          <div class="field wide"><label>Member (who paid) *</label><select name="member" id="payMember" required></select></div>
+          <div class="field"><label>Amount ($) *</label><input name="amount" type="number" step="0.01" min="0" required></div>
+          <div class="field"><label>Method *</label><select name="method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
+          <div class="field"><label>Date received</label><input name="date_received" type="date"></div>
+          <div class="field"><label>Dues year</label><input name="dues_year" type="number" id="duesYear"></div>
+          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+        </div>
+        <div class="actions"><button class="primary" type="submit">Record payment</button><span id="payMsg" class="msg"></span></div>
+      </form>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head"><h2>Payments</h2><div class="total">Total recorded: <strong id="payTotal">$0.00</strong></div></div>
+      <table>
+        <thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th><th>Method</th><th>Year</th></tr></thead>
+        <tbody id="payRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </section>
+  </div>
+
+  <!-- Edit dialog -->
+  <div class="modal" id="modal">
+    <div class="dialog">
+      <h2>Edit member</h2>
+      <form id="editForm">
+        <input type="hidden" id="editId">
+        <div class="grid">
+          <div class="field"><label>First name *</label><input name="first_name" required></div>
+          <div class="field"><label>Last name *</label><input name="last_name" required></div>
+          <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
+          <div class="field"><label>Membership type</label><select name="membership_type"></select></div>
+          <div class="field"><label>Email</label><input name="email" type="email"></div>
+          <div class="field"><label>Phone</label><input name="phone"></div>
+          <div class="field"><label>Secondary phone</label><input name="phone_secondary"></div>
+          <div class="field"><label>Next due date</label><input name="next_due_date" type="date"></div>
+          <div class="field wide"><label>Street address</label><input name="street_address"></div>
+          <div class="field"><label>City</label><input name="city"></div>
+          <div class="field"><label>Province</label><input name="province"></div>
+          <div class="field"><label>Postal code</label><input name="postal_code"></div>
+          <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
+          <div class="field wide checkbox-field"><input type="checkbox" name="is_payer" id="editIsPayer"><label for="editIsPayer">Paying / primary member of this membership</label></div>
+          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+        </div>
+        <div class="actions">
+          <span id="editMsg" class="msg"></span>
+          <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="primary">Save changes</button>
+        </div>
+      </form>
+    </div>
   </div>
 
 <script>
@@ -147,37 +198,110 @@ const api = (path, opts) => fetch(path, opts).then(async r => {
   if (!r.ok) throw new Error(data.error || ('Request failed: ' + r.status));
   return data;
 });
-const esc = (s) => (s == null ? '' : String(s).replace(/[&<>"]/g, c =>
-  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
+const esc = (s) => (s == null ? '' : String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
+const money = (cents) => '$' + (cents/100).toFixed(2);
+const methodLabel = (m) => ({etransfer:'E-transfer', cash:'Cash', cheque:'Cheque'}[m] || m);
+
+let membersById = {}, typesList = [], editMembershipId = null;
 
 async function loadTypes() {
-  const types = await api('/api/membership-types');
+  typesList = await api('/api/membership-types');
   const sel = document.getElementById('typeSelect');
-  const ordered = types.filter(t => t.type !== 'Exempt').concat(types.filter(t => t.type === 'Exempt'));
-  sel.innerHTML = ordered.map(t =>
-    `<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
+  const ordered = typesList.filter(t => t.type !== 'Exempt').concat(typesList.filter(t => t.type === 'Exempt'));
+  sel.innerHTML = ordered.map(t => `<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
   sel.value = 'Individual';
 }
 
 async function loadMembers() {
   const tbody = document.getElementById('memberRows');
+  const paySel = document.getElementById('payMember');
   try {
     const members = await api('/api/members');
+    membersById = {};
+    members.forEach(m => { membersById[m.member_id] = m; });
     document.getElementById('memberCount').textContent = members.length;
-    if (!members.length) {
-      tbody.innerHTML = '<tr><td colspan="4" class="empty">No members yet — add your first above.</td></tr>';
-      return;
-    }
-    tbody.innerHTML = members.map((m, i) => `
-      <tr style="animation-delay:${i*30}ms">
-        <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
-        <td><span class="pill">${esc(m.membership_type || '—')}</span></td>
-        <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
-        <td class="muted">${esc(m.email) || '—'}</td>
-      </tr>`).join('');
+    tbody.innerHTML = members.length
+      ? members.map((m, i) => `
+        <tr style="animation-delay:${i*30}ms">
+          <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
+          <td><span class="pill">${esc(m.membership_type || '—')}</span></td>
+          <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
+          <td class="muted">${esc(m.email) || '—'}</td>
+          <td class="row-actions"><button class="btn-ghost" onclick="editMember(${m.member_id})">Edit</button><button class="btn-danger" onclick="deleteMember(${m.member_id})">Delete</button></td>
+        </tr>`).join('')
+      : '<tr><td colspan="5" class="empty">No members yet — add your first above.</td></tr>';
+    paySel.innerHTML = members.length
+      ? '<option value="">Select a member…</option>' + members.map(m => `<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type || '?')}</option>`).join('')
+      : '<option value="">No members yet — add one first</option>';
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="4" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="5" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
   }
+}
+
+async function loadPayments() {
+  const tbody = document.getElementById('payRows');
+  try {
+    const payments = await api('/api/payments');
+    document.getElementById('payTotal').textContent = money(payments.reduce((s, p) => s + p.amount_cents, 0));
+    tbody.innerHTML = payments.length
+      ? payments.map((p, i) => {
+          const payer = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ');
+          return `<tr style="animation-delay:${i*30}ms">
+            <td class="muted">${esc(p.date_received)}</td>
+            <td class="name">${esc(payer) || '—'}</td>
+            <td><span class="pill">${esc(p.membership_type || '—')}</span></td>
+            <td class="amount">${money(p.amount_cents)}</td>
+            <td class="muted">${esc(methodLabel(p.method))}</td>
+            <td class="muted">${esc(p.dues_year)}</td>
+          </tr>`;
+        }).join('')
+      : '<tr><td colspan="6" class="empty">No payments recorded yet.</td></tr>';
+  } catch (e) {
+    tbody.innerHTML = `<tr><td colspan="6" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;
+  }
+}
+
+async function editMember(id) {
+  const m = await api('/api/members/' + id);
+  const f = document.getElementById('editForm');
+  document.getElementById('editId').value = m.member_id;
+  editMembershipId = m.membership_id;
+  ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes']
+    .forEach(k => { f[k].value = m[k] || ''; });
+  f.membership_type.innerHTML = typesList.map(t => `<option value="${esc(t.type)}">${esc(t.type)}</option>`).join('');
+  f.membership_type.value = m.membership_type || 'Individual';
+  f.next_due_date.value = m.next_due_date || '';
+  f.is_payer.checked = !!m.is_payer;
+  document.getElementById('editMsg').textContent = '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+document.getElementById('editForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const f = ev.target, id = document.getElementById('editId').value;
+  const msg = document.getElementById('editMsg');
+  const body = {};
+  ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes']
+    .forEach(k => { body[k] = f[k].value; });
+  body.is_payer = f.is_payer.checked ? 1 : 0;
+  try {
+    await api('/api/members/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    if (editMembershipId) {
+      await api('/api/memberships/' + editMembershipId, { method:'PUT', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({ type: f.membership_type.value, next_due_date: f.next_due_date.value || null }) });
+    }
+    closeModal(); loadMembers(); loadPayments();
+  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+});
+
+async function deleteMember(id) {
+  if (!confirm("Remove this member from the roll? Their payment history is kept. This can't be undone.")) return;
+  try { await api('/api/members/' + id, { method:'DELETE' }); loadMembers(); loadPayments(); }
+  catch (e) { alert('Could not delete: ' + e.message); }
 }
 
 document.getElementById('addForm').addEventListener('submit', async (ev) => {
@@ -195,8 +319,30 @@ document.getElementById('addForm').addEventListener('submit', async (ev) => {
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
 
+document.getElementById('payForm').addEventListener('submit', async (ev) => {
+  ev.preventDefault();
+  const msg = document.getElementById('payMsg');
+  msg.textContent = ''; msg.className = 'msg';
+  const form = ev.target, memberId = form.member.value;
+  if (!memberId) { msg.textContent = 'Pick a member first.'; msg.className = 'msg err'; return; }
+  const m = membersById[memberId];
+  const body = { membership_id: m.membership_id, paid_by_member_id: Number(memberId), amount: Number(form.amount.value), method: form.method.value };
+  if (form.date_received.value) body.date_received = form.date_received.value;
+  if (form.dues_year.value) body.dues_year = Number(form.dues_year.value);
+  if (form.notes.value) body.notes = form.notes.value;
+  try {
+    await api('/api/payments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    msg.textContent = 'Recorded ✓'; msg.className = 'msg ok';
+    form.reset(); document.getElementById('duesYear').value = new Date().getFullYear();
+    loadPayments();
+    setTimeout(() => { msg.textContent = ''; }, 2500);
+  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+});
+
+document.getElementById('duesYear').value = new Date().getFullYear();
 loadTypes();
 loadMembers();
+loadPayments();
 </script>
 </body>
 </html>

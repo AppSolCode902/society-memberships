@@ -95,9 +95,15 @@ app.put("/api/members/:id", async (c) => {
 });
 
 app.delete("/api/members/:id", async (c) => {
+  const id = c.req.param("id");
+  // Keep the financial record intact: detach this member from any payments
+  // they made, rather than letting the delete fail on the foreign key.
+  await c.env.DB.prepare(
+    "UPDATE payments SET paid_by_member_id = NULL WHERE paid_by_member_id = ?"
+  ).bind(id).run();
   const res = await c.env.DB.prepare(
     "DELETE FROM members WHERE member_id = ?"
-  ).bind(c.req.param("id")).run();
+  ).bind(id).run();
   if (res.meta.changes === 0) return c.json({ error: "Member not found" }, 404);
   return c.json({ ok: true });
 });
