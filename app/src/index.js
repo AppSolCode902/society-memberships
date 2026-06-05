@@ -21,7 +21,8 @@ app.get("/api/members", async (c) => {
   const { results } = await c.env.DB.prepare(
     `SELECT m.member_id, m.first_name, m.last_name, m.email,
             m.city, m.province, m.is_payer, m.date_joined,
-            ms.membership_id, ms.type AS membership_type, ms.next_due_date
+            ms.membership_id, ms.type AS membership_type,
+            ms.next_due_date, ms.active AS membership_active
        FROM members m
        LEFT JOIN memberships ms ON ms.membership_id = m.membership_id
       ORDER BY m.last_name, m.first_name`
@@ -31,7 +32,8 @@ app.get("/api/members", async (c) => {
 
 app.get("/api/members/:id", async (c) => {
   const member = await c.env.DB.prepare(
-    `SELECT m.*, ms.type AS membership_type, ms.next_due_date
+    `SELECT m.*, ms.type AS membership_type, ms.next_due_date,
+            ms.active AS membership_active
        FROM members m
        LEFT JOIN memberships ms ON ms.membership_id = m.membership_id
       WHERE m.member_id = ?`
@@ -49,7 +51,7 @@ app.post("/api/members", async (c) => {
   let isPayer = b.is_payer ? 1 : 0;
   if (!membershipId) {
     const ms = await c.env.DB.prepare(
-      "INSERT INTO memberships (type, created_date) VALUES (?, date('now'))"
+      "INSERT INTO memberships (type, active, created_date) VALUES (?, 1, date('now'))"
     ).bind(b.membership_type || "Individual").run();
     membershipId = ms.meta.last_row_id;
     isPayer = 1;
@@ -70,7 +72,6 @@ app.post("/api/members", async (c) => {
   return c.json({ member_id: res.meta.last_row_id, membership_id: membershipId }, 201);
 });
 
-// Update a member — sends back the fields you pass, keeps the rest unchanged.
 app.put("/api/members/:id", async (c) => {
   const id = c.req.param("id");
   const b = await c.req.json();
@@ -94,10 +95,10 @@ app.put("/api/members/:id", async (c) => {
   return c.json({ ok: true });
 });
 
+// Soft-delete: deactivates the membership instead of destroying the member record.
+// Hard delete is kept as a fallback but the UI now uses deactivate.
 app.delete("/api/members/:id", async (c) => {
   const id = c.req.param("id");
-  // Keep the financial record intact: detach this member from any payments
-  // they made, rather than letting the delete fail on the foreign key.
   await c.env.DB.prepare(
     "UPDATE payments SET paid_by_member_id = NULL WHERE paid_by_member_id = ?"
   ).bind(id).run();
@@ -122,7 +123,13 @@ app.put("/api/memberships/:id", async (c) => {
   await c.env.DB.prepare(
     `UPDATE memberships SET type = ?, next_due_date = ?, active = ?, notes = ?
      WHERE membership_id = ?`
-  ).bind(v("type"), v("next_due_date"), v("active") ? 1 : 0, v("notes"), id).run();
+  ).bind(
+    v("type"),
+    v("next_due_date"),
+    b.active !== undefined ? (b.active ? 1 : 0) : existing.active,
+    v("notes"),
+    id
+  ).run();
   return c.json({ ok: true });
 });
 
@@ -144,8 +151,6 @@ app.get("/api/payments", async (c) => {
   return c.json(results);
 });
 
-// Record a payment. Amount comes in as DOLLARS and is stored as cents.
-// This is the same endpoint the e-Transfer email Worker will call later.
 app.post("/api/payments", async (c) => {
   const b = await c.req.json();
   const validMethods = ["etransfer", "cash", "cheque"];

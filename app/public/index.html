@@ -62,32 +62,72 @@
   button.primary { font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green); border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s; }
   button.primary:hover { background:var(--green-deep); }
   button.primary:active { transform:translateY(1px); }
-  .btn-ghost, .btn-danger { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
+  .btn-ghost, .btn-danger, .btn-warn { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
   .btn-ghost { color:var(--green); }
   .btn-ghost:hover { background:#f1ede3; border-color:var(--green); }
   .btn-danger { color:var(--danger); margin-left:6px; }
   .btn-danger:hover { background:#fbeeec; border-color:var(--danger); }
+  .btn-warn { color:var(--ochre); margin-left:6px; }
+  .btn-warn:hover { background:#fdf5eb; border-color:var(--ochre); }
+  .btn-sm { font-size:12px; padding:4px 10px; }
   .msg { font-size:14px; }
   .msg.ok { color:var(--green); }
   .msg.err { color:var(--danger); }
   .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:36px; animation:rise .6s ease .16s both; }
-  .table-head { padding:22px 26px 0; display:flex; align-items:baseline; justify-content:space-between; gap:16px; }
+  .table-head { padding:22px 26px 0; display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   .table-head h2 { font-size:20px; margin:0; }
   .table-head .total { font-size:14px; color:var(--muted); }
   .table-head .total strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
   table { width:100%; border-collapse:collapse; margin-top:14px; }
   thead th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line); }
+  thead th.sortable { cursor:pointer; user-select:none; }
+  thead th.sortable:hover { color:var(--green); }
+  thead th .sort-arrow { font-size:10px; margin-left:4px; }
   tbody td { padding:14px 26px; border-bottom:1px solid #f0eade; vertical-align:middle; }
   tbody tr { animation:fadein .4s ease both; }
   tbody tr:hover { background:#faf6ec; }
   tbody tr:last-child td { border-bottom:none; }
+  tbody tr.inactive-row { opacity:.5; }
   .name { font-weight:600; color:var(--green-deep); }
   .pill { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15); }
+  .pill-inactive { background:rgba(156,59,46,.08); color:var(--danger); border-color:rgba(156,59,46,.2); }
   .badge-payer { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px; }
   .amount { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; }
   .muted { color:var(--muted); }
+  .overdue { color:var(--danger); font-weight:600; }
   .empty { padding:40px 26px; text-align:center; color:var(--muted); }
   .row-actions { white-space:nowrap; text-align:right; }
+
+  /* Toolbar: search, filters, pagination */
+  .toolbar { padding:16px 26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
+  .toolbar input[type="search"] {
+    flex:1; min-width:180px; font-family:inherit; font-size:14px; color:var(--ink);
+    background:#fbf8f1; border:1px solid var(--line); border-radius:9px; padding:9px 14px;
+    transition:border-color .15s, box-shadow .15s, background .15s;
+  }
+  .toolbar input[type="search"]:focus { outline:none; border-color:var(--green); background:#fff; box-shadow:0 0 0 3px rgba(31,77,63,.12); }
+  .toolbar select {
+    font-family:inherit; font-size:13px; padding:8px 12px; border:1px solid var(--line);
+    border-radius:9px; background:#fbf8f1; color:var(--ink); cursor:pointer;
+  }
+  .toolbar label.toggle-label {
+    font-size:13px; font-weight:500; color:var(--muted); cursor:pointer;
+    display:flex; align-items:center; gap:6px; text-transform:none; letter-spacing:0;
+  }
+  .toolbar label.toggle-label input { width:auto; }
+  .toolbar .result-count { font-size:13px; color:var(--muted); margin-left:auto; white-space:nowrap; }
+
+  /* Pagination */
+  .pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
+  .pagination button {
+    font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
+    border:1px solid var(--line); border-radius:7px; padding:6px 14px;
+    background:#fff; color:var(--green); transition:background .12s;
+  }
+  .pagination button:hover:not(:disabled) { background:#f1ede3; border-color:var(--green); }
+  .pagination button:disabled { opacity:.35; cursor:default; }
+  .pagination .page-info { font-size:13px; color:var(--muted); min-width:100px; text-align:center; }
+
   .modal { position:fixed; inset:0; background:rgba(20,30,25,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50; }
   .modal.open { display:flex; animation:fadein .2s ease; }
   .dialog { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 20px 60px rgba(20,40,30,.25); width:100%; max-width:640px; padding:28px; animation:rise .25s ease; }
@@ -127,12 +167,37 @@
       </form>
     </section>
 
-    <section class="table-card">
+    <!-- ============ MEMBERS TABLE ============ -->
+    <section class="table-card" id="membersCard">
       <div class="table-head"><h2>Members</h2></div>
+      <div class="toolbar">
+        <input type="search" id="memberSearch" placeholder="Search by name, email, or city…" autocomplete="off">
+        <select id="typeFilter">
+          <option value="">All types</option>
+          <option value="Individual">Individual</option>
+          <option value="Couple">Couple</option>
+          <option value="Family">Family</option>
+          <option value="Exempt">Exempt</option>
+        </select>
+        <label class="toggle-label"><input type="checkbox" id="showInactive"> Show inactive</label>
+        <span class="result-count" id="memberResultCount"></span>
+      </div>
       <table>
-        <thead><tr><th>Name</th><th>Type</th><th>Location</th><th>Email</th><th></th></tr></thead>
-        <tbody id="memberRows"><tr><td colspan="5" class="empty">Loading…</td></tr></tbody>
+        <thead><tr>
+          <th class="sortable" data-sort="name">Name <span class="sort-arrow" id="arrow-name">▲</span></th>
+          <th class="sortable" data-sort="type">Type <span class="sort-arrow" id="arrow-type"></span></th>
+          <th class="sortable" data-sort="due">Next Due <span class="sort-arrow" id="arrow-due"></span></th>
+          <th>Location</th>
+          <th>Email</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="memberRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
       </table>
+      <div class="pagination" id="memberPagination">
+        <button id="prevPage" onclick="changePage(-1)">← Previous</button>
+        <span class="page-info" id="pageInfo">Page 1 of 1</span>
+        <button id="nextPage" onclick="changePage(1)">Next →</button>
+      </div>
     </section>
 
     <section class="card">
@@ -151,8 +216,15 @@
       </form>
     </section>
 
-    <section class="table-card">
-      <div class="table-head"><h2>Payments</h2><div class="total">Total recorded: <strong id="payTotal">$0.00</strong></div></div>
+    <!-- ============ PAYMENTS TABLE ============ -->
+    <section class="table-card" id="paymentsCard">
+      <div class="table-head">
+        <h2>Payments</h2>
+        <div class="total">
+          <select id="payYearFilter" style="margin-right:12px;font-family:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:#fbf8f1;"></select>
+          Total: <strong id="payTotal">$0.00</strong> · <span id="payCount">0</span> payments
+        </div>
+      </div>
       <table>
         <thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th><th>Method</th><th>Year</th></tr></thead>
         <tbody id="payRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
@@ -202,7 +274,128 @@ const esc = (s) => (s == null ? '' : String(s).replace(/[&<>"]/g, c => ({'&':'&a
 const money = (cents) => '$' + (cents/100).toFixed(2);
 const methodLabel = (m) => ({etransfer:'E-transfer', cash:'Cash', cheque:'Cheque'}[m] || m);
 
-let membersById = {}, typesList = [], editMembershipId = null;
+let membersById = {}, allMembers = [], typesList = [], editMembershipId = null;
+let allPayments = [];
+
+// ===== Member state =====
+const PER_PAGE = 20;
+let currentPage = 1;
+let sortField = 'name';
+let sortDir = 1; // 1 = asc, -1 = desc
+let filteredMembers = [];
+
+function getFilteredMembers() {
+  const q = document.getElementById('memberSearch').value.toLowerCase().trim();
+  const typeF = document.getElementById('typeFilter').value;
+  const showInactive = document.getElementById('showInactive').checked;
+
+  let list = allMembers.filter(m => {
+    // Active filter
+    if (!showInactive && m.membership_active === 0) return false;
+    // Type filter
+    if (typeF && m.membership_type !== typeF) return false;
+    // Search filter
+    if (q) {
+      const haystack = [m.last_name, m.first_name, m.email, m.city, m.province, m.membership_type]
+        .filter(Boolean).join(' ').toLowerCase();
+      return haystack.includes(q);
+    }
+    return true;
+  });
+
+  // Sort
+  list.sort((a, b) => {
+    let va, vb;
+    if (sortField === 'name') {
+      va = (a.last_name || '').toLowerCase() + ' ' + (a.first_name || '').toLowerCase();
+      vb = (b.last_name || '').toLowerCase() + ' ' + (b.first_name || '').toLowerCase();
+    } else if (sortField === 'type') {
+      va = (a.membership_type || '').toLowerCase();
+      vb = (b.membership_type || '').toLowerCase();
+    } else if (sortField === 'due') {
+      va = a.next_due_date || '9999';
+      vb = b.next_due_date || '9999';
+    }
+    if (va < vb) return -1 * sortDir;
+    if (va > vb) return 1 * sortDir;
+    return 0;
+  });
+
+  return list;
+}
+
+function renderMembers() {
+  filteredMembers = getFilteredMembers();
+  const totalPages = Math.max(1, Math.ceil(filteredMembers.length / PER_PAGE));
+  if (currentPage > totalPages) currentPage = totalPages;
+  const start = (currentPage - 1) * PER_PAGE;
+  const page = filteredMembers.slice(start, start + PER_PAGE);
+
+  const tbody = document.getElementById('memberRows');
+  const today = new Date().toISOString().slice(0, 10);
+
+  tbody.innerHTML = page.length
+    ? page.map((m, i) => {
+        const isInactive = m.membership_active === 0;
+        const dueDate = m.next_due_date || '';
+        const isOverdue = dueDate && dueDate < today && !isInactive;
+        const dueDisplay = dueDate ? dueDate.slice(0, 10) : '—';
+        return `
+        <tr class="${isInactive ? 'inactive-row' : ''}" style="animation-delay:${i*20}ms">
+          <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
+          <td><span class="pill ${isInactive ? 'pill-inactive' : ''}">${esc(m.membership_type || '—')}${isInactive ? ' (inactive)' : ''}</span></td>
+          <td class="${isOverdue ? 'overdue' : 'muted'}">${isOverdue ? '⚠ ' : ''}${esc(dueDisplay)}</td>
+          <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
+          <td class="muted">${esc(m.email) || '—'}</td>
+          <td class="row-actions">
+            <button class="btn-ghost btn-sm" onclick="editMember(${m.member_id})">Edit</button>${
+            isInactive
+              ? `<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id}, ${m.membership_id})">Reactivate</button>`
+              : `<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id}, ${m.membership_id})">Deactivate</button>`
+          }</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
+
+  // Update counts
+  const activeCount = allMembers.filter(m => m.membership_active !== 0).length;
+  document.getElementById('memberCount').textContent = activeCount;
+  document.getElementById('memberResultCount').textContent =
+    `Showing ${filteredMembers.length} of ${allMembers.length}`;
+
+  // Pagination
+  document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+  document.getElementById('prevPage').disabled = currentPage <= 1;
+  document.getElementById('nextPage').disabled = currentPage >= totalPages;
+
+  // Sort arrows
+  ['name','type','due'].forEach(f => {
+    const el = document.getElementById('arrow-' + f);
+    if (f === sortField) el.textContent = sortDir === 1 ? '▲' : '▼';
+    else el.textContent = '';
+  });
+}
+
+function changePage(delta) {
+  currentPage += delta;
+  renderMembers();
+}
+
+// Sort click handler
+document.querySelectorAll('th.sortable').forEach(th => {
+  th.addEventListener('click', () => {
+    const field = th.dataset.sort;
+    if (sortField === field) sortDir *= -1;
+    else { sortField = field; sortDir = 1; }
+    currentPage = 1;
+    renderMembers();
+  });
+});
+
+// Search + filter handlers
+document.getElementById('memberSearch').addEventListener('input', () => { currentPage = 1; renderMembers(); });
+document.getElementById('typeFilter').addEventListener('change', () => { currentPage = 1; renderMembers(); });
+document.getElementById('showInactive').addEventListener('change', () => { currentPage = 1; renderMembers(); });
 
 async function loadTypes() {
   typesList = await api('/api/membership-types');
@@ -213,54 +406,103 @@ async function loadTypes() {
 }
 
 async function loadMembers() {
-  const tbody = document.getElementById('memberRows');
   const paySel = document.getElementById('payMember');
   try {
-    const members = await api('/api/members');
+    allMembers = await api('/api/members');
     membersById = {};
-    members.forEach(m => { membersById[m.member_id] = m; });
-    document.getElementById('memberCount').textContent = members.length;
-    tbody.innerHTML = members.length
-      ? members.map((m, i) => `
-        <tr style="animation-delay:${i*30}ms">
-          <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
-          <td><span class="pill">${esc(m.membership_type || '—')}</span></td>
-          <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
-          <td class="muted">${esc(m.email) || '—'}</td>
-          <td class="row-actions"><button class="btn-ghost" onclick="editMember(${m.member_id})">Edit</button><button class="btn-danger" onclick="deleteMember(${m.member_id})">Delete</button></td>
-        </tr>`).join('')
-      : '<tr><td colspan="5" class="empty">No members yet — add your first above.</td></tr>';
-    paySel.innerHTML = members.length
-      ? '<option value="">Select a member…</option>' + members.map(m => `<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type || '?')}</option>`).join('')
+    allMembers.forEach(m => { membersById[m.member_id] = m; });
+    currentPage = 1;
+    renderMembers();
+    // Payment dropdown — only active members
+    const active = allMembers.filter(m => m.membership_active !== 0);
+    paySel.innerHTML = active.length
+      ? '<option value="">Select a member…</option>' + active.map(m =>
+          `<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type || '?')}</option>`
+        ).join('')
       : '<option value="">No members yet — add one first</option>';
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="5" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
+    document.getElementById('memberRows').innerHTML =
+      `<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
   }
+}
+
+// ===== Payments =====
+function renderPayments() {
+  const yearFilter = document.getElementById('payYearFilter').value;
+  const tbody = document.getElementById('payRows');
+
+  const filtered = yearFilter === 'all'
+    ? allPayments
+    : allPayments.filter(p => String(p.dues_year) === yearFilter);
+
+  const total = filtered.reduce((s, p) => s + p.amount_cents, 0);
+  document.getElementById('payTotal').textContent = money(total);
+  document.getElementById('payCount').textContent = filtered.length;
+
+  tbody.innerHTML = filtered.length
+    ? filtered.map((p, i) => {
+        const payer = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ');
+        return `<tr style="animation-delay:${i*20}ms">
+          <td class="muted">${esc(p.date_received)}</td>
+          <td class="name">${esc(payer) || '—'}</td>
+          <td><span class="pill">${esc(p.membership_type || '—')}</span></td>
+          <td class="amount">${money(p.amount_cents)}</td>
+          <td class="muted">${esc(methodLabel(p.method))}</td>
+          <td class="muted">${esc(p.dues_year)}</td>
+        </tr>`;
+      }).join('')
+    : '<tr><td colspan="6" class="empty">No payments for this year.</td></tr>';
 }
 
 async function loadPayments() {
   const tbody = document.getElementById('payRows');
   try {
-    const payments = await api('/api/payments');
-    document.getElementById('payTotal').textContent = money(payments.reduce((s, p) => s + p.amount_cents, 0));
-    tbody.innerHTML = payments.length
-      ? payments.map((p, i) => {
-          const payer = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ');
-          return `<tr style="animation-delay:${i*30}ms">
-            <td class="muted">${esc(p.date_received)}</td>
-            <td class="name">${esc(payer) || '—'}</td>
-            <td><span class="pill">${esc(p.membership_type || '—')}</span></td>
-            <td class="amount">${money(p.amount_cents)}</td>
-            <td class="muted">${esc(methodLabel(p.method))}</td>
-            <td class="muted">${esc(p.dues_year)}</td>
-          </tr>`;
-        }).join('')
-      : '<tr><td colspan="6" class="empty">No payments recorded yet.</td></tr>';
+    allPayments = await api('/api/payments');
+
+    // Build year dropdown
+    const years = [...new Set(allPayments.map(p => p.dues_year).filter(Boolean))].sort((a,b) => b - a);
+    const sel = document.getElementById('payYearFilter');
+    const currentYear = new Date().getFullYear();
+    sel.innerHTML = years.map(y =>
+      `<option value="${y}"${y === currentYear ? ' selected' : ''}>${y}</option>`
+    ).join('') + '<option value="all">All years</option>';
+
+    // Default to current year if it exists, otherwise 'all'
+    if (!years.includes(currentYear)) sel.value = 'all';
+
+    renderPayments();
   } catch (e) {
     tbody.innerHTML = `<tr><td colspan="6" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;
   }
 }
 
+document.getElementById('payYearFilter').addEventListener('change', renderPayments);
+
+// ===== Deactivate / Reactivate =====
+async function deactivateMember(memberId, membershipId) {
+  if (!confirm('Deactivate this member? They will be hidden from the active list but all data and payment history is preserved.')) return;
+  try {
+    await api('/api/memberships/' + membershipId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active: 0 })
+    });
+    loadMembers();
+  } catch (e) { alert('Could not deactivate: ' + e.message); }
+}
+
+async function reactivateMember(memberId, membershipId) {
+  try {
+    await api('/api/memberships/' + membershipId, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active: 1 })
+    });
+    loadMembers();
+  } catch (e) { alert('Could not reactivate: ' + e.message); }
+}
+
+// ===== Edit =====
 async function editMember(id) {
   const m = await api('/api/members/' + id);
   const f = document.getElementById('editForm');
@@ -298,12 +540,7 @@ document.getElementById('editForm').addEventListener('submit', async (ev) => {
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
 
-async function deleteMember(id) {
-  if (!confirm("Remove this member from the roll? Their payment history is kept. This can't be undone.")) return;
-  try { await api('/api/members/' + id, { method:'DELETE' }); loadMembers(); loadPayments(); }
-  catch (e) { alert('Could not delete: ' + e.message); }
-}
-
+// ===== Add member =====
 document.getElementById('addForm').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const msg = document.getElementById('formMsg');
@@ -319,6 +556,7 @@ document.getElementById('addForm').addEventListener('submit', async (ev) => {
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
 
+// ===== Record payment =====
 document.getElementById('payForm').addEventListener('submit', async (ev) => {
   ev.preventDefault();
   const msg = document.getElementById('payMsg');
