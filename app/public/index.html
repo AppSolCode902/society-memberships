@@ -97,8 +97,6 @@
   .overdue { color:var(--danger); font-weight:600; }
   .empty { padding:40px 26px; text-align:center; color:var(--muted); }
   .row-actions { white-space:nowrap; text-align:right; }
-
-  /* Toolbar: search, filters, pagination */
   .toolbar { padding:16px 26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
   .toolbar input[type="search"] {
     flex:1; min-width:180px; font-family:inherit; font-size:14px; color:var(--ink);
@@ -116,8 +114,6 @@
   }
   .toolbar label.toggle-label input { width:auto; }
   .toolbar .result-count { font-size:13px; color:var(--muted); margin-left:auto; white-space:nowrap; }
-
-  /* Pagination */
   .pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
   .pagination button {
     font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
@@ -127,7 +123,26 @@
   .pagination button:hover:not(:disabled) { background:#f1ede3; border-color:var(--green); }
   .pagination button:disabled { opacity:.35; cursor:default; }
   .pagination .page-info { font-size:13px; color:var(--muted); min-width:100px; text-align:center; }
-
+  .calc-row { display:flex; align-items:center; gap:14px; margin-top:6px; padding:10px 14px; background:#f8f5ec; border-radius:9px; font-size:14px; color:var(--muted); }
+  .calc-row strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
+  /* Audit log */
+  .log-toggle { cursor:pointer; display:flex; align-items:center; gap:10px; }
+  .log-toggle .chevron { transition:transform .2s; font-size:12px; }
+  .log-toggle.open .chevron { transform:rotate(90deg); }
+  .log-entry { padding:12px 26px; border-bottom:1px solid #f0eade; font-size:13px; display:flex; gap:16px; align-items:baseline; }
+  .log-entry:last-child { border-bottom:none; }
+  .log-time { color:var(--muted); white-space:nowrap; min-width:130px; font-variant-numeric:tabular-nums; }
+  .log-user { color:var(--ochre); font-weight:600; min-width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .log-action { font-weight:600; min-width:80px; }
+  .log-action.CREATE { color:var(--green); }
+  .log-action.UPDATE { color:var(--ochre); }
+  .log-action.DELETE, .log-action.DEACTIVATE { color:var(--danger); }
+  .log-action.REACTIVATE { color:#2d6a9f; }
+  .log-summary { flex:1; }
+  .log-pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
+  .log-pagination button { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--line); border-radius:7px; padding:6px 14px; background:#fff; color:var(--green); }
+  .log-pagination button:hover:not(:disabled) { background:#f1ede3; }
+  .log-pagination button:disabled { opacity:.35; cursor:default; }
   .modal { position:fixed; inset:0; background:rgba(20,30,25,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50; }
   .modal.open { display:flex; animation:fadein .2s ease; }
   .dialog { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 20px 60px rgba(20,40,30,.25); width:100%; max-width:640px; padding:28px; animation:rise .25s ease; }
@@ -145,15 +160,38 @@
       <div class="count"><strong id="memberCount">—</strong>members on the roll</div>
     </header>
 
+    <!-- ============ ADD MEMBER ============ -->
     <section class="card">
       <h2>Add a member</h2>
-      <p class="sub">Creates the person as the payer of a new membership. (Use Edit to set due dates, change type, or adjust the payer.)</p>
+      <p class="sub">Creates the person as the payer of a new membership with an optional initial payment.</p>
       <form id="addForm">
         <div class="grid">
           <div class="field"><label>First name *</label><input name="first_name" required></div>
           <div class="field"><label>Last name *</label><input name="last_name" required></div>
           <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
           <div class="field"><label>Membership type</label><select name="membership_type" id="typeSelect"></select></div>
+          <div class="field"><label>Years paid for</label>
+            <select name="years_paid" id="yearsPaid">
+              <option value="1">1 year</option>
+              <option value="2">2 years</option>
+              <option value="3">3 years</option>
+              <option value="4">4 years</option>
+              <option value="5">5 years</option>
+            </select>
+          </div>
+          <div class="field"><label>Payment method</label>
+            <select name="initial_payment_method" id="addPayMethod">
+              <option value="etransfer">E-transfer</option>
+              <option value="cash">Cash</option>
+              <option value="cheque">Cheque</option>
+            </select>
+          </div>
+          <div class="field wide">
+            <div class="calc-row">
+              Total due: <strong id="calcTotal">$20.00</strong> · Next due: <strong id="calcDue">Jan 2027</strong>
+              <input type="hidden" name="initial_payment_amount" id="calcAmountHidden">
+            </div>
+          </div>
           <div class="field"><label>Email</label><input name="email" type="email"></div>
           <div class="field"><label>Phone</label><input name="phone"></div>
           <div class="field wide"><label>Street address</label><input name="street_address"></div>
@@ -200,9 +238,10 @@
       </div>
     </section>
 
+    <!-- ============ RECORD PAYMENT ============ -->
     <section class="card">
       <h2>Record a payment</h2>
-      <p class="sub">Logs a payment against a member's membership. This is the same record the e-transfer automation will create later.</p>
+      <p class="sub">Logs a payment and automatically updates the member's next due date.</p>
       <form id="payForm">
         <div class="grid">
           <div class="field wide"><label>Member (who paid) *</label><select name="member" id="payMember" required></select></div>
@@ -229,6 +268,24 @@
         <thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th><th>Method</th><th>Year</th></tr></thead>
         <tbody id="payRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
       </table>
+    </section>
+
+    <!-- ============ ACTIVITY LOG ============ -->
+    <section class="table-card" id="auditCard">
+      <div class="table-head">
+        <h2 class="log-toggle" id="logToggle" onclick="toggleAuditLog()">
+          <span class="chevron">▶</span> Activity Log
+        </h2>
+        <span class="muted" id="logCount" style="font-size:13px;"></span>
+      </div>
+      <div id="auditBody" style="display:none;">
+        <div id="auditEntries"></div>
+        <div class="log-pagination">
+          <button id="logPrev" onclick="changeLogPage(-1)">← Newer</button>
+          <span class="page-info" id="logPageInfo">Page 1</span>
+          <button id="logNext" onclick="changeLogPage(1)">Older →</button>
+        </div>
+      </div>
     </section>
   </div>
 
@@ -276,25 +333,34 @@ const methodLabel = (m) => ({etransfer:'E-transfer', cash:'Cash', cheque:'Cheque
 
 let membersById = {}, allMembers = [], typesList = [], editMembershipId = null;
 let allPayments = [];
+let typeFees = {}; // { 'Individual': 2000, 'Couple': 3000, ... }
 
 // ===== Member state =====
 const PER_PAGE = 20;
 let currentPage = 1;
 let sortField = 'name';
-let sortDir = 1; // 1 = asc, -1 = desc
+let sortDir = 1;
 let filteredMembers = [];
+
+// ===== Add Member: calc total + due date =====
+function updateCalc() {
+  const typeVal = document.getElementById('typeSelect').value;
+  const years = parseInt(document.getElementById('yearsPaid').value) || 1;
+  const fee = typeFees[typeVal] || 2000;
+  const total = (fee * years) / 100;
+  const dueYear = new Date().getFullYear() + years;
+  document.getElementById('calcTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('calcDue').textContent = 'Jan ' + dueYear;
+  document.getElementById('calcAmountHidden').value = total.toFixed(2);
+}
 
 function getFilteredMembers() {
   const q = document.getElementById('memberSearch').value.toLowerCase().trim();
   const typeF = document.getElementById('typeFilter').value;
   const showInactive = document.getElementById('showInactive').checked;
-
   let list = allMembers.filter(m => {
-    // Active filter
     if (!showInactive && m.membership_active === 0) return false;
-    // Type filter
     if (typeF && m.membership_type !== typeF) return false;
-    // Search filter
     if (q) {
       const haystack = [m.last_name, m.first_name, m.email, m.city, m.province, m.membership_type]
         .filter(Boolean).join(' ').toLowerCase();
@@ -302,16 +368,14 @@ function getFilteredMembers() {
     }
     return true;
   });
-
-  // Sort
   list.sort((a, b) => {
     let va, vb;
     if (sortField === 'name') {
-      va = (a.last_name || '').toLowerCase() + ' ' + (a.first_name || '').toLowerCase();
-      vb = (b.last_name || '').toLowerCase() + ' ' + (b.first_name || '').toLowerCase();
+      va = (a.last_name||'').toLowerCase()+' '+(a.first_name||'').toLowerCase();
+      vb = (b.last_name||'').toLowerCase()+' '+(b.first_name||'').toLowerCase();
     } else if (sortField === 'type') {
-      va = (a.membership_type || '').toLowerCase();
-      vb = (b.membership_type || '').toLowerCase();
+      va = (a.membership_type||'').toLowerCase();
+      vb = (b.membership_type||'').toLowerCase();
     } else if (sortField === 'due') {
       va = a.next_due_date || '9999';
       vb = b.next_due_date || '9999';
@@ -320,7 +384,6 @@ function getFilteredMembers() {
     if (va > vb) return 1 * sortDir;
     return 0;
   });
-
   return list;
 }
 
@@ -330,18 +393,15 @@ function renderMembers() {
   if (currentPage > totalPages) currentPage = totalPages;
   const start = (currentPage - 1) * PER_PAGE;
   const page = filteredMembers.slice(start, start + PER_PAGE);
-
   const tbody = document.getElementById('memberRows');
   const today = new Date().toISOString().slice(0, 10);
-
   tbody.innerHTML = page.length
     ? page.map((m, i) => {
         const isInactive = m.membership_active === 0;
         const dueDate = m.next_due_date || '';
         const isOverdue = dueDate && dueDate < today && !isInactive;
         const dueDisplay = dueDate ? dueDate.slice(0, 10) : '—';
-        return `
-        <tr class="${isInactive ? 'inactive-row' : ''}" style="animation-delay:${i*20}ms">
+        return `<tr class="${isInactive ? 'inactive-row' : ''}" style="animation-delay:${i*20}ms">
           <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
           <td><span class="pill ${isInactive ? 'pill-inactive' : ''}">${esc(m.membership_type || '—')}${isInactive ? ' (inactive)' : ''}</span></td>
           <td class="${isOverdue ? 'overdue' : 'muted'}">${isOverdue ? '⚠ ' : ''}${esc(dueDisplay)}</td>
@@ -352,23 +412,15 @@ function renderMembers() {
             isInactive
               ? `<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id}, ${m.membership_id})">Reactivate</button>`
               : `<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id}, ${m.membership_id})">Deactivate</button>`
-          }</td>
-        </tr>`;
+          }</td></tr>`;
       }).join('')
     : '<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
-
-  // Update counts
   const activeCount = allMembers.filter(m => m.membership_active !== 0).length;
   document.getElementById('memberCount').textContent = activeCount;
-  document.getElementById('memberResultCount').textContent =
-    `Showing ${filteredMembers.length} of ${allMembers.length}`;
-
-  // Pagination
+  document.getElementById('memberResultCount').textContent = `Showing ${filteredMembers.length} of ${allMembers.length}`;
   document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
   document.getElementById('prevPage').disabled = currentPage <= 1;
   document.getElementById('nextPage').disabled = currentPage >= totalPages;
-
-  // Sort arrows
   ['name','type','due'].forEach(f => {
     const el = document.getElementById('arrow-' + f);
     if (f === sortField) el.textContent = sortDir === 1 ? '▲' : '▼';
@@ -376,12 +428,8 @@ function renderMembers() {
   });
 }
 
-function changePage(delta) {
-  currentPage += delta;
-  renderMembers();
-}
+function changePage(delta) { currentPage += delta; renderMembers(); }
 
-// Sort click handler
 document.querySelectorAll('th.sortable').forEach(th => {
   th.addEventListener('click', () => {
     const field = th.dataset.sort;
@@ -392,18 +440,23 @@ document.querySelectorAll('th.sortable').forEach(th => {
   });
 });
 
-// Search + filter handlers
 document.getElementById('memberSearch').addEventListener('input', () => { currentPage = 1; renderMembers(); });
 document.getElementById('typeFilter').addEventListener('change', () => { currentPage = 1; renderMembers(); });
 document.getElementById('showInactive').addEventListener('change', () => { currentPage = 1; renderMembers(); });
 
 async function loadTypes() {
   typesList = await api('/api/membership-types');
+  typeFees = {};
+  typesList.forEach(t => { typeFees[t.type] = t.annual_fee_cents; });
   const sel = document.getElementById('typeSelect');
   const ordered = typesList.filter(t => t.type !== 'Exempt').concat(typesList.filter(t => t.type === 'Exempt'));
   sel.innerHTML = ordered.map(t => `<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
   sel.value = 'Individual';
+  updateCalc();
 }
+
+document.getElementById('typeSelect').addEventListener('change', updateCalc);
+document.getElementById('yearsPaid').addEventListener('change', updateCalc);
 
 async function loadMembers() {
   const paySel = document.getElementById('payMember');
@@ -413,7 +466,6 @@ async function loadMembers() {
     allMembers.forEach(m => { membersById[m.member_id] = m; });
     currentPage = 1;
     renderMembers();
-    // Payment dropdown — only active members
     const active = allMembers.filter(m => m.membership_active !== 0);
     paySel.innerHTML = active.length
       ? '<option value="">Select a member…</option>' + active.map(m =>
@@ -421,8 +473,7 @@ async function loadMembers() {
         ).join('')
       : '<option value="">No members yet — add one first</option>';
   } catch (e) {
-    document.getElementById('memberRows').innerHTML =
-      `<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
+    document.getElementById('memberRows').innerHTML = `<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
   }
 }
 
@@ -430,15 +481,10 @@ async function loadMembers() {
 function renderPayments() {
   const yearFilter = document.getElementById('payYearFilter').value;
   const tbody = document.getElementById('payRows');
-
-  const filtered = yearFilter === 'all'
-    ? allPayments
-    : allPayments.filter(p => String(p.dues_year) === yearFilter);
-
+  const filtered = yearFilter === 'all' ? allPayments : allPayments.filter(p => String(p.dues_year) === yearFilter);
   const total = filtered.reduce((s, p) => s + p.amount_cents, 0);
   document.getElementById('payTotal').textContent = money(total);
   document.getElementById('payCount').textContent = filtered.length;
-
   tbody.innerHTML = filtered.length
     ? filtered.map((p, i) => {
         const payer = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ');
@@ -455,24 +501,16 @@ function renderPayments() {
 }
 
 async function loadPayments() {
-  const tbody = document.getElementById('payRows');
   try {
     allPayments = await api('/api/payments');
-
-    // Build year dropdown
     const years = [...new Set(allPayments.map(p => p.dues_year).filter(Boolean))].sort((a,b) => b - a);
     const sel = document.getElementById('payYearFilter');
     const currentYear = new Date().getFullYear();
-    sel.innerHTML = years.map(y =>
-      `<option value="${y}"${y === currentYear ? ' selected' : ''}>${y}</option>`
-    ).join('') + '<option value="all">All years</option>';
-
-    // Default to current year if it exists, otherwise 'all'
+    sel.innerHTML = years.map(y => `<option value="${y}"${y === currentYear ? ' selected' : ''}>${y}</option>`).join('') + '<option value="all">All years</option>';
     if (!years.includes(currentYear)) sel.value = 'all';
-
     renderPayments();
   } catch (e) {
-    tbody.innerHTML = `<tr><td colspan="6" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;
+    document.getElementById('payRows').innerHTML = `<tr><td colspan="6" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;
   }
 }
 
@@ -482,23 +520,15 @@ document.getElementById('payYearFilter').addEventListener('change', renderPaymen
 async function deactivateMember(memberId, membershipId) {
   if (!confirm('Deactivate this member? They will be hidden from the active list but all data and payment history is preserved.')) return;
   try {
-    await api('/api/memberships/' + membershipId, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: 0 })
-    });
-    loadMembers();
+    await api('/api/memberships/' + membershipId, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ active: 0 }) });
+    loadMembers(); loadAuditLog();
   } catch (e) { alert('Could not deactivate: ' + e.message); }
 }
 
 async function reactivateMember(memberId, membershipId) {
   try {
-    await api('/api/memberships/' + membershipId, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ active: 1 })
-    });
-    loadMembers();
+    await api('/api/memberships/' + membershipId, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ active: 1 }) });
+    loadMembers(); loadAuditLog();
   } catch (e) { alert('Could not reactivate: ' + e.message); }
 }
 
@@ -536,7 +566,7 @@ document.getElementById('editForm').addEventListener('submit', async (ev) => {
       await api('/api/memberships/' + editMembershipId, { method:'PUT', headers:{'Content-Type':'application/json'},
         body:JSON.stringify({ type: f.membership_type.value, next_due_date: f.next_due_date.value || null }) });
     }
-    closeModal(); loadMembers(); loadPayments();
+    closeModal(); loadMembers(); loadPayments(); loadAuditLog();
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
 
@@ -551,7 +581,9 @@ document.getElementById('addForm').addEventListener('submit', async (ev) => {
     await api('/api/members', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     msg.textContent = 'Added ✓'; msg.className = 'msg ok';
     form.reset(); document.getElementById('typeSelect').value = 'Individual';
-    loadMembers();
+    document.getElementById('yearsPaid').value = '1';
+    updateCalc();
+    loadMembers(); loadPayments(); loadAuditLog();
     setTimeout(() => { msg.textContent = ''; }, 2500);
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
@@ -572,10 +604,56 @@ document.getElementById('payForm').addEventListener('submit', async (ev) => {
     await api('/api/payments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     msg.textContent = 'Recorded ✓'; msg.className = 'msg ok';
     form.reset(); document.getElementById('duesYear').value = new Date().getFullYear();
-    loadPayments();
+    loadPayments(); loadMembers(); loadAuditLog(); // reload members to show updated due date
     setTimeout(() => { msg.textContent = ''; }, 2500);
   } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
 });
+
+// ===== Audit Log =====
+let auditLogOpen = false;
+let logPage = 0;
+const LOG_PER_PAGE = 25;
+
+function toggleAuditLog() {
+  auditLogOpen = !auditLogOpen;
+  document.getElementById('auditBody').style.display = auditLogOpen ? 'block' : 'none';
+  document.getElementById('logToggle').classList.toggle('open', auditLogOpen);
+  if (auditLogOpen) loadAuditLog();
+}
+
+async function loadAuditLog() {
+  if (!auditLogOpen) return;
+  try {
+    const data = await api(`/api/audit-log?limit=${LOG_PER_PAGE}&offset=${logPage * LOG_PER_PAGE}`);
+    const entries = data.entries || [];
+    const total = data.total || 0;
+    document.getElementById('logCount').textContent = `${total} entries`;
+
+    const container = document.getElementById('auditEntries');
+    container.innerHTML = entries.length
+      ? entries.map(e => {
+          const time = e.timestamp ? e.timestamp.replace('T', ' ').slice(0, 16) : '—';
+          const user = e.user_email || 'unknown';
+          const userShort = user.includes('@') ? user.split('@')[0] : user;
+          return `<div class="log-entry">
+            <span class="log-time">${esc(time)}</span>
+            <span class="log-user" title="${esc(user)}">${esc(userShort)}</span>
+            <span class="log-action ${esc(e.action)}">${esc(e.action)}</span>
+            <span class="log-summary">${esc(e.summary || '—')}</span>
+          </div>`;
+        }).join('')
+      : '<div class="empty">No activity recorded yet.</div>';
+
+    const totalPages = Math.max(1, Math.ceil(total / LOG_PER_PAGE));
+    document.getElementById('logPageInfo').textContent = `Page ${logPage + 1} of ${totalPages}`;
+    document.getElementById('logPrev').disabled = logPage <= 0;
+    document.getElementById('logNext').disabled = logPage >= totalPages - 1;
+  } catch (e) {
+    document.getElementById('auditEntries').innerHTML = `<div class="empty">Couldn't load log: ${esc(e.message)}</div>`;
+  }
+}
+
+function changeLogPage(delta) { logPage += delta; loadAuditLog(); }
 
 document.getElementById('duesYear').value = new Date().getFullYear();
 loadTypes();
