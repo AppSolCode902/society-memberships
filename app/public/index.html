@@ -8,119 +8,106 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg:#f3ede1; --surface:#fffdf8; --ink:#211c15; --muted:#71685b;
-    --line:#e4dccc; --green:#1f4d3f; --green-deep:#143229; --ochre:#a9742b;
-    --danger:#9c3b2e; --radius:14px;
-    --shadow:0 1px 2px rgba(20,40,30,.04), 0 12px 30px rgba(20,40,30,.06);
-  }
-  * { box-sizing:border-box; }
-  body { margin:0; background:var(--bg); background-image:radial-gradient(circle at 20% 10%,rgba(31,77,63,.04),transparent 40%),radial-gradient(circle at 85% 90%,rgba(169,116,43,.05),transparent 45%); color:var(--ink); font-family:'Hanken Grotesk',sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
-  .wrap { max-width:1040px; margin:0 auto; padding:48px 28px 80px; }
-  header.masthead { border-bottom:2px solid var(--green); padding-bottom:20px; margin-bottom:0; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; animation:rise .6s ease both; }
-  .masthead h1 { font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,5vw,44px); line-height:1.02; margin:0; color:var(--green-deep); letter-spacing:-.01em; }
-  .masthead .eyebrow { font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--ochre); font-weight:600; margin:0 0 8px; }
-  .count { font-family:'Fraunces',serif; font-size:15px; color:var(--muted); text-align:right; }
-  .count strong { color:var(--green-deep); font-size:26px; display:block; }
-  .tab-bar { display:flex; gap:0; margin:0 0 28px; border-bottom:2px solid var(--line); padding-top:16px; }
-  .tab-btn { font-family:'Hanken Grotesk',sans-serif; font-size:14px; font-weight:600; color:var(--muted); background:none; border:none; border-bottom:2px solid transparent; padding:12px 22px; margin-bottom:-2px; cursor:pointer; transition:color .15s, border-color .15s; white-space:nowrap; }
-  .tab-btn:hover { color:var(--green); }
-  .tab-btn.active { color:var(--green-deep); border-bottom-color:var(--green); }
-  .tab-panel { display:none; animation:fadein .3s ease; }
-  .tab-panel.active { display:block; }
-  .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px; margin-bottom:36px; animation:rise .6s ease .08s both; }
-  .card h2, .table-head h2, .dialog h2 { font-family:'Fraunces',serif; font-weight:600; color:var(--green-deep); }
-  .card h2 { font-size:20px; margin:0 0 4px; }
-  .card .sub { color:var(--muted); font-size:13px; margin:0 0 22px; }
-  form .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px 20px; }
-  @media (max-width:640px){ form .grid { grid-template-columns:1fr; } .tab-btn { padding:10px 14px; font-size:13px; } }
-  .field { display:flex; flex-direction:column; gap:6px; }
-  .field.wide { grid-column:1 / -1; }
-  label { font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
-  input, select, textarea { font-family:inherit; font-size:15px; color:var(--ink); background:#fbf8f1; border:1px solid var(--line); border-radius:9px; padding:10px 12px; transition:border-color .15s, box-shadow .15s, background .15s; }
-  input:focus, select:focus, textarea:focus { outline:none; border-color:var(--green); background:#fff; box-shadow:0 0 0 3px rgba(31,77,63,.12); }
-  textarea { resize:vertical; min-height:56px; }
-  .checkbox-field { flex-direction:row; align-items:center; gap:10px; }
-  .checkbox-field input { width:auto; }
-  .checkbox-field label { text-transform:none; letter-spacing:0; font-size:14px; color:var(--ink); }
-  .actions { margin-top:22px; display:flex; align-items:center; gap:14px; }
-  button.primary { font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green); border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s; }
-  button.primary:hover { background:var(--green-deep); }
-  button.primary:active { transform:translateY(1px); }
-  .btn-ghost,.btn-danger,.btn-warn { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
-  .btn-ghost { color:var(--green); } .btn-ghost:hover { background:#f1ede3; border-color:var(--green); }
-  .btn-danger { color:var(--danger); margin-left:6px; } .btn-danger:hover { background:#fbeeec; border-color:var(--danger); }
-  .btn-warn { color:var(--ochre); margin-left:6px; } .btn-warn:hover { background:#fdf5eb; border-color:var(--ochre); }
-  .btn-sm { font-size:12px; padding:4px 10px; }
-  .btn-restore { color:#2d6a9f; font-size:12px; padding:3px 10px; border:1px solid rgba(45,106,159,.3); border-radius:6px; background:#fff; cursor:pointer; font-weight:600; font-family:inherit; } .btn-restore:hover { background:#eef4fa; border-color:#2d6a9f; }
-  .msg { font-size:14px; } .msg.ok { color:var(--green); } .msg.err { color:var(--danger); }
-  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:36px; }
-  .table-head { padding:22px 26px 0; display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
-  .table-head h2 { font-size:20px; margin:0; }
-  .table-head .total { font-size:14px; color:var(--muted); } .table-head .total strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
-  table { width:100%; border-collapse:collapse; margin-top:14px; }
-  thead th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line); }
-  thead th.sortable { cursor:pointer; user-select:none; } thead th.sortable:hover { color:var(--green); }
-  thead th .sort-arrow { font-size:10px; margin-left:4px; }
-  tbody td { padding:14px 26px; border-bottom:1px solid #f0eade; vertical-align:middle; }
-  tbody tr:hover { background:#faf6ec; } tbody tr:last-child td { border-bottom:none; } tbody tr.inactive-row { opacity:.5; }
-  .name { font-weight:600; color:var(--green-deep); }
-  .pill { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15); }
-  .pill-inactive { background:rgba(156,59,46,.08); color:var(--danger); border-color:rgba(156,59,46,.2); }
-  .badge-payer { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px; }
-  .amount { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; }
-  .muted { color:var(--muted); } .overdue { color:var(--danger); font-weight:600; }
-  .empty { padding:40px 26px; text-align:center; color:var(--muted); }
-  .row-actions { white-space:nowrap; text-align:right; }
-  .toolbar { padding:16px 26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
-  .toolbar input[type="search"] { flex:1; min-width:180px; font-family:inherit; font-size:14px; color:var(--ink); background:#fbf8f1; border:1px solid var(--line); border-radius:9px; padding:9px 14px; }
-  .toolbar input[type="search"]:focus { outline:none; border-color:var(--green); background:#fff; box-shadow:0 0 0 3px rgba(31,77,63,.12); }
-  .toolbar select { font-family:inherit; font-size:13px; padding:8px 12px; border:1px solid var(--line); border-radius:9px; background:#fbf8f1; color:var(--ink); cursor:pointer; }
-  .toolbar label.toggle-label { font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; display:flex; align-items:center; gap:6px; text-transform:none; letter-spacing:0; }
-  .toolbar label.toggle-label input { width:auto; }
-  .toolbar .result-count { font-size:13px; color:var(--muted); margin-left:auto; white-space:nowrap; }
-  .pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
-  .pagination button { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--line); border-radius:7px; padding:6px 14px; background:#fff; color:var(--green); }
-  .pagination button:hover:not(:disabled) { background:#f1ede3; border-color:var(--green); }
-  .pagination button:disabled { opacity:.35; cursor:default; }
-  .pagination .page-info { font-size:13px; color:var(--muted); min-width:100px; text-align:center; }
-  .calc-row { display:flex; align-items:center; gap:14px; margin-top:6px; padding:10px 14px; background:#f8f5ec; border-radius:9px; font-size:14px; color:var(--muted); } .calc-row strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
-  .report-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:20px 26px; }
-  .stat-card { background:#f8f5ec; border-radius:12px; padding:20px; text-align:center; }
-  .stat-card .stat-value { font-family:'Fraunces',serif; font-size:32px; font-weight:600; color:var(--green-deep); }
-  .stat-card .stat-label { font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--muted); font-weight:600; margin-top:4px; }
-  .report-section { padding:0 26px 20px; }
-  .report-section h3 { font-family:'Fraunces',serif; font-size:16px; color:var(--green-deep); margin:20px 0 10px; }
-  .report-bar { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #f0eade; font-size:14px; }
-  .report-bar:last-child { border-bottom:none; }
-  .report-bar .bar-label { min-width:140px; font-weight:600; color:var(--ink); }
-  .report-bar .bar-fill { height:22px; border-radius:6px; background:var(--green); opacity:.7; min-width:2px; }
-  .report-bar .bar-value { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; min-width:80px; text-align:right; }
-  .outstanding-row { display:flex; align-items:center; gap:16px; padding:10px 0; border-bottom:1px solid #f0eade; font-size:14px; }
-  .outstanding-row:last-child { border-bottom:none; }
-  .outstanding-row .or-name { font-weight:600; color:var(--green-deep); min-width:180px; }
-  .outstanding-row .or-type { min-width:80px; }
-  .outstanding-row .or-due { color:var(--danger); font-weight:600; min-width:100px; }
-  .outstanding-row .or-email { color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; }
-  .outstanding-toolbar { display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
-  .outstanding-toolbar select { font-family:inherit; font-size:13px; padding:6px 10px; border:1px solid var(--line); border-radius:7px; background:#fbf8f1; }
-  .log-entry { padding:12px 26px; border-bottom:1px solid #f0eade; font-size:13px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-  .log-entry:last-child { border-bottom:none; }
-  .log-time { color:var(--muted); white-space:nowrap; min-width:130px; font-variant-numeric:tabular-nums; }
-  .log-user { color:var(--ochre); font-weight:600; min-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-  .log-action { font-weight:600; min-width:80px; }
-  .log-action.CREATE { color:var(--green); } .log-action.UPDATE { color:var(--ochre); }
-  .log-action.DELETE,.log-action.DEACTIVATE { color:var(--danger); }
-  .log-action.REACTIVATE { color:#2d6a9f; } .log-action.RESTORE { color:#7b2d9f; }
-  .log-summary { flex:1; min-width:200px; }
-  .log-restore-col { min-width:70px; text-align:right; }
-  .modal { position:fixed; inset:0; background:rgba(20,30,25,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50; }
-  .modal.open { display:flex; animation:fadein .2s ease; }
-  .dialog { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 20px 60px rgba(20,40,30,.25); width:100%; max-width:640px; padding:28px; animation:rise .25s ease; }
-  .dialog h2 { font-size:22px; margin:0 0 20px; }
-  .dialog .actions { justify-content:flex-end; } .dialog .actions .msg { margin-right:auto; }
-  @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
-  @keyframes fadein { from { opacity:0; } to { opacity:1; } }
+  :root{--bg:#f3ede1;--surface:#fffdf8;--ink:#211c15;--muted:#71685b;--line:#e4dccc;--green:#1f4d3f;--green-deep:#143229;--ochre:#a9742b;--danger:#9c3b2e;--radius:14px;--shadow:0 1px 2px rgba(20,40,30,.04),0 12px 30px rgba(20,40,30,.06);}
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);background-image:radial-gradient(circle at 20% 10%,rgba(31,77,63,.04),transparent 40%),radial-gradient(circle at 85% 90%,rgba(169,116,43,.05),transparent 45%);color:var(--ink);font-family:'Hanken Grotesk',sans-serif;font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+  .wrap{max-width:1040px;margin:0 auto;padding:48px 28px 80px;}
+  header.masthead{border-bottom:2px solid var(--green);padding-bottom:20px;margin-bottom:0;display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap;animation:rise .6s ease both;}
+  .masthead h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,5vw,44px);line-height:1.02;margin:0;color:var(--green-deep);letter-spacing:-.01em;}
+  .masthead .eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--ochre);font-weight:600;margin:0 0 8px;}
+  .count{font-family:'Fraunces',serif;font-size:15px;color:var(--muted);text-align:right;} .count strong{color:var(--green-deep);font-size:26px;display:block;}
+  .tab-bar{display:flex;gap:0;margin:0 0 28px;border-bottom:2px solid var(--line);padding-top:16px;overflow-x:auto;}
+  .tab-btn{font-family:'Hanken Grotesk',sans-serif;font-size:14px;font-weight:600;color:var(--muted);background:none;border:none;border-bottom:2px solid transparent;padding:12px 20px;margin-bottom:-2px;cursor:pointer;transition:color .15s,border-color .15s;white-space:nowrap;}
+  .tab-btn:hover{color:var(--green);} .tab-btn.active{color:var(--green-deep);border-bottom-color:var(--green);}
+  .tab-panel{display:none;animation:fadein .3s ease;} .tab-panel.active{display:block;}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px;margin-bottom:36px;}
+  .card h2,.table-head h2,.dialog h2{font-family:'Fraunces',serif;font-weight:600;color:var(--green-deep);}
+  .card h2{font-size:20px;margin:0 0 4px;} .card .sub{color:var(--muted);font-size:13px;margin:0 0 22px;}
+  form .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px 20px;}
+  @media(max-width:640px){form .grid{grid-template-columns:1fr;} .tab-btn{padding:10px 12px;font-size:13px;}}
+  .field{display:flex;flex-direction:column;gap:6px;} .field.wide{grid-column:1/-1;}
+  label{font-size:12px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--muted);}
+  input,select,textarea{font-family:inherit;font-size:15px;color:var(--ink);background:#fbf8f1;border:1px solid var(--line);border-radius:9px;padding:10px 12px;transition:border-color .15s,box-shadow .15s,background .15s;}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(31,77,63,.12);}
+  textarea{resize:vertical;min-height:56px;}
+  .checkbox-field{flex-direction:row;align-items:center;gap:10px;} .checkbox-field input{width:auto;} .checkbox-field label{text-transform:none;letter-spacing:0;font-size:14px;color:var(--ink);}
+  .actions{margin-top:22px;display:flex;align-items:center;gap:14px;}
+  button.primary{font-family:inherit;font-weight:600;font-size:15px;color:#fdfaf3;background:var(--green);border:none;border-radius:9px;padding:11px 22px;cursor:pointer;transition:background .15s,transform .05s;} button.primary:hover{background:var(--green-deep);} button.primary:active{transform:translateY(1px);}
+  .btn-ghost,.btn-danger,.btn-warn{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border-radius:7px;padding:6px 12px;border:1px solid var(--line);background:#fff;transition:background .12s,border-color .12s;}
+  .btn-ghost{color:var(--green);} .btn-ghost:hover{background:#f1ede3;border-color:var(--green);}
+  .btn-danger{color:var(--danger);margin-left:6px;} .btn-danger:hover{background:#fbeeec;border-color:var(--danger);}
+  .btn-warn{color:var(--ochre);margin-left:6px;} .btn-warn:hover{background:#fdf5eb;border-color:var(--ochre);}
+  .btn-sm{font-size:12px;padding:4px 10px;}
+  .btn-restore{color:#2d6a9f;font-size:12px;padding:3px 10px;border:1px solid rgba(45,106,159,.3);border-radius:6px;background:#fff;cursor:pointer;font-weight:600;font-family:inherit;} .btn-restore:hover{background:#eef4fa;border-color:#2d6a9f;}
+  .msg{font-size:14px;} .msg.ok{color:var(--green);} .msg.err{color:var(--danger);}
+  .table-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;margin-bottom:36px;}
+  .table-head{padding:22px 26px 0;display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+  .table-head h2{font-size:20px;margin:0;} .table-head .total{font-size:14px;color:var(--muted);} .table-head .total strong{color:var(--green-deep);font-variant-numeric:tabular-nums;}
+  table{width:100%;border-collapse:collapse;margin-top:14px;}
+  thead th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:10px 26px;border-bottom:1px solid var(--line);}
+  thead th.sortable{cursor:pointer;user-select:none;} thead th.sortable:hover{color:var(--green);}
+  thead th .sort-arrow{font-size:10px;margin-left:4px;}
+  tbody td{padding:14px 26px;border-bottom:1px solid #f0eade;vertical-align:middle;}
+  tbody tr:hover{background:#faf6ec;} tbody tr:last-child td{border-bottom:none;} tbody tr.inactive-row{opacity:.5;}
+  .name{font-weight:600;color:var(--green-deep);}
+  .pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;background:rgba(31,77,63,.08);color:var(--green);border:1px solid rgba(31,77,63,.15);}
+  .pill-inactive{background:rgba(156,59,46,.08);color:var(--danger);border-color:rgba(156,59,46,.2);}
+  .badge-payer{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ochre);border:1px solid rgba(169,116,43,.4);border-radius:999px;padding:2px 8px;margin-left:8px;}
+  .amount{font-weight:600;color:var(--green-deep);font-variant-numeric:tabular-nums;}
+  .muted{color:var(--muted);} .overdue{color:var(--danger);font-weight:600;}
+  .empty{padding:40px 26px;text-align:center;color:var(--muted);}
+  .row-actions{white-space:nowrap;text-align:right;}
+  .toolbar{padding:16px 26px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid var(--line);}
+  .toolbar input[type="search"]{flex:1;min-width:180px;font-family:inherit;font-size:14px;color:var(--ink);background:#fbf8f1;border:1px solid var(--line);border-radius:9px;padding:9px 14px;}
+  .toolbar input[type="search"]:focus{outline:none;border-color:var(--green);background:#fff;box-shadow:0 0 0 3px rgba(31,77,63,.12);}
+  .toolbar select{font-family:inherit;font-size:13px;padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:#fbf8f1;color:var(--ink);cursor:pointer;}
+  .toolbar label.toggle-label{font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px;text-transform:none;letter-spacing:0;}
+  .toolbar label.toggle-label input{width:auto;} .toolbar .result-count{font-size:13px;color:var(--muted);margin-left:auto;white-space:nowrap;}
+  .pagination{padding:14px 26px;display:flex;align-items:center;justify-content:center;gap:10px;border-top:1px solid var(--line);}
+  .pagination button{font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--line);border-radius:7px;padding:6px 14px;background:#fff;color:var(--green);}
+  .pagination button:hover:not(:disabled){background:#f1ede3;border-color:var(--green);} .pagination button:disabled{opacity:.35;cursor:default;}
+  .pagination .page-info{font-size:13px;color:var(--muted);min-width:100px;text-align:center;}
+  .calc-row{display:flex;align-items:center;gap:14px;margin-top:6px;padding:10px 14px;background:#f8f5ec;border-radius:9px;font-size:14px;color:var(--muted);} .calc-row strong{color:var(--green-deep);font-variant-numeric:tabular-nums;}
+  .report-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;padding:20px 26px;}
+  .stat-card{background:#f8f5ec;border-radius:12px;padding:20px;text-align:center;}
+  .stat-card .stat-value{font-family:'Fraunces',serif;font-size:32px;font-weight:600;color:var(--green-deep);}
+  .stat-card .stat-label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600;margin-top:4px;}
+  .report-section{padding:0 26px 20px;} .report-section h3{font-family:'Fraunces',serif;font-size:16px;color:var(--green-deep);margin:20px 0 10px;}
+  .report-bar{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid #f0eade;font-size:14px;} .report-bar:last-child{border-bottom:none;}
+  .report-bar .bar-label{min-width:140px;font-weight:600;color:var(--ink);}
+  .report-bar .bar-fill{height:22px;border-radius:6px;background:var(--green);opacity:.7;min-width:2px;}
+  .report-bar .bar-value{font-weight:600;color:var(--green-deep);font-variant-numeric:tabular-nums;min-width:80px;text-align:right;}
+  .outstanding-row{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid #f0eade;font-size:14px;} .outstanding-row:last-child{border-bottom:none;}
+  .outstanding-row .or-name{font-weight:600;color:var(--green-deep);min-width:180px;}
+  .outstanding-row .or-type{min-width:80px;} .outstanding-row .or-due{color:var(--danger);font-weight:600;min-width:100px;}
+  .outstanding-row .or-email{color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;}
+  .outstanding-toolbar{display:flex;align-items:center;gap:14px;margin-bottom:10px;flex-wrap:wrap;}
+  .outstanding-toolbar select{font-family:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:#fbf8f1;}
+  /* Document cards */
+  .doc-card{display:flex;align-items:center;gap:16px;padding:16px 26px;border-bottom:1px solid #f0eade;} .doc-card:last-child{border-bottom:none;} .doc-card:hover{background:#faf6ec;}
+  .doc-icon{font-size:28px;min-width:36px;text-align:center;}
+  .doc-info{flex:1;min-width:0;} .doc-title{font-weight:600;color:var(--green-deep);font-size:15px;} .doc-meta{font-size:12px;color:var(--muted);margin-top:2px;}
+  .doc-actions{display:flex;gap:8px;white-space:nowrap;}
+  /* Template editor */
+  .template-card{padding:20px 26px;border-bottom:1px solid #f0eade;} .template-card:last-child{border-bottom:none;} .template-card:hover{background:#faf6ec;}
+  .template-name{font-weight:600;color:var(--green-deep);font-size:15px;} .template-subj{font-size:13px;color:var(--muted);margin-top:2px;}
+  .template-actions{display:flex;gap:8px;margin-top:8px;}
+  .preview-card{background:#f8f5ec;border-radius:12px;padding:16px 20px;margin:12px 0;font-size:13px;}
+  .preview-card .pv-to{color:var(--muted);font-size:12px;} .preview-card .pv-subj{font-weight:600;color:var(--green-deep);margin:4px 0;} .preview-card .pv-body{white-space:pre-wrap;color:var(--ink);}
+  .var-hint{font-size:12px;color:var(--muted);padding:8px 0;} .var-hint code{background:#f0eade;padding:2px 6px;border-radius:4px;font-size:11px;}
+  /* Audit */
+  .log-entry{padding:12px 26px;border-bottom:1px solid #f0eade;font-size:13px;display:flex;gap:12px;align-items:center;flex-wrap:wrap;} .log-entry:last-child{border-bottom:none;}
+  .log-time{color:var(--muted);white-space:nowrap;min-width:130px;font-variant-numeric:tabular-nums;}
+  .log-user{color:var(--ochre);font-weight:600;min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .log-action{font-weight:600;min-width:80px;} .log-action.CREATE{color:var(--green);} .log-action.UPDATE{color:var(--ochre);}
+  .log-action.DELETE,.log-action.DEACTIVATE{color:var(--danger);} .log-action.REACTIVATE{color:#2d6a9f;} .log-action.RESTORE{color:#7b2d9f;}
+  .log-summary{flex:1;min-width:200px;} .log-restore-col{min-width:70px;text-align:right;}
+  .modal{position:fixed;inset:0;background:rgba(20,30,25,.45);display:none;align-items:flex-start;justify-content:center;padding:40px 20px;overflow-y:auto;z-index:50;}
+  .modal.open{display:flex;animation:fadein .2s ease;}
+  .dialog{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 20px 60px rgba(20,40,30,.25);width:100%;max-width:640px;padding:28px;animation:rise .25s ease;}
+  .dialog h2{font-size:22px;margin:0 0 20px;} .dialog .actions{justify-content:flex-end;} .dialog .actions .msg{margin-right:auto;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+  @keyframes fadein{from{opacity:0;}to{opacity:1;}}
 </style>
 </head>
 <body>
@@ -132,92 +119,131 @@
   <nav class="tab-bar">
     <button class="tab-btn active" data-tab="members">Members &amp; Payments</button>
     <button class="tab-btn" data-tab="reports">Reports</button>
+    <button class="tab-btn" data-tab="docs">Executive Meetings</button>
+    <button class="tab-btn" data-tab="comms">Communications</button>
     <button class="tab-btn" data-tab="log">Activity Log</button>
   </nav>
 
-  <!-- TAB 1: MEMBERS & PAYMENTS -->
+  <!-- ===================== TAB 1: MEMBERS & PAYMENTS ===================== -->
   <div class="tab-panel active" id="tab-members">
-    <section class="card">
-      <h2>Add a member</h2>
-      <p class="sub">Creates the person as the payer of a new membership with an optional initial payment.</p>
-      <form id="addForm">
-        <div class="grid">
-          <div class="field"><label>First name *</label><input name="first_name" required></div>
-          <div class="field"><label>Last name *</label><input name="last_name" required></div>
-          <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
-          <div class="field"><label>Membership type</label><select name="membership_type" id="typeSelect"></select></div>
-          <div class="field"><label>Years paid for</label><select name="years_paid" id="yearsPaid"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option><option value="4">4 years</option><option value="5">5 years</option></select></div>
-          <div class="field"><label>Payment method</label><select name="initial_payment_method" id="addPayMethod"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
-          <div class="field wide"><div class="calc-row">Total due: <strong id="calcTotal">$20.00</strong> · Next due: <strong id="calcDue">Jan 2027</strong><input type="hidden" name="initial_payment_amount" id="calcAmountHidden"></div></div>
-          <div class="field"><label>Email</label><input name="email" type="email"></div>
-          <div class="field"><label>Phone</label><input name="phone"></div>
-          <div class="field wide"><label>Street address</label><input name="street_address"></div>
-          <div class="field"><label>City</label><input name="city"></div>
-          <div class="field"><label>Province</label><input name="province"></div>
-          <div class="field"><label>Postal code</label><input name="postal_code"></div>
-          <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
-          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
-        </div>
-        <div class="actions"><button class="primary" type="submit">Add member</button><span id="formMsg" class="msg"></span></div>
-      </form>
+    <section class="card"><h2>Add a member</h2><p class="sub">Creates the person as the payer of a new membership with an optional initial payment.</p>
+      <form id="addForm"><div class="grid">
+        <div class="field"><label>First name *</label><input name="first_name" required></div>
+        <div class="field"><label>Last name *</label><input name="last_name" required></div>
+        <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
+        <div class="field"><label>Membership type</label><select name="membership_type" id="typeSelect"></select></div>
+        <div class="field"><label>Years paid for</label><select name="years_paid" id="yearsPaid"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option><option value="4">4 years</option><option value="5">5 years</option></select></div>
+        <div class="field"><label>Payment method</label><select name="initial_payment_method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
+        <div class="field wide"><div class="calc-row">Total due: <strong id="calcTotal">$20.00</strong> · Next due: <strong id="calcDue">Jan 2027</strong><input type="hidden" name="initial_payment_amount" id="calcAmountHidden"></div></div>
+        <div class="field"><label>Email</label><input name="email" type="email"></div>
+        <div class="field"><label>Phone</label><input name="phone"></div>
+        <div class="field wide"><label>Street address</label><input name="street_address"></div>
+        <div class="field"><label>City</label><input name="city"></div>
+        <div class="field"><label>Province</label><input name="province"></div>
+        <div class="field"><label>Postal code</label><input name="postal_code"></div>
+        <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
+        <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+      </div><div class="actions"><button class="primary" type="submit">Add member</button><span id="formMsg" class="msg"></span></div></form>
     </section>
-    <section class="table-card">
-      <div class="table-head"><h2>Members</h2></div>
-      <div class="toolbar">
-        <input type="search" id="memberSearch" placeholder="Search by name, email, or city…" autocomplete="off">
+    <section class="table-card"><div class="table-head"><h2>Members</h2></div>
+      <div class="toolbar"><input type="search" id="memberSearch" placeholder="Search by name, email, or city…" autocomplete="off">
         <select id="typeFilter"><option value="">All types</option><option value="Individual">Individual</option><option value="Couple">Couple</option><option value="Family">Family</option><option value="Exempt">Exempt</option></select>
         <label class="toggle-label"><input type="checkbox" id="showInactive"> Show inactive</label>
-        <span class="result-count" id="memberResultCount"></span>
-      </div>
-      <table>
-        <thead><tr><th class="sortable" data-sort="name">Name <span class="sort-arrow" id="arrow-name">▲</span></th><th class="sortable" data-sort="type">Type <span class="sort-arrow" id="arrow-type"></span></th><th class="sortable" data-sort="due">Next Due <span class="sort-arrow" id="arrow-due"></span></th><th>Location</th><th>Email</th><th></th></tr></thead>
-        <tbody id="memberRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
-      </table>
+        <span class="result-count" id="memberResultCount"></span></div>
+      <table><thead><tr><th class="sortable" data-sort="name">Name <span class="sort-arrow" id="arrow-name">▲</span></th><th class="sortable" data-sort="type">Type <span class="sort-arrow" id="arrow-type"></span></th><th class="sortable" data-sort="due">Next Due <span class="sort-arrow" id="arrow-due"></span></th><th>Location</th><th>Email</th><th></th></tr></thead>
+        <tbody id="memberRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody></table>
       <div class="pagination"><button id="prevPage" onclick="changePage(-1)">← Previous</button><span class="page-info" id="pageInfo">Page 1 of 1</span><button id="nextPage" onclick="changePage(1)">Next →</button></div>
     </section>
-    <section class="card">
-      <h2>Record a payment</h2>
-      <p class="sub">Logs a payment and automatically updates the member's next due date.</p>
-      <form id="payForm">
-        <div class="grid">
-          <div class="field wide"><label>Member (who paid) *</label><select name="member" id="payMember" required></select></div>
-          <div class="field"><label>Amount ($) *</label><input name="amount" type="number" step="0.01" min="0" required></div>
-          <div class="field"><label>Method *</label><select name="method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
-          <div class="field"><label>Date received</label><input name="date_received" type="date"></div>
-          <div class="field"><label>Dues year</label><input name="dues_year" type="number" id="duesYear"></div>
-          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
-        </div>
-        <div class="actions"><button class="primary" type="submit">Record payment</button><span id="payMsg" class="msg"></span></div>
-      </form>
+    <section class="card"><h2>Record a payment</h2><p class="sub">Logs a payment and automatically updates the member's next due date.</p>
+      <form id="payForm"><div class="grid">
+        <div class="field wide"><label>Member (who paid) *</label><select name="member" id="payMember" required></select></div>
+        <div class="field"><label>Amount ($) *</label><input name="amount" type="number" step="0.01" min="0" required></div>
+        <div class="field"><label>Method *</label><select name="method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
+        <div class="field"><label>Date received</label><input name="date_received" type="date"></div>
+        <div class="field"><label>Dues year</label><input name="dues_year" type="number" id="duesYear"></div>
+        <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+      </div><div class="actions"><button class="primary" type="submit">Record payment</button><span id="payMsg" class="msg"></span></div></form>
     </section>
-    <section class="table-card">
-      <div class="table-head"><h2>Payments</h2><div class="total"><select id="payYearFilter" style="margin-right:12px;font-family:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:#fbf8f1;"></select>Total: <strong id="payTotal">$0.00</strong> · <span id="payCount">0</span> payments</div></div>
-      <table>
-        <thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th><th>Method</th><th>Year</th><th></th></tr></thead>
-        <tbody id="payRows"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
-      </table>
+    <section class="table-card"><div class="table-head"><h2>Payments</h2><div class="total"><select id="payYearFilter" style="margin-right:12px;font-family:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:#fbf8f1;"></select>Total: <strong id="payTotal">$0.00</strong> · <span id="payCount">0</span> payments</div></div>
+      <table><thead><tr><th>Date</th><th>Member</th><th>Type</th><th>Amount</th><th>Method</th><th>Year</th><th></th></tr></thead>
+        <tbody id="payRows"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody></table>
     </section>
   </div>
 
-  <!-- TAB 2: REPORTS -->
+  <!-- ===================== TAB 2: REPORTS ===================== -->
   <div class="tab-panel" id="tab-reports">
-    <section class="table-card">
-      <div class="table-head"><h2>📊 Dashboard</h2></div>
+    <section class="table-card"><div class="table-head"><h2>📊 Dashboard</h2></div>
       <div class="report-grid" id="reportStats"></div>
-      <div class="report-section"><h3>💰 Revenue by Year</h3><div id="revenueByYear"></div></div>
-    </section>
-    <section class="table-card">
-      <div class="table-head"><h2>⚠ Dues Outstanding</h2><span class="muted" id="outstandingTotal" style="font-size:13px;"></span></div>
+      <div class="report-section"><h3>💰 Revenue by Year</h3><div id="revenueByYear"></div></div></section>
+    <section class="table-card"><div class="table-head"><h2>⚠ Dues Outstanding</h2><span class="muted" id="outstandingTotal" style="font-size:13px;"></span></div>
       <div style="padding:16px 26px 0;"><div class="outstanding-toolbar"><select id="outstandingYearFilter"></select><span class="result-count" id="outstandingResultCount"></span></div></div>
       <div id="duesOutstanding" style="padding:0 26px;"></div>
-      <div class="pagination" id="outstandingPagination"><button id="outPrev" onclick="changeOutPage(-1)">← Previous</button><span class="page-info" id="outPageInfo">Page 1 of 1</span><button id="outNext" onclick="changeOutPage(1)">Next →</button></div>
+      <div class="pagination"><button id="outPrev" onclick="changeOutPage(-1)">← Previous</button><span class="page-info" id="outPageInfo">Page 1 of 1</span><button id="outNext" onclick="changeOutPage(1)">Next →</button></div>
     </section>
   </div>
 
-  <!-- TAB 3: ACTIVITY LOG -->
+  <!-- ===================== TAB 3: EXECUTIVE MEETINGS ===================== -->
+  <div class="tab-panel" id="tab-docs">
+    <section class="card"><h2>📁 Upload Document</h2><p class="sub">Upload meeting minutes, agendas, guides, and other important documents.</p>
+      <form id="uploadDocForm"><div class="grid">
+        <div class="field wide"><label>File *</label><input type="file" name="file" id="docFile" required accept=".pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.jpg,.jpeg,.png"></div>
+        <div class="field"><label>Title</label><input name="title" id="docTitle" placeholder="Auto-filled from filename"></div>
+        <div class="field"><label>Category *</label><select name="category" id="docCategory">
+          <option value="Meeting Minutes">Meeting Minutes</option><option value="Agendas">Agendas</option><option value="Website Guides">Website Guides</option><option value="CIS Documents">CIS Documents</option><option value="Newsletters">Newsletters</option></select></div>
+        <div class="field"><label>Document date</label><input name="doc_date" type="date" id="docDate"></div>
+        <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+      </div><div class="actions"><button class="primary" type="submit">Upload</button><span id="docMsg" class="msg"></span></div></form>
+    </section>
+    <section class="table-card"><div class="table-head"><h2>📄 Documents</h2><span class="muted" id="docCount" style="font-size:13px;"></span></div>
+      <div class="toolbar">
+        <select id="docCategoryFilter"><option value="">All categories</option><option value="Meeting Minutes">Meeting Minutes</option><option value="Agendas">Agendas</option><option value="Website Guides">Website Guides</option><option value="CIS Documents">CIS Documents</option><option value="Newsletters">Newsletters</option></select>
+        <select id="docYearFilter"></select>
+        <span class="result-count" id="docResultCount"></span>
+      </div>
+      <div id="docList"></div>
+      <div class="pagination"><button id="docPrev" onclick="changeDocPage(-1)">← Previous</button><span class="page-info" id="docPageInfo">Page 1 of 1</span><button id="docNext" onclick="changeDocPage(1)">Next →</button></div>
+    </section>
+  </div>
+
+  <!-- ===================== TAB 4: COMMUNICATIONS ===================== -->
+  <div class="tab-panel" id="tab-comms">
+    <section class="card"><h2>✉️ Email Templates</h2>
+      <p class="sub">Create reusable email templates with merge fields. Sending will be enabled when the CIS email domain is configured.</p>
+      <div class="var-hint">Available variables: <code>{first_name}</code> <code>{last_name}</code> <code>{membership_type}</code> <code>{email}</code> <code>{next_due_date}</code> <code>{amount_due}</code></div>
+      <form id="templateForm"><div class="grid">
+        <div class="field"><label>Template name *</label><input name="name" required placeholder="e.g. Dues Reminder"></div>
+        <div class="field"><label>Subject line *</label><input name="subject" required placeholder="e.g. HCIS Membership Dues - {first_name}"></div>
+        <div class="field wide"><label>Email body *</label><textarea name="body" required style="min-height:140px;" placeholder="Dear {first_name},&#10;&#10;This is a reminder that your {membership_type} membership dues of {amount_due} are due..."></textarea></div>
+      </div><div class="actions"><button class="primary" type="submit">Save Template</button><span id="templateMsg" class="msg"></span></div></form>
+    </section>
+
+    <section class="table-card"><div class="table-head"><h2>Saved Templates</h2></div>
+      <div id="templateList"></div>
+    </section>
+
+    <section class="table-card"><div class="table-head"><h2>📬 Preview & Send</h2></div>
+      <div style="padding:20px 26px;">
+        <div class="grid" style="gap:14px 20px;">
+          <div class="field"><label>Template</label><select id="previewTemplate"></select></div>
+          <div class="field"><label>Recipients</label><select id="previewFilter">
+            <option value="all_active">All active payers with email</option>
+            <option value="overdue">All overdue payers</option>
+            <option value="overdue_year">Overdue for specific year</option>
+          </select></div>
+          <div class="field" id="previewYearField" style="display:none;"><label>Year</label><input type="number" id="previewYear" value="2026"></div>
+        </div>
+        <div class="actions"><button class="primary" onclick="loadPreview()">Preview</button></div>
+        <div id="previewResults" style="margin-top:16px;"></div>
+        <div style="margin-top:16px;padding:16px;background:#fdf5eb;border-radius:9px;font-size:13px;color:var(--ochre);font-weight:500;">
+          ⚠ Email sending is not yet connected. Templates and recipient lists are ready — sending will be enabled when the CIS email domain is configured.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ===================== TAB 5: ACTIVITY LOG ===================== -->
   <div class="tab-panel" id="tab-log">
-    <section class="table-card">
-      <div class="table-head"><h2>📋 Activity Log</h2><span class="muted" id="logCount" style="font-size:13px;"></span></div>
+    <section class="table-card"><div class="table-head"><h2>📋 Activity Log</h2><span class="muted" id="logCount" style="font-size:13px;"></span></div>
       <div id="auditEntries"></div>
       <div class="pagination"><button id="logPrev" onclick="changeLogPage(-1)">← Newer</button><span class="page-info" id="logPageInfo">Page 1</span><button id="logNext" onclick="changeLogPage(1)">Older →</button></div>
     </section>
@@ -240,6 +266,7 @@
   <div class="field"><label>Postal code</label><input name="postal_code"></div>
   <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
   <div class="field wide checkbox-field"><input type="checkbox" name="is_payer" id="editIsPayer"><label for="editIsPayer">Paying / primary member of this membership</label></div>
+  <div class="field wide checkbox-field"><input type="checkbox" name="unsubscribed" id="editUnsub"><label for="editUnsub">Unsubscribed from emails</label></div>
   <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
 </div><div class="actions"><span id="editMsg" class="msg"></span><button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save changes</button></div></form></div></div>
 
@@ -253,234 +280,243 @@
   <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
 </div><div class="actions"><span id="editPayMsg" class="msg"></span><button type="button" class="btn-ghost" onclick="closePayModal()">Cancel</button><button type="submit" class="primary">Save changes</button></div></form></div></div>
 
+<!-- Edit Template modal -->
+<div class="modal" id="tplModal"><div class="dialog"><h2>Edit Template</h2><form id="editTplForm"><input type="hidden" id="editTplId"><div class="grid">
+  <div class="field"><label>Template name *</label><input name="name" required></div>
+  <div class="field"><label>Subject line *</label><input name="subject" required></div>
+  <div class="field wide"><label>Email body *</label><textarea name="body" required style="min-height:140px;"></textarea></div>
+</div><div class="actions"><span id="editTplMsg" class="msg"></span><button type="button" class="btn-ghost" onclick="closeTplModal()">Cancel</button><button type="submit" class="primary">Save changes</button></div></form></div></div>
+
 <script>
 const api=(p,o)=>fetch(p,o).then(async r=>{const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||('Request failed: '+r.status));return d;});
 const esc=s=>(s==null?'':String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
 const money=c=>'$'+(c/100).toFixed(2);
 const methodLabel=m=>({etransfer:'E-transfer',cash:'Cash',cheque:'Cheque'}[m]||m);
+const fmtSize=b=>{if(b<1024)return b+'B';if(b<1048576)return(b/1024).toFixed(1)+'KB';return(b/1048576).toFixed(1)+'MB';};
+const fileIcon=t=>{if(!t)return'📄';if(t.includes('pdf'))return'📕';if(t.includes('word')||t.includes('doc'))return'📘';if(t.includes('sheet')||t.includes('xls'))return'📗';if(t.includes('image'))return'🖼️';return'📄';};
 
 let membersById={},allMembers=[],typesList=[],editMembershipId=null,allPayments=[],typeFees={};
 
-// ===== TABS (with hash routing) =====
-function showTab(tabName){
-  const valid=['members','reports','log'];
-  if(!valid.includes(tabName)) tabName='members';
-  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tabName));
-  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+tabName));
-  if(tabName==='reports') loadReports();
-  if(tabName==='log') loadAuditLog();
+// ===== TABS =====
+function showTab(t){const v=['members','reports','docs','comms','log'];if(!v.includes(t))t='members';
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='tab-'+t));
+  if(t==='reports')loadReports();if(t==='log')loadAuditLog();if(t==='docs')loadDocuments();if(t==='comms'){loadTemplates();loadTemplateSelect();}
 }
-document.querySelectorAll('.tab-btn').forEach(btn=>{
-  btn.addEventListener('click',()=>{ window.location.hash=btn.dataset.tab; });
-});
+document.querySelectorAll('.tab-btn').forEach(b=>{b.addEventListener('click',()=>{window.location.hash=b.dataset.tab;});});
 window.addEventListener('hashchange',()=>{showTab(window.location.hash.replace('#',''));});
 
 // ===== Add Member calc =====
-function updateCalc(){
-  const t=document.getElementById('typeSelect').value;
-  const y=parseInt(document.getElementById('yearsPaid').value)||1;
+function updateCalc(){const t=document.getElementById('typeSelect').value;const y=parseInt(document.getElementById('yearsPaid').value)||1;
   const fee=typeFees[t]||2000;const total=(fee*y)/100;const due=new Date().getFullYear()+y;
-  document.getElementById('calcTotal').textContent='$'+total.toFixed(2);
-  document.getElementById('calcDue').textContent='Jan '+due;
-  document.getElementById('calcAmountHidden').value=total.toFixed(2);
-}
+  document.getElementById('calcTotal').textContent='$'+total.toFixed(2);document.getElementById('calcDue').textContent='Jan '+due;
+  document.getElementById('calcAmountHidden').value=total.toFixed(2);}
 
+// ===== Members =====
 const PER_PAGE=20;let currentPage=1,sortField='name',sortDir=1,filteredMembers=[];
-
-function getFilteredMembers(){
-  const q=document.getElementById('memberSearch').value.toLowerCase().trim();
-  const tf=document.getElementById('typeFilter').value;
-  const si=document.getElementById('showInactive').checked;
-  let list=allMembers.filter(m=>{
-    if(!si&&m.membership_active===0)return false;if(tf&&m.membership_type!==tf)return false;
-    if(q){const h=[m.last_name,m.first_name,m.email,m.city,m.province,m.membership_type].filter(Boolean).join(' ').toLowerCase();return h.includes(q);}return true;
-  });
-  list.sort((a,b)=>{let va,vb;
-    if(sortField==='name'){va=(a.last_name||'').toLowerCase()+' '+(a.first_name||'').toLowerCase();vb=(b.last_name||'').toLowerCase()+' '+(b.first_name||'').toLowerCase();}
+function getFilteredMembers(){const q=document.getElementById('memberSearch').value.toLowerCase().trim();const tf=document.getElementById('typeFilter').value;const si=document.getElementById('showInactive').checked;
+  let list=allMembers.filter(m=>{if(!si&&m.membership_active===0)return false;if(tf&&m.membership_type!==tf)return false;
+    if(q){return[m.last_name,m.first_name,m.email,m.city,m.province,m.membership_type].filter(Boolean).join(' ').toLowerCase().includes(q);}return true;});
+  list.sort((a,b)=>{let va,vb;if(sortField==='name'){va=(a.last_name||'').toLowerCase()+' '+(a.first_name||'').toLowerCase();vb=(b.last_name||'').toLowerCase()+' '+(b.first_name||'').toLowerCase();}
     else if(sortField==='type'){va=(a.membership_type||'').toLowerCase();vb=(b.membership_type||'').toLowerCase();}
-    else if(sortField==='due'){va=a.next_due_date||'9999';vb=b.next_due_date||'9999';}
-    if(va<vb)return -1*sortDir;if(va>vb)return 1*sortDir;return 0;
-  });return list;
-}
-
-function renderMembers(){
-  filteredMembers=getFilteredMembers();const tp=Math.max(1,Math.ceil(filteredMembers.length/PER_PAGE));
-  if(currentPage>tp)currentPage=tp;const s=(currentPage-1)*PER_PAGE;const pg=filteredMembers.slice(s,s+PER_PAGE);
-  const tbody=document.getElementById('memberRows');const today=new Date().toISOString().slice(0,10);
+    else if(sortField==='due'){va=a.next_due_date||'9999';vb=b.next_due_date||'9999';}if(va<vb)return -1*sortDir;if(va>vb)return 1*sortDir;return 0;});return list;}
+function renderMembers(){filteredMembers=getFilteredMembers();const tp=Math.max(1,Math.ceil(filteredMembers.length/PER_PAGE));if(currentPage>tp)currentPage=tp;
+  const s=(currentPage-1)*PER_PAGE;const pg=filteredMembers.slice(s,s+PER_PAGE);const tbody=document.getElementById('memberRows');const today=new Date().toISOString().slice(0,10);
   tbody.innerHTML=pg.length?pg.map((m,i)=>{const ia=m.membership_active===0;const dd=m.next_due_date||'';const od=dd&&dd<today&&!ia;const disp=dd?dd.slice(0,10):'—';
-    return `<tr class="${ia?'inactive-row':''}" style="animation-delay:${i*20}ms"><td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer?'<span class="badge-payer">Payer</span>':''}</span></td><td><span class="pill ${ia?'pill-inactive':''}">${esc(m.membership_type||'—')}${ia?' (inactive)':''}</span></td><td class="${od?'overdue':'muted'}">${od?'⚠ ':''}${esc(disp)}</td><td class="muted">${[esc(m.city),esc(m.province)].filter(Boolean).join(', ')||'—'}</td><td class="muted">${esc(m.email)||'—'}</td><td class="row-actions"><button class="btn-ghost btn-sm" onclick="editMember(${m.member_id})">Edit</button>${ia?`<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id},${m.membership_id})">Reactivate</button>`:`<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id},${m.membership_id})">Deactivate</button>`}</td></tr>`;
-  }).join(''):'<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
-  const ac=allMembers.filter(m=>m.membership_active!==0).length;
-  document.getElementById('memberCount').textContent=ac;
+    return `<tr class="${ia?'inactive-row':''}" style="animation-delay:${i*20}ms"><td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer?'<span class="badge-payer">Payer</span>':''}</span></td><td><span class="pill ${ia?'pill-inactive':''}">${esc(m.membership_type||'—')}${ia?' (inactive)':''}</span></td><td class="${od?'overdue':'muted'}">${od?'⚠ ':''}${esc(disp)}</td><td class="muted">${[esc(m.city),esc(m.province)].filter(Boolean).join(', ')||'—'}</td><td class="muted">${esc(m.email)||'—'}</td><td class="row-actions"><button class="btn-ghost btn-sm" onclick="editMember(${m.member_id})">Edit</button>${ia?`<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id},${m.membership_id})">Reactivate</button>`:`<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id},${m.membership_id})">Deactivate</button>`}</td></tr>`;}).join('')
+    :'<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
+  const ac=allMembers.filter(m=>m.membership_active!==0).length;document.getElementById('memberCount').textContent=ac;
   document.getElementById('memberResultCount').textContent=`Showing ${filteredMembers.length} of ${allMembers.length}`;
-  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${tp}`;
-  document.getElementById('prevPage').disabled=currentPage<=1;document.getElementById('nextPage').disabled=currentPage>=tp;
-  ['name','type','due'].forEach(f=>{document.getElementById('arrow-'+f).textContent=f===sortField?(sortDir===1?'▲':'▼'):'';});
-}
+  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${tp}`;document.getElementById('prevPage').disabled=currentPage<=1;document.getElementById('nextPage').disabled=currentPage>=tp;
+  ['name','type','due'].forEach(f=>{document.getElementById('arrow-'+f).textContent=f===sortField?(sortDir===1?'▲':'▼'):'';});}
 function changePage(d){currentPage+=d;renderMembers();}
 document.querySelectorAll('th.sortable').forEach(th=>{th.addEventListener('click',()=>{const f=th.dataset.sort;if(sortField===f)sortDir*=-1;else{sortField=f;sortDir=1;}currentPage=1;renderMembers();});});
 document.getElementById('memberSearch').addEventListener('input',()=>{currentPage=1;renderMembers();});
 document.getElementById('typeFilter').addEventListener('change',()=>{currentPage=1;renderMembers();});
 document.getElementById('showInactive').addEventListener('change',()=>{currentPage=1;renderMembers();});
 
-async function loadTypes(){
-  typesList=await api('/api/membership-types');typeFees={};typesList.forEach(t=>{typeFees[t.type]=t.annual_fee_cents;});
+async function loadTypes(){typesList=await api('/api/membership-types');typeFees={};typesList.forEach(t=>{typeFees[t.type]=t.annual_fee_cents;});
   const sel=document.getElementById('typeSelect');const ord=typesList.filter(t=>t.type!=='Exempt').concat(typesList.filter(t=>t.type==='Exempt'));
-  sel.innerHTML=ord.map(t=>`<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
-  sel.value='Individual';updateCalc();
-}
-document.getElementById('typeSelect').addEventListener('change',updateCalc);
-document.getElementById('yearsPaid').addEventListener('change',updateCalc);
+  sel.innerHTML=ord.map(t=>`<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');sel.value='Individual';updateCalc();}
+document.getElementById('typeSelect').addEventListener('change',updateCalc);document.getElementById('yearsPaid').addEventListener('change',updateCalc);
 
-async function loadMembers(){
-  const ps=document.getElementById('payMember');
+async function loadMembers(){const ps=document.getElementById('payMember');
   try{allMembers=await api('/api/members');membersById={};allMembers.forEach(m=>{membersById[m.member_id]=m;});currentPage=1;renderMembers();
     const active=allMembers.filter(m=>m.membership_active!==0);
     ps.innerHTML=active.length?'<option value="">Select a member…</option>'+active.map(m=>`<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type||'?')}</option>`).join(''):'<option value="">No members yet</option>';
-  }catch(e){document.getElementById('memberRows').innerHTML=`<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;}
-}
+  }catch(e){document.getElementById('memberRows').innerHTML=`<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;}}
 
-function renderPayments(){
-  const yf=document.getElementById('payYearFilter').value;const tbody=document.getElementById('payRows');
+// ===== Payments =====
+function renderPayments(){const yf=document.getElementById('payYearFilter').value;const tbody=document.getElementById('payRows');
   const filtered=yf==='all'?allPayments:allPayments.filter(p=>String(p.dues_year)===yf);
-  document.getElementById('payTotal').textContent=money(filtered.reduce((s,p)=>s+p.amount_cents,0));
-  document.getElementById('payCount').textContent=filtered.length;
+  document.getElementById('payTotal').textContent=money(filtered.reduce((s,p)=>s+p.amount_cents,0));document.getElementById('payCount').textContent=filtered.length;
   tbody.innerHTML=filtered.length?filtered.map((p,i)=>{const payer=[p.payer_last_name,p.payer_first_name].filter(Boolean).join(', ');
-    return `<tr style="animation-delay:${i*20}ms"><td class="muted">${esc(p.date_received)}</td><td class="name">${esc(payer)||'—'}</td><td><span class="pill">${esc(p.membership_type||'—')}</span></td><td class="amount">${money(p.amount_cents)}</td><td class="muted">${esc(methodLabel(p.method))}</td><td class="muted">${esc(p.dues_year)}</td><td class="row-actions"><button class="btn-ghost btn-sm" onclick="editPayment(${p.payment_id})">Edit</button></td></tr>`;
-  }).join(''):'<tr><td colspan="7" class="empty">No payments for this period.</td></tr>';
-}
-async function loadPayments(){
-  try{allPayments=await api('/api/payments');const years=[...new Set(allPayments.map(p=>p.dues_year).filter(Boolean))].sort((a,b)=>b-a);
-    const sel=document.getElementById('payYearFilter');const cy=new Date().getFullYear();
-    sel.innerHTML=years.map(y=>`<option value="${y}"${y===cy?' selected':''}>${y}</option>`).join('')+'<option value="all">All years</option>';
-    if(!years.includes(cy))sel.value='all';renderPayments();
-  }catch(e){document.getElementById('payRows').innerHTML=`<tr><td colspan="7" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;}
-}
+    return `<tr style="animation-delay:${i*20}ms"><td class="muted">${esc(p.date_received)}</td><td class="name">${esc(payer)||'—'}</td><td><span class="pill">${esc(p.membership_type||'—')}</span></td><td class="amount">${money(p.amount_cents)}</td><td class="muted">${esc(methodLabel(p.method))}</td><td class="muted">${esc(p.dues_year)}</td><td class="row-actions"><button class="btn-ghost btn-sm" onclick="editPayment(${p.payment_id})">Edit</button></td></tr>`;}).join('')
+    :'<tr><td colspan="7" class="empty">No payments for this period.</td></tr>';}
+async function loadPayments(){try{allPayments=await api('/api/payments');const years=[...new Set(allPayments.map(p=>p.dues_year).filter(Boolean))].sort((a,b)=>b-a);
+    const sel=document.getElementById('payYearFilter');const cy=new Date().getFullYear();sel.innerHTML=years.map(y=>`<option value="${y}"${y===cy?' selected':''}>${y}</option>`).join('')+'<option value="all">All years</option>';
+    if(!years.includes(cy))sel.value='all';renderPayments();}catch(e){document.getElementById('payRows').innerHTML=`<tr><td colspan="7" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;}}
 document.getElementById('payYearFilter').addEventListener('change',renderPayments);
 
-async function editPayment(id){
-  const p=await api('/api/payments/'+id);const f=document.getElementById('editPayForm');
-  document.getElementById('editPayId').value=p.payment_id;
+// Payment edit
+async function editPayment(id){const p=await api('/api/payments/'+id);const f=document.getElementById('editPayForm');document.getElementById('editPayId').value=p.payment_id;
   document.getElementById('editPayPayer').value=[p.payer_last_name,p.payer_first_name].filter(Boolean).join(', ')||'Unknown';
   f.amount.value=(p.amount_cents/100).toFixed(2);f.method.value=p.method;f.date_received.value=p.date_received||'';f.dues_year.value=p.dues_year||'';f.notes.value=p.notes||'';
-  document.getElementById('editPayMsg').textContent='';document.getElementById('payModal').classList.add('open');
-}
+  document.getElementById('editPayMsg').textContent='';document.getElementById('payModal').classList.add('open');}
 function closePayModal(){document.getElementById('payModal').classList.remove('open');}
 document.getElementById('payModal').addEventListener('click',e=>{if(e.target.id==='payModal')closePayModal();});
-document.getElementById('editPayForm').addEventListener('submit',async ev=>{
-  ev.preventDefault();const f=ev.target,id=document.getElementById('editPayId').value;const msg=document.getElementById('editPayMsg');
+document.getElementById('editPayForm').addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target,id=document.getElementById('editPayId').value;const msg=document.getElementById('editPayMsg');
   try{await api('/api/payments/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({amount:Number(f.amount.value),method:f.method.value,date_received:f.date_received.value||null,dues_year:f.dues_year.value?Number(f.dues_year.value):null,notes:f.notes.value})});
-    closePayModal();loadPayments();loadMembers();}catch(e){msg.textContent=e.message;msg.className='msg err';}
-});
+    closePayModal();loadPayments();loadMembers();}catch(e){msg.textContent=e.message;msg.className='msg err';}});
 
-async function deactivateMember(mid,msid){if(!confirm('Deactivate this member? They will be hidden but all data is preserved.'))return;try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:0})});loadMembers();}catch(e){alert('Could not deactivate: '+e.message);}}
-async function reactivateMember(mid,msid){try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:1})});loadMembers();}catch(e){alert('Could not reactivate: '+e.message);}}
+// Deactivate/Reactivate
+async function deactivateMember(mid,msid){if(!confirm('Deactivate this member?'))return;try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:0})});loadMembers();}catch(e){alert(e.message);}}
+async function reactivateMember(mid,msid){try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:1})});loadMembers();}catch(e){alert(e.message);}}
 
-async function editMember(id){
-  const m=await api('/api/members/'+id);const f=document.getElementById('editForm');
-  document.getElementById('editId').value=m.member_id;editMembershipId=m.membership_id;
+// Edit member
+async function editMember(id){const m=await api('/api/members/'+id);const f=document.getElementById('editForm');document.getElementById('editId').value=m.member_id;editMembershipId=m.membership_id;
   ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes'].forEach(k=>{f[k].value=m[k]||'';});
-  f.membership_type.innerHTML=typesList.map(t=>`<option value="${esc(t.type)}">${esc(t.type)}</option>`).join('');
-  f.membership_type.value=m.membership_type||'Individual';f.next_due_date.value=m.next_due_date||'';f.is_payer.checked=!!m.is_payer;
-  document.getElementById('editMsg').textContent='';document.getElementById('modal').classList.add('open');
-}
+  f.membership_type.innerHTML=typesList.map(t=>`<option value="${esc(t.type)}">${esc(t.type)}</option>`).join('');f.membership_type.value=m.membership_type||'Individual';
+  f.next_due_date.value=m.next_due_date||'';f.is_payer.checked=!!m.is_payer;document.getElementById('editUnsub').checked=!!m.unsubscribed;
+  document.getElementById('editMsg').textContent='';document.getElementById('modal').classList.add('open');}
 function closeModal(){document.getElementById('modal').classList.remove('open');}
 document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closePayModal();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closePayModal();closeTplModal();}});
 
-document.getElementById('editForm').addEventListener('submit',async ev=>{
-  ev.preventDefault();const f=ev.target,id=document.getElementById('editId').value;const msg=document.getElementById('editMsg');
+document.getElementById('editForm').addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target,id=document.getElementById('editId').value;const msg=document.getElementById('editMsg');
   const body={};['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes'].forEach(k=>{body[k]=f[k].value;});
-  body.is_payer=f.is_payer.checked?1:0;
+  body.is_payer=f.is_payer.checked?1:0;body.unsubscribed=document.getElementById('editUnsub').checked?1:0;
   try{await api('/api/members/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     if(editMembershipId){await api('/api/memberships/'+editMembershipId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:f.membership_type.value,next_due_date:f.next_due_date.value||null})});}
-    closeModal();loadMembers();loadPayments();}catch(e){msg.textContent=e.message;msg.className='msg err';}
-});
+    closeModal();loadMembers();loadPayments();}catch(e){msg.textContent=e.message;msg.className='msg err';}});
 
-document.getElementById('addForm').addEventListener('submit',async ev=>{
-  ev.preventDefault();const msg=document.getElementById('formMsg');msg.textContent='';msg.className='msg';
+// Add member
+document.getElementById('addForm').addEventListener('submit',async ev=>{ev.preventDefault();const msg=document.getElementById('formMsg');msg.textContent='';msg.className='msg';
   const form=ev.target,body={};new FormData(form).forEach((v,k)=>{if(v!=='')body[k]=v;});
-  try{await api('/api/members',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    msg.textContent='Added ✓';msg.className='msg ok';form.reset();document.getElementById('typeSelect').value='Individual';document.getElementById('yearsPaid').value='1';updateCalc();
-    loadMembers();loadPayments();setTimeout(()=>{msg.textContent='';},2500);
-  }catch(e){msg.textContent=e.message;msg.className='msg err';}
-});
+  try{await api('/api/members',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});msg.textContent='Added ✓';msg.className='msg ok';
+    form.reset();document.getElementById('typeSelect').value='Individual';document.getElementById('yearsPaid').value='1';updateCalc();loadMembers();loadPayments();
+    setTimeout(()=>{msg.textContent='';},2500);}catch(e){msg.textContent=e.message;msg.className='msg err';}});
 
-document.getElementById('payForm').addEventListener('submit',async ev=>{
-  ev.preventDefault();const msg=document.getElementById('payMsg');msg.textContent='';msg.className='msg';
-  const form=ev.target,mid=form.member.value;
-  if(!mid){msg.textContent='Pick a member first.';msg.className='msg err';return;}
-  const m=membersById[mid];const body={membership_id:m.membership_id,paid_by_member_id:Number(mid),amount:Number(form.amount.value),method:form.method.value};
+// Record payment
+document.getElementById('payForm').addEventListener('submit',async ev=>{ev.preventDefault();const msg=document.getElementById('payMsg');msg.textContent='';msg.className='msg';
+  const form=ev.target,mid=form.member.value;if(!mid){msg.textContent='Pick a member first.';msg.className='msg err';return;}const m=membersById[mid];
+  const body={membership_id:m.membership_id,paid_by_member_id:Number(mid),amount:Number(form.amount.value),method:form.method.value};
   if(form.date_received.value)body.date_received=form.date_received.value;if(form.dues_year.value)body.dues_year=Number(form.dues_year.value);if(form.notes.value)body.notes=form.notes.value;
-  try{await api('/api/payments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
-    msg.textContent='Recorded ✓';msg.className='msg ok';form.reset();document.getElementById('duesYear').value=new Date().getFullYear();
-    loadPayments();loadMembers();setTimeout(()=>{msg.textContent='';},2500);
-  }catch(e){msg.textContent=e.message;msg.className='msg err';}
-});
+  try{await api('/api/payments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});msg.textContent='Recorded ✓';msg.className='msg ok';
+    form.reset();document.getElementById('duesYear').value=new Date().getFullYear();loadPayments();loadMembers();setTimeout(()=>{msg.textContent='';},2500);
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}});
 
 // ===== Reports =====
 let outstandingData=[],outPage=1;const OUT_PER=15;
-async function loadReports(){
-  try{const [summary,revenue,outstanding]=await Promise.all([api('/api/reports/membership-summary'),api('/api/reports/revenue-by-year'),api('/api/reports/dues-outstanding')]);
-    outstandingData=outstanding;
-    let totalActive=0,totalInactive=0;const typeBreak={};
-    summary.forEach(r=>{if(r.active){totalActive+=r.member_count;if(!typeBreak[r.type])typeBreak[r.type]=0;typeBreak[r.type]+=r.membership_count;}else totalInactive+=r.member_count;});
-    document.getElementById('reportStats').innerHTML=`<div class="stat-card"><div class="stat-value">${totalActive}</div><div class="stat-label">Active Members</div></div><div class="stat-card"><div class="stat-value">${totalInactive}</div><div class="stat-label">Inactive</div></div><div class="stat-card"><div class="stat-value">${outstanding.length}</div><div class="stat-label">Overdue Payers</div></div><div class="stat-card"><div class="stat-value">${Object.values(typeBreak).reduce((a,b)=>a+b,0)}</div><div class="stat-label">Active Memberships</div></div>`;
+async function loadReports(){try{const[summary,revenue,outstanding]=await Promise.all([api('/api/reports/membership-summary'),api('/api/reports/revenue-by-year'),api('/api/reports/dues-outstanding')]);
+    outstandingData=outstanding;let tA=0,tI=0;const tb={};summary.forEach(r=>{if(r.active){tA+=r.member_count;if(!tb[r.type])tb[r.type]=0;tb[r.type]+=r.membership_count;}else tI+=r.member_count;});
+    document.getElementById('reportStats').innerHTML=`<div class="stat-card"><div class="stat-value">${tA}</div><div class="stat-label">Active Members</div></div><div class="stat-card"><div class="stat-value">${tI}</div><div class="stat-label">Inactive</div></div><div class="stat-card"><div class="stat-value">${outstanding.length}</div><div class="stat-label">Overdue Payers</div></div><div class="stat-card"><div class="stat-value">${Object.values(tb).reduce((a,b)=>a+b,0)}</div><div class="stat-label">Active Memberships</div></div>`;
     const yt={};revenue.forEach(r=>{if(!yt[r.dues_year])yt[r.dues_year]={total:0,types:{}};yt[r.dues_year].total+=r.total_cents;yt[r.dues_year].types[r.membership_type]=r.total_cents;});
     const sy=Object.keys(yt).sort((a,b)=>b-a);const mx=Math.max(...Object.values(yt).map(y=>y.total),1);
     document.getElementById('revenueByYear').innerHTML=sy.length?sy.map(yr=>{const y=yt[yr];const pct=Math.round((y.total/mx)*100);const td=Object.entries(y.types).map(([t,c])=>`${t}: ${money(c)}`).join(' · ');
-      return `<div class="report-bar"><span class="bar-label">${esc(yr)}</span><div style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div><span class="bar-value">${money(y.total)}</span></div><div style="padding:0 0 8px 152px;font-size:12px;color:var(--muted);">${td}</div>`;
-    }).join(''):'<div class="empty">No revenue data yet.</div>';
-    const dueYears=[...new Set(outstanding.map(o=>{return o.next_due_date?o.next_due_date.slice(0,4):'?';}))].sort();
-    const osel=document.getElementById('outstandingYearFilter');
-    osel.innerHTML='<option value="all">All years</option>'+dueYears.map(y=>`<option value="${y}">${y}</option>`).join('');
-    document.getElementById('outstandingTotal').textContent=`${outstanding.length} payers overdue`;
-    outPage=1;renderOutstanding();
-  }catch(e){document.getElementById('reportStats').innerHTML=`<div class="empty">Couldn't load reports: ${esc(e.message)}</div>`;}
-}
-function renderOutstanding(){
-  const yf=document.getElementById('outstandingYearFilter').value;
-  let list=yf==='all'?outstandingData:outstandingData.filter(o=>o.next_due_date&&o.next_due_date.startsWith(yf));
-  const tp=Math.max(1,Math.ceil(list.length/OUT_PER));if(outPage>tp)outPage=tp;
-  const s=(outPage-1)*OUT_PER;const pg=list.slice(s,s+OUT_PER);
+      return `<div class="report-bar"><span class="bar-label">${esc(yr)}</span><div style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div><span class="bar-value">${money(y.total)}</span></div><div style="padding:0 0 8px 152px;font-size:12px;color:var(--muted);">${td}</div>`;}).join(''):'<div class="empty">No revenue data yet.</div>';
+    const dy=[...new Set(outstanding.map(o=>o.next_due_date?o.next_due_date.slice(0,4):'?'))].sort();const osel=document.getElementById('outstandingYearFilter');
+    osel.innerHTML='<option value="all">All years</option>'+dy.map(y=>`<option value="${y}">${y}</option>`).join('');
+    document.getElementById('outstandingTotal').textContent=`${outstanding.length} payers overdue`;outPage=1;renderOutstanding();
+  }catch(e){document.getElementById('reportStats').innerHTML=`<div class="empty">Couldn't load reports: ${esc(e.message)}</div>`;}}
+function renderOutstanding(){const yf=document.getElementById('outstandingYearFilter').value;let list=yf==='all'?outstandingData:outstandingData.filter(o=>o.next_due_date&&o.next_due_date.startsWith(yf));
+  const tp=Math.max(1,Math.ceil(list.length/OUT_PER));if(outPage>tp)outPage=tp;const s=(outPage-1)*OUT_PER;const pg=list.slice(s,s+OUT_PER);
   document.getElementById('outstandingResultCount').textContent=`${list.length} results`;
   document.getElementById('duesOutstanding').innerHTML=pg.length?pg.map(o=>{const dd=o.next_due_date?o.next_due_date.slice(0,10):'—';
-    return `<div class="outstanding-row"><span class="or-name">${esc(o.last_name)}, ${esc(o.first_name)}</span><span class="or-type"><span class="pill">${esc(o.membership_type)}</span></span><span class="or-due">Due: ${esc(dd)}</span><span class="or-email">${esc(o.email)||'—'}</span></div>`;
-  }).join(''):'<div class="empty" style="padding:20px;">All payers are current! 🍀</div>';
-  document.getElementById('outPageInfo').textContent=`Page ${outPage} of ${tp}`;
-  document.getElementById('outPrev').disabled=outPage<=1;document.getElementById('outNext').disabled=outPage>=tp;
-}
+    return `<div class="outstanding-row"><span class="or-name">${esc(o.last_name)}, ${esc(o.first_name)}</span><span class="or-type"><span class="pill">${esc(o.membership_type)}</span></span><span class="or-due">Due: ${esc(dd)}</span><span class="or-email">${esc(o.email)||'—'}</span></div>`;}).join('')
+    :'<div class="empty" style="padding:20px;">All payers are current! 🍀</div>';
+  document.getElementById('outPageInfo').textContent=`Page ${outPage} of ${tp}`;document.getElementById('outPrev').disabled=outPage<=1;document.getElementById('outNext').disabled=outPage>=tp;}
 function changeOutPage(d){outPage+=d;renderOutstanding();}
 document.getElementById('outstandingYearFilter').addEventListener('change',()=>{outPage=1;renderOutstanding();});
 
+// ===== Documents =====
+let allDocs=[],docPage=1;const DOC_PER=15;
+async function loadDocuments(){try{allDocs=await api('/api/documents');
+    const years=[...new Set(allDocs.map(d=>d.doc_date?d.doc_date.slice(0,4):'?'))].sort((a,b)=>b-a);
+    document.getElementById('docYearFilter').innerHTML='<option value="">All years</option>'+years.map(y=>`<option value="${y}">${y}</option>`).join('');
+    document.getElementById('docCount').textContent=`${allDocs.length} documents`;docPage=1;renderDocuments();
+  }catch(e){document.getElementById('docList').innerHTML=`<div class="empty">Couldn't load documents: ${esc(e.message)}</div>`;}}
+function renderDocuments(){const cf=document.getElementById('docCategoryFilter').value;const yf=document.getElementById('docYearFilter').value;
+  let list=allDocs;if(cf)list=list.filter(d=>d.category===cf);if(yf)list=list.filter(d=>d.doc_date&&d.doc_date.startsWith(yf));
+  const tp=Math.max(1,Math.ceil(list.length/DOC_PER));if(docPage>tp)docPage=tp;const s=(docPage-1)*DOC_PER;const pg=list.slice(s,s+DOC_PER);
+  document.getElementById('docResultCount').textContent=`${list.length} results`;
+  document.getElementById('docList').innerHTML=pg.length?pg.map(d=>{
+    const dt=d.doc_date?d.doc_date.slice(0,10):'—';const up=d.uploaded_by?d.uploaded_by.split('@')[0]:'—';
+    return `<div class="doc-card"><span class="doc-icon">${fileIcon(d.file_type)}</span><div class="doc-info"><div class="doc-title">${esc(d.title)}</div><div class="doc-meta"><span class="pill" style="font-size:11px;padding:2px 8px;">${esc(d.category)}</span> · ${esc(dt)} · ${fmtSize(d.file_size)} · Uploaded by ${esc(up)}</div></div><div class="doc-actions"><a href="/api/documents/${d.doc_id}/download" class="btn-ghost btn-sm" style="text-decoration:none;">Download</a><button class="btn-danger btn-sm" onclick="deleteDoc(${d.doc_id})">Delete</button></div></div>`;}).join('')
+    :'<div class="empty">No documents match your filter.</div>';
+  document.getElementById('docPageInfo').textContent=`Page ${docPage} of ${tp}`;document.getElementById('docPrev').disabled=docPage<=1;document.getElementById('docNext').disabled=docPage>=tp;}
+function changeDocPage(d){docPage+=d;renderDocuments();}
+document.getElementById('docCategoryFilter').addEventListener('change',()=>{docPage=1;renderDocuments();});
+document.getElementById('docYearFilter').addEventListener('change',()=>{docPage=1;renderDocuments();});
+
+document.getElementById('docFile').addEventListener('change',e=>{const f=e.target.files[0];if(f&&!document.getElementById('docTitle').value){document.getElementById('docTitle').value=f.name.replace(/\.[^.]+$/,'');}});
+document.getElementById('docDate').value=new Date().toISOString().slice(0,10);
+
+document.getElementById('uploadDocForm').addEventListener('submit',async ev=>{ev.preventDefault();const msg=document.getElementById('docMsg');msg.textContent='';msg.className='msg';
+  const form=ev.target;const fd=new FormData(form);if(!fd.get('file')||!fd.get('file').name){msg.textContent='Please select a file.';msg.className='msg err';return;}
+  try{const r=await fetch('/api/documents',{method:'POST',body:fd});const d=await r.json();if(!r.ok)throw new Error(d.error||'Upload failed');
+    msg.textContent='Uploaded ✓';msg.className='msg ok';form.reset();document.getElementById('docDate').value=new Date().toISOString().slice(0,10);
+    loadDocuments();setTimeout(()=>{msg.textContent='';},2500);}catch(e){msg.textContent=e.message;msg.className='msg err';}});
+
+async function deleteDoc(id){if(!confirm('Delete this document? The file will be permanently removed.'))return;
+  try{await api('/api/documents/'+id,{method:'DELETE'});loadDocuments();}catch(e){alert('Could not delete: '+e.message);}}
+
+// ===== Communications =====
+let allTemplates=[];
+async function loadTemplates(){try{allTemplates=await api('/api/email-templates');
+    document.getElementById('templateList').innerHTML=allTemplates.length?allTemplates.map(t=>`<div class="template-card"><div class="template-name">${esc(t.name)}</div><div class="template-subj">Subject: ${esc(t.subject)}</div><div class="template-actions"><button class="btn-ghost btn-sm" onclick="editTemplate(${t.template_id})">Edit</button><button class="btn-danger btn-sm" onclick="deleteTemplate(${t.template_id})">Delete</button></div></div>`).join('')
+    :'<div class="empty">No templates yet — create one above.</div>';}catch(e){document.getElementById('templateList').innerHTML=`<div class="empty">${esc(e.message)}</div>`;}}
+
+async function loadTemplateSelect(){try{const tpls=await api('/api/email-templates');const sel=document.getElementById('previewTemplate');
+    sel.innerHTML=tpls.length?tpls.map(t=>`<option value="${t.template_id}">${esc(t.name)}</option>`).join(''):'<option value="">No templates</option>';
+  }catch(e){}}
+
+document.getElementById('templateForm').addEventListener('submit',async ev=>{ev.preventDefault();const msg=document.getElementById('templateMsg');msg.textContent='';const f=ev.target;
+  try{await api('/api/email-templates',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:f.name.value,subject:f.subject.value,body:f.body.value})});
+    msg.textContent='Saved ✓';msg.className='msg ok';f.reset();loadTemplates();loadTemplateSelect();setTimeout(()=>{msg.textContent='';},2500);
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}});
+
+async function editTemplate(id){const t=await api('/api/email-templates/'+id);const f=document.getElementById('editTplForm');
+  document.getElementById('editTplId').value=t.template_id;f.name.value=t.name;f.subject.value=t.subject;f.body.value=t.body;
+  document.getElementById('editTplMsg').textContent='';document.getElementById('tplModal').classList.add('open');}
+function closeTplModal(){document.getElementById('tplModal').classList.remove('open');}
+document.getElementById('tplModal').addEventListener('click',e=>{if(e.target.id==='tplModal')closeTplModal();});
+document.getElementById('editTplForm').addEventListener('submit',async ev=>{ev.preventDefault();const f=ev.target,id=document.getElementById('editTplId').value;const msg=document.getElementById('editTplMsg');
+  try{await api('/api/email-templates/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:f.name.value,subject:f.subject.value,body:f.body.value})});
+    closeTplModal();loadTemplates();loadTemplateSelect();}catch(e){msg.textContent=e.message;msg.className='msg err';}});
+
+async function deleteTemplate(id){if(!confirm('Delete this template?'))return;try{await api('/api/email-templates/'+id,{method:'DELETE'});loadTemplates();loadTemplateSelect();}catch(e){alert(e.message);}}
+
+document.getElementById('previewFilter').addEventListener('change',e=>{document.getElementById('previewYearField').style.display=e.target.value==='overdue_year'?'':'none';});
+
+async function loadPreview(){const tplId=document.getElementById('previewTemplate').value;if(!tplId)return;
+  const filter=document.getElementById('previewFilter').value;const body={filter};if(filter==='overdue_year')body.year=document.getElementById('previewYear').value;
+  try{const r=await api('/api/email-templates/'+tplId+'/preview',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    let html=`<div style="font-size:14px;font-weight:600;color:var(--green-deep);margin-bottom:12px;">📧 ${r.total_recipients} recipients would receive this email</div>`;
+    if(r.previews.length){html+=r.previews.map(p=>`<div class="preview-card"><div class="pv-to">To: ${esc(p.member)} &lt;${esc(p.email)}&gt;</div><div class="pv-subj">${esc(p.subject)}</div><div class="pv-body">${esc(p.body)}</div></div>`).join('');
+      if(r.total_recipients>3)html+=`<div class="muted" style="font-size:13px;margin-top:8px;">...and ${r.total_recipients-3} more recipients</div>`;}
+    else html+='<div class="empty" style="padding:16px;">No recipients match this filter.</div>';
+    document.getElementById('previewResults').innerHTML=html;
+  }catch(e){document.getElementById('previewResults').innerHTML=`<div class="msg err">${esc(e.message)}</div>`;}}
+
 // ===== Audit Log =====
 let logPage=0;const LOG_PER=25;
-async function loadAuditLog(){
-  try{const data=await api(`/api/audit-log?limit=${LOG_PER}&offset=${logPage*LOG_PER}`);
-    const entries=data.entries||[];const total=data.total||0;
+async function loadAuditLog(){try{const data=await api(`/api/audit-log?limit=${LOG_PER}&offset=${logPage*LOG_PER}`);const entries=data.entries||[];const total=data.total||0;
     document.getElementById('logCount').textContent=`${total} entries`;
-    document.getElementById('auditEntries').innerHTML=entries.length?entries.map(e=>{
-      const time=e.timestamp?e.timestamp.replace('T',' ').slice(0,16):'—';const user=e.user_email||'unknown';const us=user.includes('@')?user.split('@')[0]:user;
+    document.getElementById('auditEntries').innerHTML=entries.length?entries.map(e=>{const time=e.timestamp?e.timestamp.replace('T',' ').slice(0,16):'—';const user=e.user_email||'unknown';const us=user.includes('@')?user.split('@')[0]:user;
       const canRestore=e.old_values&&(e.action==='UPDATE'||e.action==='DEACTIVATE'||e.action==='REACTIVATE');
-      return `<div class="log-entry"><span class="log-time">${esc(time)}</span><span class="log-user" title="${esc(user)}">${esc(us)}</span><span class="log-action ${esc(e.action)}">${esc(e.action)}</span><span class="log-summary">${esc(e.summary||'—')}</span><span class="log-restore-col">${canRestore?`<button class="btn-restore" onclick="restoreFromLog(${e.log_id})">Restore</button>`:''}</span></div>`;
-    }).join(''):'<div class="empty">No activity recorded yet.</div>';
-    const tp=Math.max(1,Math.ceil(total/LOG_PER));
-    document.getElementById('logPageInfo').textContent=`Page ${logPage+1} of ${tp}`;
+      return `<div class="log-entry"><span class="log-time">${esc(time)}</span><span class="log-user" title="${esc(user)}">${esc(us)}</span><span class="log-action ${esc(e.action)}">${esc(e.action)}</span><span class="log-summary">${esc(e.summary||'—')}</span><span class="log-restore-col">${canRestore?`<button class="btn-restore" onclick="restoreFromLog(${e.log_id})">Restore</button>`:''}</span></div>`;}).join('')
+    :'<div class="empty">No activity recorded yet.</div>';
+    const tp=Math.max(1,Math.ceil(total/LOG_PER));document.getElementById('logPageInfo').textContent=`Page ${logPage+1} of ${tp}`;
     document.getElementById('logPrev').disabled=logPage<=0;document.getElementById('logNext').disabled=logPage>=tp-1;
-  }catch(e){document.getElementById('auditEntries').innerHTML=`<div class="empty">Couldn't load log: ${esc(e.message)}</div>`;}
-}
+  }catch(e){document.getElementById('auditEntries').innerHTML=`<div class="empty">Couldn't load log: ${esc(e.message)}</div>`;}}
 function changeLogPage(d){logPage+=d;loadAuditLog();}
-
-async function restoreFromLog(logId){
-  if(!confirm('Restore this record to its previous state? This will undo the change and create a new audit log entry.'))return;
-  try{await api('/api/audit-log/'+logId+'/restore',{method:'POST'});loadAuditLog();loadMembers();loadPayments();alert('Restored successfully ✓');
-  }catch(e){alert('Restore failed: '+e.message);}
-}
+async function restoreFromLog(logId){if(!confirm('Restore this record to its previous state?'))return;
+  try{await api('/api/audit-log/'+logId+'/restore',{method:'POST'});loadAuditLog();loadMembers();loadPayments();alert('Restored ✓');}catch(e){alert('Restore failed: '+e.message);}}
 
 // ===== Init =====
 document.getElementById('duesYear').value=new Date().getFullYear();
 loadTypes();loadMembers();loadPayments();
-// Apply hash route on load
 showTab(window.location.hash.replace('#','')||'members');
 </script>
 </body>
