@@ -6,12 +6,10 @@ const app = new Hono();
 //  Helpers
 // ===================================================================
 
-// Extract authenticated user email from Cloudflare Access headers
 function getUserEmail(c) {
   return c.req.header("Cf-Access-Authenticated-User-Email") || "unknown";
 }
 
-// Write an entry to the audit log
 async function logAudit(db, { userEmail, action, entityType, entityId, oldValues, newValues, summary }) {
   await db.prepare(
     `INSERT INTO audit_log (user_email, action, entity_type, entity_id, old_values, new_values, summary)
@@ -78,7 +76,6 @@ app.post("/api/members", async (c) => {
   let membershipId = b.membership_id;
   let isPayer = b.is_payer ? 1 : 0;
 
-  // Calculate next_due_date based on years_paid
   const yearsPaid = Math.max(1, parseInt(b.years_paid) || 1);
   const currentYear = new Date().getFullYear();
   const nextDueYear = currentYear + yearsPaid;
@@ -108,7 +105,6 @@ app.post("/api/members", async (c) => {
 
   const memberId = res.meta.last_row_id;
 
-  // Auto-create payment if years_paid and amount provided
   if (b.initial_payment_amount && Number(b.initial_payment_amount) > 0) {
     const amountCents = Math.round(Number(b.initial_payment_amount) * 100);
     await c.env.DB.prepare(
@@ -124,7 +120,6 @@ app.post("/api/members", async (c) => {
     ).run();
   }
 
-  // Audit log
   await logAudit(c.env.DB, {
     userEmail,
     action: "CREATE",
@@ -137,7 +132,6 @@ app.post("/api/members", async (c) => {
   return c.json({ member_id: memberId, membership_id: membershipId }, 201);
 });
 
-// Update a member
 app.put("/api/members/:id", async (c) => {
   const id = c.req.param("id");
   const b = await c.req.json();
@@ -150,7 +144,6 @@ app.put("/api/members/:id", async (c) => {
 
   const v = (k) => (b[k] !== undefined ? b[k] : existing[k]);
 
-  // Capture old values for audit
   const oldVals = {};
   const newVals = {};
   ['last_name','first_name','pronouns_title','street_address','city','province','postal_code','phone','phone_secondary','email','date_joined','notes','is_payer']
@@ -191,7 +184,6 @@ app.put("/api/members/:id", async (c) => {
   return c.json({ ok: true });
 });
 
-// Hard delete (kept as fallback, UI uses deactivate)
 app.delete("/api/members/:id", async (c) => {
   const id = c.req.param("id");
   const userEmail = getUserEmail(c);
@@ -221,7 +213,7 @@ app.delete("/api/members/:id", async (c) => {
 });
 
 // ===================================================================
-//  Memberships  (set type / next due date / active status)
+//  Memberships
 // ===================================================================
 app.put("/api/memberships/:id", async (c) => {
   const id = c.req.param("id");
@@ -236,7 +228,6 @@ app.put("/api/memberships/:id", async (c) => {
   const v = (k) => (b[k] !== undefined ? b[k] : existing[k]);
   const newActive = b.active !== undefined ? (b.active ? 1 : 0) : existing.active;
 
-  // Capture changes for audit
   const oldVals = {};
   const newVals = {};
   if (v("type") !== existing.type) { oldVals.type = existing.type; newVals.type = v("type"); }
@@ -249,20 +240,14 @@ app.put("/api/memberships/:id", async (c) => {
   ).bind(v("type"), v("next_due_date"), newActive, v("notes"), id).run();
 
   if (Object.keys(newVals).length > 0) {
-    // Determine action label
     let action = "UPDATE";
     let summary = `Updated membership #${id}`;
     if (newVals.active === 0) { action = "DEACTIVATE"; summary = `Deactivated membership #${id}`; }
     else if (newVals.active === 1 && existing.active === 0) { action = "REACTIVATE"; summary = `Reactivated membership #${id}`; }
 
     await logAudit(c.env.DB, {
-      userEmail,
-      action,
-      entityType: "membership",
-      entityId: Number(id),
-      oldValues: oldVals,
-      newValues: newVals,
-      summary
+      userEmail, action, entityType: "membership", entityId: Number(id),
+      oldValues: oldVals, newValues: newVals, summary
     });
   }
 
@@ -275,7 +260,7 @@ app.put("/api/memberships/:id", async (c) => {
 app.get("/api/payments", async (c) => {
   const { results } = await c.env.DB.prepare(
     `SELECT p.payment_id, p.membership_id, p.amount_cents, p.method,
-            p.date_received, p.dues_year, p.notes,
+            p.date_received, p.dues_year, p.notes, p.paid_by_member_id,
             payer.first_name AS payer_first_name,
             payer.last_name  AS payer_last_name,
             ms.type AS membership_type
@@ -287,7 +272,19 @@ app.get("/api/payments", async (c) => {
   return c.json(results);
 });
 
-// Record a payment + auto-update next_due_date
+app.get("/api/payments/:id", async (c) => {
+  const payment = await c.env.DB.prepare(
+    `SELECT p.*, payer.first_name AS payer_first_name, payer.last_name AS payer_last_name,
+            ms.type AS membership_type
+       FROM payments p
+       LEFT JOIN members payer ON payer.member_id = p.paid_by_member_id
+       LEFT JOIN memberships ms ON ms.membership_id = p.membership_id
+      WHERE p.payment_id = ?`
+  ).bind(c.req.param("id")).first();
+  if (!payment) return c.json({ error: "Payment not found" }, 404);
+  return c.json(payment);
+});
+
 app.post("/api/payments", async (c) => {
   const b = await c.req.json();
   const userEmail = getUserEmail(c);
@@ -315,8 +312,7 @@ app.post("/api/payments", async (c) => {
 
   const paymentId = res.meta.last_row_id;
 
-  // ---- Auto-update next_due_date ----
-  // Look up the membership type's annual fee
+  // Auto-update next_due_date
   const membership = await c.env.DB.prepare(
     "SELECT type, next_due_date FROM memberships WHERE membership_id = ?"
   ).bind(b.membership_id).first();
@@ -328,13 +324,9 @@ app.post("/api/payments", async (c) => {
 
     if (typeInfo && typeInfo.annual_fee_cents > 0) {
       const yearsCovered = Math.floor(amountCents / typeInfo.annual_fee_cents);
-
       if (yearsCovered > 0) {
-        // Calculate new due date: dues_year + years covered
         const newDueYear = Number(duesYear) + yearsCovered;
         const newDueDate = newDueYear + "-01-01";
-
-        // Only advance the due date, never move it backward
         const currentDue = membership.next_due_date || "0000-01-01";
         if (newDueDate > currentDue) {
           await c.env.DB.prepare(
@@ -345,7 +337,6 @@ app.post("/api/payments", async (c) => {
     }
   }
 
-  // Get payer name for audit summary
   let payerName = "Unknown";
   if (b.paid_by_member_id) {
     const payer = await c.env.DB.prepare(
@@ -364,6 +355,149 @@ app.post("/api/payments", async (c) => {
   });
 
   return c.json({ payment_id: paymentId }, 201);
+});
+
+// Edit a payment
+app.put("/api/payments/:id", async (c) => {
+  const id = c.req.param("id");
+  const b = await c.req.json();
+  const userEmail = getUserEmail(c);
+  const validMethods = ["etransfer", "cash", "cheque"];
+
+  const existing = await c.env.DB.prepare(
+    `SELECT p.*, payer.first_name AS payer_first_name, payer.last_name AS payer_last_name
+       FROM payments p
+       LEFT JOIN members payer ON payer.member_id = p.paid_by_member_id
+      WHERE p.payment_id = ?`
+  ).bind(id).first();
+  if (!existing) return c.json({ error: "Payment not found" }, 404);
+
+  const newMethod = b.method || existing.method;
+  if (!validMethods.includes(newMethod)) {
+    return c.json({ error: "method must be one of: etransfer, cash, cheque" }, 400);
+  }
+
+  const newAmountCents = b.amount != null ? Math.round(Number(b.amount) * 100) : existing.amount_cents;
+  const newDateReceived = b.date_received || existing.date_received;
+  const newDuesYear = b.dues_year || existing.dues_year;
+  const newNotes = b.notes !== undefined ? b.notes : existing.notes;
+
+  // Track changes for audit
+  const oldVals = {};
+  const newVals = {};
+  if (newAmountCents !== existing.amount_cents) {
+    oldVals.amount = (existing.amount_cents / 100).toFixed(2);
+    newVals.amount = (newAmountCents / 100).toFixed(2);
+  }
+  if (newMethod !== existing.method) { oldVals.method = existing.method; newVals.method = newMethod; }
+  if (newDateReceived !== existing.date_received) { oldVals.date_received = existing.date_received; newVals.date_received = newDateReceived; }
+  if (Number(newDuesYear) !== Number(existing.dues_year)) { oldVals.dues_year = existing.dues_year; newVals.dues_year = newDuesYear; }
+  if (newNotes !== existing.notes) { oldVals.notes = existing.notes; newVals.notes = newNotes; }
+
+  await c.env.DB.prepare(
+    `UPDATE payments SET amount_cents = ?, method = ?, date_received = ?, dues_year = ?, notes = ?
+     WHERE payment_id = ?`
+  ).bind(newAmountCents, newMethod, newDateReceived, newDuesYear, newNotes, id).run();
+
+  // Recalculate next_due_date if amount or dues_year changed
+  if (newVals.amount || newVals.dues_year) {
+    const membership = await c.env.DB.prepare(
+      "SELECT type FROM memberships WHERE membership_id = ?"
+    ).bind(existing.membership_id).first();
+
+    if (membership) {
+      const typeInfo = await c.env.DB.prepare(
+        "SELECT annual_fee_cents FROM membership_types WHERE type = ?"
+      ).bind(membership.type).first();
+
+      if (typeInfo && typeInfo.annual_fee_cents > 0) {
+        // Recalculate from ALL payments for this membership
+        const { results: allPayments } = await c.env.DB.prepare(
+          "SELECT amount_cents, dues_year FROM payments WHERE membership_id = ?"
+        ).bind(existing.membership_id).all();
+
+        let maxDue = 0;
+        for (const p of allPayments) {
+          const yrs = Math.floor(p.amount_cents / typeInfo.annual_fee_cents);
+          const due = Number(p.dues_year) + yrs;
+          if (due > maxDue) maxDue = due;
+        }
+
+        if (maxDue > 0) {
+          await c.env.DB.prepare(
+            "UPDATE memberships SET next_due_date = ? WHERE membership_id = ?"
+          ).bind(maxDue + "-01-01", existing.membership_id).run();
+        }
+      }
+    }
+  }
+
+  if (Object.keys(newVals).length > 0) {
+    const payerName = [existing.payer_first_name, existing.payer_last_name].filter(Boolean).join(' ') || 'Unknown';
+    await logAudit(c.env.DB, {
+      userEmail,
+      action: "UPDATE",
+      entityType: "payment",
+      entityId: Number(id),
+      oldValues: oldVals,
+      newValues: newVals,
+      summary: `Edited payment #${id} from ${payerName}`
+    });
+  }
+
+  return c.json({ ok: true });
+});
+
+// ===================================================================
+//  Reports
+// ===================================================================
+
+// Dues outstanding: active members whose next_due_date is past
+app.get("/api/reports/dues-outstanding", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    `SELECT m.member_id, m.first_name, m.last_name, m.email, m.is_payer,
+            ms.membership_id, ms.type AS membership_type,
+            ms.next_due_date,
+            mt.annual_fee_cents
+       FROM members m
+       JOIN memberships ms ON ms.membership_id = m.membership_id
+       JOIN membership_types mt ON mt.type = ms.type
+      WHERE ms.active = 1
+        AND m.is_payer = 1
+        AND ms.next_due_date IS NOT NULL
+        AND ms.next_due_date <= date('now')
+      ORDER BY ms.next_due_date ASC`
+  ).all();
+  return c.json(results);
+});
+
+// Revenue by year
+app.get("/api/reports/revenue-by-year", async (c) => {
+  const { results } = await c.env.DB.prepare(
+    `SELECT p.dues_year,
+            ms.type AS membership_type,
+            COUNT(*) AS payment_count,
+            SUM(p.amount_cents) AS total_cents
+       FROM payments p
+       LEFT JOIN memberships ms ON ms.membership_id = p.membership_id
+      GROUP BY p.dues_year, ms.type
+      ORDER BY p.dues_year DESC, ms.type`
+  ).all();
+  return c.json(results);
+});
+
+// Membership summary
+app.get("/api/reports/membership-summary", async (c) => {
+  const { results: byType } = await c.env.DB.prepare(
+    `SELECT ms.type, ms.active,
+            COUNT(DISTINCT ms.membership_id) AS membership_count,
+            COUNT(m.member_id) AS member_count
+       FROM memberships ms
+       LEFT JOIN members m ON m.membership_id = ms.membership_id
+      GROUP BY ms.type, ms.active
+      ORDER BY ms.type`
+  ).all();
+  return c.json(byType);
 });
 
 // ===================================================================
