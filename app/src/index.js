@@ -171,12 +171,8 @@ app.put("/api/members/:id", async (c) => {
 
   if (Object.keys(newVals).length > 0) {
     await logAudit(c.env.DB, {
-      userEmail,
-      action: "UPDATE",
-      entityType: "member",
-      entityId: Number(id),
-      oldValues: oldVals,
-      newValues: newVals,
+      userEmail, action: "UPDATE", entityType: "member", entityId: Number(id),
+      oldValues: oldVals, newValues: newVals,
       summary: `Edited member: ${v("first_name")} ${v("last_name")}`
     });
   }
@@ -201,12 +197,8 @@ app.delete("/api/members/:id", async (c) => {
   if (res.meta.changes === 0) return c.json({ error: "Member not found" }, 404);
 
   await logAudit(c.env.DB, {
-    userEmail,
-    action: "DELETE",
-    entityType: "member",
-    entityId: Number(id),
-    oldValues: existing,
-    summary: `Deleted member: ${existing?.first_name} ${existing?.last_name}`
+    userEmail, action: "DELETE", entityType: "member", entityId: Number(id),
+    oldValues: existing, summary: `Deleted member: ${existing?.first_name} ${existing?.last_name}`
   });
 
   return c.json({ ok: true });
@@ -346,10 +338,7 @@ app.post("/api/payments", async (c) => {
   }
 
   await logAudit(c.env.DB, {
-    userEmail,
-    action: "CREATE",
-    entityType: "payment",
-    entityId: paymentId,
+    userEmail, action: "CREATE", entityType: "payment", entityId: paymentId,
     newValues: { membership_id: b.membership_id, amount: b.amount, method: b.method, dues_year: duesYear },
     summary: `Recorded $${Number(b.amount).toFixed(2)} payment from ${payerName} (${b.method}, year ${duesYear})`
   });
@@ -357,7 +346,6 @@ app.post("/api/payments", async (c) => {
   return c.json({ payment_id: paymentId }, 201);
 });
 
-// Edit a payment
 app.put("/api/payments/:id", async (c) => {
   const id = c.req.param("id");
   const b = await c.req.json();
@@ -382,13 +370,9 @@ app.put("/api/payments/:id", async (c) => {
   const newDuesYear = b.dues_year || existing.dues_year;
   const newNotes = b.notes !== undefined ? b.notes : existing.notes;
 
-  // Track changes for audit
   const oldVals = {};
   const newVals = {};
-  if (newAmountCents !== existing.amount_cents) {
-    oldVals.amount = (existing.amount_cents / 100).toFixed(2);
-    newVals.amount = (newAmountCents / 100).toFixed(2);
-  }
+  if (newAmountCents !== existing.amount_cents) { oldVals.amount = (existing.amount_cents/100).toFixed(2); newVals.amount = (newAmountCents/100).toFixed(2); }
   if (newMethod !== existing.method) { oldVals.method = existing.method; newVals.method = newMethod; }
   if (newDateReceived !== existing.date_received) { oldVals.date_received = existing.date_received; newVals.date_received = newDateReceived; }
   if (Number(newDuesYear) !== Number(existing.dues_year)) { oldVals.dues_year = existing.dues_year; newVals.dues_year = newDuesYear; }
@@ -399,30 +383,24 @@ app.put("/api/payments/:id", async (c) => {
      WHERE payment_id = ?`
   ).bind(newAmountCents, newMethod, newDateReceived, newDuesYear, newNotes, id).run();
 
-  // Recalculate next_due_date if amount or dues_year changed
   if (newVals.amount || newVals.dues_year) {
     const membership = await c.env.DB.prepare(
       "SELECT type FROM memberships WHERE membership_id = ?"
     ).bind(existing.membership_id).first();
-
     if (membership) {
       const typeInfo = await c.env.DB.prepare(
         "SELECT annual_fee_cents FROM membership_types WHERE type = ?"
       ).bind(membership.type).first();
-
       if (typeInfo && typeInfo.annual_fee_cents > 0) {
-        // Recalculate from ALL payments for this membership
-        const { results: allPayments } = await c.env.DB.prepare(
+        const { results: allPay } = await c.env.DB.prepare(
           "SELECT amount_cents, dues_year FROM payments WHERE membership_id = ?"
         ).bind(existing.membership_id).all();
-
         let maxDue = 0;
-        for (const p of allPayments) {
+        for (const p of allPay) {
           const yrs = Math.floor(p.amount_cents / typeInfo.annual_fee_cents);
           const due = Number(p.dues_year) + yrs;
           if (due > maxDue) maxDue = due;
         }
-
         if (maxDue > 0) {
           await c.env.DB.prepare(
             "UPDATE memberships SET next_due_date = ? WHERE membership_id = ?"
@@ -435,12 +413,8 @@ app.put("/api/payments/:id", async (c) => {
   if (Object.keys(newVals).length > 0) {
     const payerName = [existing.payer_first_name, existing.payer_last_name].filter(Boolean).join(' ') || 'Unknown';
     await logAudit(c.env.DB, {
-      userEmail,
-      action: "UPDATE",
-      entityType: "payment",
-      entityId: Number(id),
-      oldValues: oldVals,
-      newValues: newVals,
+      userEmail, action: "UPDATE", entityType: "payment", entityId: Number(id),
+      oldValues: oldVals, newValues: newVals,
       summary: `Edited payment #${id} from ${payerName}`
     });
   }
@@ -449,10 +423,104 @@ app.put("/api/payments/:id", async (c) => {
 });
 
 // ===================================================================
+//  Restore from audit log
+// ===================================================================
+app.post("/api/audit-log/:id/restore", async (c) => {
+  const logId = c.req.param("id");
+  const userEmail = getUserEmail(c);
+
+  const entry = await c.env.DB.prepare(
+    "SELECT * FROM audit_log WHERE log_id = ?"
+  ).bind(logId).first();
+
+  if (!entry) return c.json({ error: "Audit log entry not found" }, 404);
+  if (!entry.old_values) return c.json({ error: "No previous values to restore" }, 400);
+
+  const oldVals = JSON.parse(entry.old_values);
+  const entityType = entry.entity_type;
+  const entityId = entry.entity_id;
+
+  if (entityType === "member" && entityId) {
+    const existing = await c.env.DB.prepare(
+      "SELECT * FROM members WHERE member_id = ?"
+    ).bind(entityId).first();
+    if (!existing) return c.json({ error: "Member no longer exists" }, 404);
+
+    const fields = ['last_name','first_name','pronouns_title','street_address','city','province','postal_code','phone','phone_secondary','email','date_joined','notes','is_payer'];
+    const updates = {};
+    fields.forEach(k => { updates[k] = oldVals[k] !== undefined ? oldVals[k] : existing[k]; });
+
+    await c.env.DB.prepare(
+      `UPDATE members SET last_name=?, first_name=?, pronouns_title=?, street_address=?,
+       city=?, province=?, postal_code=?, phone=?, phone_secondary=?,
+       email=?, date_joined=?, notes=?, is_payer=? WHERE member_id=?`
+    ).bind(
+      updates.last_name, updates.first_name, updates.pronouns_title, updates.street_address,
+      updates.city, updates.province, updates.postal_code, updates.phone, updates.phone_secondary,
+      updates.email, updates.date_joined, updates.notes, updates.is_payer ? 1 : 0, entityId
+    ).run();
+
+    await logAudit(c.env.DB, {
+      userEmail, action: "RESTORE", entityType: "member", entityId,
+      oldValues: null, newValues: oldVals,
+      summary: `Restored member #${entityId} to state before log #${logId}`
+    });
+
+    return c.json({ ok: true, restored: "member", id: entityId });
+
+  } else if (entityType === "membership" && entityId) {
+    const existing = await c.env.DB.prepare(
+      "SELECT * FROM memberships WHERE membership_id = ?"
+    ).bind(entityId).first();
+    if (!existing) return c.json({ error: "Membership no longer exists" }, 404);
+
+    const type = oldVals.type !== undefined ? oldVals.type : existing.type;
+    const nextDue = oldVals.next_due_date !== undefined ? oldVals.next_due_date : existing.next_due_date;
+    const active = oldVals.active !== undefined ? (oldVals.active ? 1 : 0) : existing.active;
+
+    await c.env.DB.prepare(
+      "UPDATE memberships SET type=?, next_due_date=?, active=? WHERE membership_id=?"
+    ).bind(type, nextDue, active, entityId).run();
+
+    await logAudit(c.env.DB, {
+      userEmail, action: "RESTORE", entityType: "membership", entityId,
+      oldValues: null, newValues: oldVals,
+      summary: `Restored membership #${entityId} to state before log #${logId}`
+    });
+
+    return c.json({ ok: true, restored: "membership", id: entityId });
+
+  } else if (entityType === "payment" && entityId) {
+    const existing = await c.env.DB.prepare(
+      "SELECT * FROM payments WHERE payment_id = ?"
+    ).bind(entityId).first();
+    if (!existing) return c.json({ error: "Payment no longer exists" }, 404);
+
+    const amount = oldVals.amount !== undefined ? Math.round(Number(oldVals.amount) * 100) : existing.amount_cents;
+    const method = oldVals.method !== undefined ? oldVals.method : existing.method;
+    const dateRec = oldVals.date_received !== undefined ? oldVals.date_received : existing.date_received;
+    const duesYr = oldVals.dues_year !== undefined ? oldVals.dues_year : existing.dues_year;
+    const notes = oldVals.notes !== undefined ? oldVals.notes : existing.notes;
+
+    await c.env.DB.prepare(
+      "UPDATE payments SET amount_cents=?, method=?, date_received=?, dues_year=?, notes=? WHERE payment_id=?"
+    ).bind(amount, method, dateRec, duesYr, notes, entityId).run();
+
+    await logAudit(c.env.DB, {
+      userEmail, action: "RESTORE", entityType: "payment", entityId,
+      oldValues: null, newValues: oldVals,
+      summary: `Restored payment #${entityId} to state before log #${logId}`
+    });
+
+    return c.json({ ok: true, restored: "payment", id: entityId });
+  }
+
+  return c.json({ error: "Cannot restore this type of change" }, 400);
+});
+
+// ===================================================================
 //  Reports
 // ===================================================================
-
-// Dues outstanding: active members whose next_due_date is past
 app.get("/api/reports/dues-outstanding", async (c) => {
   const { results } = await c.env.DB.prepare(
     `SELECT m.member_id, m.first_name, m.last_name, m.email, m.is_payer,
@@ -471,7 +539,6 @@ app.get("/api/reports/dues-outstanding", async (c) => {
   return c.json(results);
 });
 
-// Revenue by year
 app.get("/api/reports/revenue-by-year", async (c) => {
   const { results } = await c.env.DB.prepare(
     `SELECT p.dues_year,
@@ -486,9 +553,8 @@ app.get("/api/reports/revenue-by-year", async (c) => {
   return c.json(results);
 });
 
-// Membership summary
 app.get("/api/reports/membership-summary", async (c) => {
-  const { results: byType } = await c.env.DB.prepare(
+  const { results } = await c.env.DB.prepare(
     `SELECT ms.type, ms.active,
             COUNT(DISTINCT ms.membership_id) AS membership_count,
             COUNT(m.member_id) AS member_count
@@ -497,7 +563,7 @@ app.get("/api/reports/membership-summary", async (c) => {
       GROUP BY ms.type, ms.active
       ORDER BY ms.type`
   ).all();
-  return c.json(byType);
+  return c.json(results);
 });
 
 // ===================================================================

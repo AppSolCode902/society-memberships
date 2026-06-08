@@ -15,30 +15,28 @@
     --shadow:0 1px 2px rgba(20,40,30,.04), 0 12px 30px rgba(20,40,30,.06);
   }
   * { box-sizing:border-box; }
-  body {
-    margin:0; background:var(--bg);
-    background-image:
-      radial-gradient(circle at 20% 10%, rgba(31,77,63,.04), transparent 40%),
-      radial-gradient(circle at 85% 90%, rgba(169,116,43,.05), transparent 45%);
-    color:var(--ink); font-family:'Hanken Grotesk',sans-serif;
-    font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
-  }
+  body { margin:0; background:var(--bg); background-image:radial-gradient(circle at 20% 10%,rgba(31,77,63,.04),transparent 40%),radial-gradient(circle at 85% 90%,rgba(169,116,43,.05),transparent 45%); color:var(--ink); font-family:'Hanken Grotesk',sans-serif; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
   .wrap { max-width:1040px; margin:0 auto; padding:48px 28px 80px; }
-  header.masthead {
-    border-bottom:2px solid var(--green); padding-bottom:20px; margin-bottom:36px;
-    display:flex; align-items:flex-end; justify-content:space-between;
-    gap:20px; flex-wrap:wrap; animation:rise .6s ease both;
-  }
+  header.masthead { border-bottom:2px solid var(--green); padding-bottom:20px; margin-bottom:0; display:flex; align-items:flex-end; justify-content:space-between; gap:20px; flex-wrap:wrap; animation:rise .6s ease both; }
   .masthead h1 { font-family:'Fraunces',serif; font-weight:600; font-size:clamp(28px,5vw,44px); line-height:1.02; margin:0; color:var(--green-deep); letter-spacing:-.01em; }
   .masthead .eyebrow { font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--ochre); font-weight:600; margin:0 0 8px; }
   .count { font-family:'Fraunces',serif; font-size:15px; color:var(--muted); text-align:right; }
   .count strong { color:var(--green-deep); font-size:26px; display:block; }
+
+  /* === TABS === */
+  .tab-bar { display:flex; gap:0; margin:0 0 28px; border-bottom:2px solid var(--line); padding-top:16px; }
+  .tab-btn { font-family:'Hanken Grotesk',sans-serif; font-size:14px; font-weight:600; color:var(--muted); background:none; border:none; border-bottom:2px solid transparent; padding:12px 22px; margin-bottom:-2px; cursor:pointer; transition:color .15s, border-color .15s; white-space:nowrap; }
+  .tab-btn:hover { color:var(--green); }
+  .tab-btn.active { color:var(--green-deep); border-bottom-color:var(--green); }
+  .tab-panel { display:none; animation:fadein .3s ease; }
+  .tab-panel.active { display:block; }
+
   .card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px; margin-bottom:36px; animation:rise .6s ease .08s both; }
   .card h2, .table-head h2, .dialog h2 { font-family:'Fraunces',serif; font-weight:600; color:var(--green-deep); }
   .card h2 { font-size:20px; margin:0 0 4px; }
   .card .sub { color:var(--muted); font-size:13px; margin:0 0 22px; }
   form .grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px 20px; }
-  @media (max-width:640px){ form .grid { grid-template-columns:1fr; } }
+  @media (max-width:640px){ form .grid { grid-template-columns:1fr; } .tab-btn { padding:10px 14px; font-size:13px; } }
   .field { display:flex; flex-direction:column; gap:6px; }
   .field.wide { grid-column:1 / -1; }
   label { font-size:12px; font-weight:600; letter-spacing:.03em; text-transform:uppercase; color:var(--muted); }
@@ -52,55 +50,44 @@
   button.primary { font-family:inherit; font-weight:600; font-size:15px; color:#fdfaf3; background:var(--green); border:none; border-radius:9px; padding:11px 22px; cursor:pointer; transition:background .15s, transform .05s; }
   button.primary:hover { background:var(--green-deep); }
   button.primary:active { transform:translateY(1px); }
-  .btn-ghost, .btn-danger, .btn-warn { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
-  .btn-ghost { color:var(--green); }
-  .btn-ghost:hover { background:#f1ede3; border-color:var(--green); }
-  .btn-danger { color:var(--danger); margin-left:6px; }
-  .btn-danger:hover { background:#fbeeec; border-color:var(--danger); }
-  .btn-warn { color:var(--ochre); margin-left:6px; }
-  .btn-warn:hover { background:#fdf5eb; border-color:var(--ochre); }
+  .btn-ghost,.btn-danger,.btn-warn { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border-radius:7px; padding:6px 12px; border:1px solid var(--line); background:#fff; transition:background .12s, border-color .12s; }
+  .btn-ghost { color:var(--green); } .btn-ghost:hover { background:#f1ede3; border-color:var(--green); }
+  .btn-danger { color:var(--danger); margin-left:6px; } .btn-danger:hover { background:#fbeeec; border-color:var(--danger); }
+  .btn-warn { color:var(--ochre); margin-left:6px; } .btn-warn:hover { background:#fdf5eb; border-color:var(--ochre); }
   .btn-sm { font-size:12px; padding:4px 10px; }
-  .msg { font-size:14px; }
-  .msg.ok { color:var(--green); }
-  .msg.err { color:var(--danger); }
-  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:36px; animation:rise .6s ease .16s both; }
+  .btn-restore { color:#2d6a9f; font-size:12px; padding:3px 10px; border:1px solid rgba(45,106,159,.3); border-radius:6px; background:#fff; cursor:pointer; font-weight:600; font-family:inherit; } .btn-restore:hover { background:#eef4fa; border-color:#2d6a9f; }
+  .msg { font-size:14px; } .msg.ok { color:var(--green); } .msg.err { color:var(--danger); }
+  .table-card { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; margin-bottom:36px; }
   .table-head { padding:22px 26px 0; display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   .table-head h2 { font-size:20px; margin:0; }
-  .table-head .total { font-size:14px; color:var(--muted); }
-  .table-head .total strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
+  .table-head .total { font-size:14px; color:var(--muted); } .table-head .total strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
   table { width:100%; border-collapse:collapse; margin-top:14px; }
   thead th { text-align:left; font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); font-weight:700; padding:10px 26px; border-bottom:1px solid var(--line); }
-  thead th.sortable { cursor:pointer; user-select:none; }
-  thead th.sortable:hover { color:var(--green); }
+  thead th.sortable { cursor:pointer; user-select:none; } thead th.sortable:hover { color:var(--green); }
   thead th .sort-arrow { font-size:10px; margin-left:4px; }
   tbody td { padding:14px 26px; border-bottom:1px solid #f0eade; vertical-align:middle; }
-  tbody tr { animation:fadein .4s ease both; }
-  tbody tr:hover { background:#faf6ec; }
-  tbody tr:last-child td { border-bottom:none; }
-  tbody tr.inactive-row { opacity:.5; }
+  tbody tr:hover { background:#faf6ec; } tbody tr:last-child td { border-bottom:none; } tbody tr.inactive-row { opacity:.5; }
   .name { font-weight:600; color:var(--green-deep); }
   .pill { display:inline-block; font-size:12px; font-weight:600; padding:3px 10px; border-radius:999px; background:rgba(31,77,63,.08); color:var(--green); border:1px solid rgba(31,77,63,.15); }
   .pill-inactive { background:rgba(156,59,46,.08); color:var(--danger); border-color:rgba(156,59,46,.2); }
   .badge-payer { display:inline-block; font-size:10px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ochre); border:1px solid rgba(169,116,43,.4); border-radius:999px; padding:2px 8px; margin-left:8px; }
   .amount { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; }
-  .muted { color:var(--muted); }
-  .overdue { color:var(--danger); font-weight:600; }
+  .muted { color:var(--muted); } .overdue { color:var(--danger); font-weight:600; }
   .empty { padding:40px 26px; text-align:center; color:var(--muted); }
   .row-actions { white-space:nowrap; text-align:right; }
   .toolbar { padding:16px 26px; display:flex; align-items:center; gap:14px; flex-wrap:wrap; border-bottom:1px solid var(--line); }
-  .toolbar input[type="search"] { flex:1; min-width:180px; font-family:inherit; font-size:14px; color:var(--ink); background:#fbf8f1; border:1px solid var(--line); border-radius:9px; padding:9px 14px; transition:border-color .15s, box-shadow .15s, background .15s; }
+  .toolbar input[type="search"] { flex:1; min-width:180px; font-family:inherit; font-size:14px; color:var(--ink); background:#fbf8f1; border:1px solid var(--line); border-radius:9px; padding:9px 14px; }
   .toolbar input[type="search"]:focus { outline:none; border-color:var(--green); background:#fff; box-shadow:0 0 0 3px rgba(31,77,63,.12); }
   .toolbar select { font-family:inherit; font-size:13px; padding:8px 12px; border:1px solid var(--line); border-radius:9px; background:#fbf8f1; color:var(--ink); cursor:pointer; }
   .toolbar label.toggle-label { font-size:13px; font-weight:500; color:var(--muted); cursor:pointer; display:flex; align-items:center; gap:6px; text-transform:none; letter-spacing:0; }
   .toolbar label.toggle-label input { width:auto; }
   .toolbar .result-count { font-size:13px; color:var(--muted); margin-left:auto; white-space:nowrap; }
   .pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
-  .pagination button { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--line); border-radius:7px; padding:6px 14px; background:#fff; color:var(--green); transition:background .12s; }
+  .pagination button { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--line); border-radius:7px; padding:6px 14px; background:#fff; color:var(--green); }
   .pagination button:hover:not(:disabled) { background:#f1ede3; border-color:var(--green); }
   .pagination button:disabled { opacity:.35; cursor:default; }
   .pagination .page-info { font-size:13px; color:var(--muted); min-width:100px; text-align:center; }
-  .calc-row { display:flex; align-items:center; gap:14px; margin-top:6px; padding:10px 14px; background:#f8f5ec; border-radius:9px; font-size:14px; color:var(--muted); }
-  .calc-row strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
+  .calc-row { display:flex; align-items:center; gap:14px; margin-top:6px; padding:10px 14px; background:#f8f5ec; border-radius:9px; font-size:14px; color:var(--muted); } .calc-row strong { color:var(--green-deep); font-variant-numeric:tabular-nums; }
   /* Reports */
   .report-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:20px; padding:20px 26px; }
   .stat-card { background:#f8f5ec; border-radius:12px; padding:20px; text-align:center; }
@@ -111,7 +98,7 @@
   .report-bar { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid #f0eade; font-size:14px; }
   .report-bar:last-child { border-bottom:none; }
   .report-bar .bar-label { min-width:140px; font-weight:600; color:var(--ink); }
-  .report-bar .bar-fill { height:22px; border-radius:6px; background:var(--green); opacity:.7; min-width:2px; transition:width .4s ease; }
+  .report-bar .bar-fill { height:22px; border-radius:6px; background:var(--green); opacity:.7; min-width:2px; }
   .report-bar .bar-value { font-weight:600; color:var(--green-deep); font-variant-numeric:tabular-nums; min-width:80px; text-align:right; }
   .outstanding-row { display:flex; align-items:center; gap:16px; padding:10px 0; border-bottom:1px solid #f0eade; font-size:14px; }
   .outstanding-row:last-child { border-bottom:none; }
@@ -119,56 +106,45 @@
   .outstanding-row .or-type { min-width:80px; }
   .outstanding-row .or-due { color:var(--danger); font-weight:600; min-width:100px; }
   .outstanding-row .or-email { color:var(--muted); flex:1; overflow:hidden; text-overflow:ellipsis; }
+  .outstanding-toolbar { display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap; }
+  .outstanding-toolbar select { font-family:inherit; font-size:13px; padding:6px 10px; border:1px solid var(--line); border-radius:7px; background:#fbf8f1; }
   /* Audit log */
-  .log-toggle { cursor:pointer; display:flex; align-items:center; gap:10px; }
-  .log-toggle .chevron { transition:transform .2s; font-size:12px; }
-  .log-toggle.open .chevron { transform:rotate(90deg); }
-  .log-entry { padding:12px 26px; border-bottom:1px solid #f0eade; font-size:13px; display:flex; gap:16px; align-items:baseline; }
+  .log-entry { padding:12px 26px; border-bottom:1px solid #f0eade; font-size:13px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
   .log-entry:last-child { border-bottom:none; }
   .log-time { color:var(--muted); white-space:nowrap; min-width:130px; font-variant-numeric:tabular-nums; }
-  .log-user { color:var(--ochre); font-weight:600; min-width:140px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .log-user { color:var(--ochre); font-weight:600; min-width:120px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   .log-action { font-weight:600; min-width:80px; }
-  .log-action.CREATE { color:var(--green); }
-  .log-action.UPDATE { color:var(--ochre); }
-  .log-action.DELETE, .log-action.DEACTIVATE { color:var(--danger); }
-  .log-action.REACTIVATE { color:#2d6a9f; }
-  .log-summary { flex:1; }
-  .log-pagination { padding:14px 26px; display:flex; align-items:center; justify-content:center; gap:10px; border-top:1px solid var(--line); }
-  .log-pagination button { font-family:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid var(--line); border-radius:7px; padding:6px 14px; background:#fff; color:var(--green); }
-  .log-pagination button:hover:not(:disabled) { background:#f1ede3; }
-  .log-pagination button:disabled { opacity:.35; cursor:default; }
+  .log-action.CREATE { color:var(--green); } .log-action.UPDATE { color:var(--ochre); }
+  .log-action.DELETE,.log-action.DEACTIVATE { color:var(--danger); }
+  .log-action.REACTIVATE { color:#2d6a9f; } .log-action.RESTORE { color:#7b2d9f; }
+  .log-summary { flex:1; min-width:200px; }
+  .log-restore-col { min-width:70px; text-align:right; }
   .modal { position:fixed; inset:0; background:rgba(20,30,25,.45); display:none; align-items:flex-start; justify-content:center; padding:40px 20px; overflow-y:auto; z-index:50; }
   .modal.open { display:flex; animation:fadein .2s ease; }
   .dialog { background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); box-shadow:0 20px 60px rgba(20,40,30,.25); width:100%; max-width:640px; padding:28px; animation:rise .25s ease; }
   .dialog h2 { font-size:22px; margin:0 0 20px; }
-  .dialog .actions { justify-content:flex-end; }
-  .dialog .actions .msg { margin-right:auto; }
+  .dialog .actions { justify-content:flex-end; } .dialog .actions .msg { margin-right:auto; }
   @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
   @keyframes fadein { from { opacity:0; } to { opacity:1; } }
 </style>
 </head>
 <body>
-  <div class="wrap">
-    <header class="masthead">
-      <div><p class="eyebrow">Membership Registry</p><h1>Halifax Charitable Irish Society</h1></div>
-      <div class="count"><strong id="memberCount">—</strong>members on the roll</div>
-    </header>
+<div class="wrap">
+  <header class="masthead">
+    <div><p class="eyebrow">Membership Registry</p><h1>Halifax Charitable Irish Society</h1></div>
+    <div class="count"><strong id="memberCount">—</strong>active members</div>
+  </header>
 
-    <!-- ============ REPORTS DASHBOARD ============ -->
-    <section class="table-card" id="reportsCard">
-      <div class="table-head"><h2>📊 Reports Dashboard</h2></div>
-      <div class="report-grid" id="reportStats"></div>
-      <div class="report-section">
-        <h3>Revenue by Year</h3>
-        <div id="revenueByYear"></div>
-      </div>
-      <div class="report-section">
-        <h3>⚠ Dues Outstanding (<span id="outstandingCount">0</span> payers overdue)</h3>
-        <div id="duesOutstanding"></div>
-      </div>
-    </section>
+  <!-- === TAB BAR === -->
+  <nav class="tab-bar">
+    <button class="tab-btn active" data-tab="members">Members &amp; Payments</button>
+    <button class="tab-btn" data-tab="reports">Reports</button>
+    <button class="tab-btn" data-tab="log">Activity Log</button>
+  </nav>
 
-    <!-- ============ ADD MEMBER ============ -->
+  <!-- ===================== TAB 1: MEMBERS & PAYMENTS ===================== -->
+  <div class="tab-panel active" id="tab-members">
+
     <section class="card">
       <h2>Add a member</h2>
       <p class="sub">Creates the person as the payer of a new membership with an optional initial payment.</p>
@@ -178,15 +154,9 @@
           <div class="field"><label>Last name *</label><input name="last_name" required></div>
           <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
           <div class="field"><label>Membership type</label><select name="membership_type" id="typeSelect"></select></div>
-          <div class="field"><label>Years paid for</label>
-            <select name="years_paid" id="yearsPaid"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option><option value="4">4 years</option><option value="5">5 years</option></select>
-          </div>
-          <div class="field"><label>Payment method</label>
-            <select name="initial_payment_method" id="addPayMethod"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select>
-          </div>
-          <div class="field wide">
-            <div class="calc-row">Total due: <strong id="calcTotal">$20.00</strong> · Next due: <strong id="calcDue">Jan 2027</strong><input type="hidden" name="initial_payment_amount" id="calcAmountHidden"></div>
-          </div>
+          <div class="field"><label>Years paid for</label><select name="years_paid" id="yearsPaid"><option value="1">1 year</option><option value="2">2 years</option><option value="3">3 years</option><option value="4">4 years</option><option value="5">5 years</option></select></div>
+          <div class="field"><label>Payment method</label><select name="initial_payment_method" id="addPayMethod"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
+          <div class="field wide"><div class="calc-row">Total due: <strong id="calcTotal">$20.00</strong> · Next due: <strong id="calcDue">Jan 2027</strong><input type="hidden" name="initial_payment_amount" id="calcAmountHidden"></div></div>
           <div class="field"><label>Email</label><input name="email" type="email"></div>
           <div class="field"><label>Phone</label><input name="phone"></div>
           <div class="field wide"><label>Street address</label><input name="street_address"></div>
@@ -200,8 +170,7 @@
       </form>
     </section>
 
-    <!-- ============ MEMBERS TABLE ============ -->
-    <section class="table-card" id="membersCard">
+    <section class="table-card">
       <div class="table-head"><h2>Members</h2></div>
       <div class="toolbar">
         <input type="search" id="memberSearch" placeholder="Search by name, email, or city…" autocomplete="off">
@@ -218,14 +187,9 @@
         </tr></thead>
         <tbody id="memberRows"><tr><td colspan="6" class="empty">Loading…</td></tr></tbody>
       </table>
-      <div class="pagination" id="memberPagination">
-        <button id="prevPage" onclick="changePage(-1)">← Previous</button>
-        <span class="page-info" id="pageInfo">Page 1 of 1</span>
-        <button id="nextPage" onclick="changePage(1)">Next →</button>
-      </div>
+      <div class="pagination"><button id="prevPage" onclick="changePage(-1)">← Previous</button><span class="page-info" id="pageInfo">Page 1 of 1</span><button id="nextPage" onclick="changePage(1)">Next →</button></div>
     </section>
 
-    <!-- ============ RECORD PAYMENT ============ -->
     <section class="card">
       <h2>Record a payment</h2>
       <p class="sub">Logs a payment and automatically updates the member's next due date.</p>
@@ -242,8 +206,7 @@
       </form>
     </section>
 
-    <!-- ============ PAYMENTS TABLE ============ -->
-    <section class="table-card" id="paymentsCard">
+    <section class="table-card">
       <div class="table-head">
         <h2>Payments</h2>
         <div class="total">
@@ -256,501 +219,437 @@
         <tbody id="payRows"><tr><td colspan="7" class="empty">Loading…</td></tr></tbody>
       </table>
     </section>
+  </div>
 
-    <!-- ============ ACTIVITY LOG ============ -->
-    <section class="table-card" id="auditCard">
-      <div class="table-head">
-        <h2 class="log-toggle" id="logToggle" onclick="toggleAuditLog()"><span class="chevron">▶</span> Activity Log</h2>
-        <span class="muted" id="logCount" style="font-size:13px;"></span>
+  <!-- ===================== TAB 2: REPORTS ===================== -->
+  <div class="tab-panel" id="tab-reports">
+    <section class="table-card">
+      <div class="table-head"><h2>📊 Dashboard</h2></div>
+      <div class="report-grid" id="reportStats"></div>
+      <div class="report-section">
+        <h3>💰 Revenue by Year</h3>
+        <div id="revenueByYear"></div>
       </div>
-      <div id="auditBody" style="display:none;">
-        <div id="auditEntries"></div>
-        <div class="log-pagination">
-          <button id="logPrev" onclick="changeLogPage(-1)">← Newer</button>
-          <span class="page-info" id="logPageInfo">Page 1</span>
-          <button id="logNext" onclick="changeLogPage(1)">Older →</button>
+    </section>
+
+    <section class="table-card">
+      <div class="table-head"><h2>⚠ Dues Outstanding</h2><span class="muted" id="outstandingTotal" style="font-size:13px;"></span></div>
+      <div style="padding:16px 26px 0;">
+        <div class="outstanding-toolbar">
+          <select id="outstandingYearFilter"></select>
+          <span class="result-count" id="outstandingResultCount"></span>
         </div>
+      </div>
+      <div id="duesOutstanding" style="padding:0 26px;"></div>
+      <div class="pagination" id="outstandingPagination">
+        <button id="outPrev" onclick="changeOutPage(-1)">← Previous</button>
+        <span class="page-info" id="outPageInfo">Page 1 of 1</span>
+        <button id="outNext" onclick="changeOutPage(1)">Next →</button>
       </div>
     </section>
   </div>
 
-  <!-- Edit Member dialog -->
-  <div class="modal" id="modal">
-    <div class="dialog">
-      <h2>Edit member</h2>
-      <form id="editForm">
-        <input type="hidden" id="editId">
-        <div class="grid">
-          <div class="field"><label>First name *</label><input name="first_name" required></div>
-          <div class="field"><label>Last name *</label><input name="last_name" required></div>
-          <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
-          <div class="field"><label>Membership type</label><select name="membership_type"></select></div>
-          <div class="field"><label>Email</label><input name="email" type="email"></div>
-          <div class="field"><label>Phone</label><input name="phone"></div>
-          <div class="field"><label>Secondary phone</label><input name="phone_secondary"></div>
-          <div class="field"><label>Next due date</label><input name="next_due_date" type="date"></div>
-          <div class="field wide"><label>Street address</label><input name="street_address"></div>
-          <div class="field"><label>City</label><input name="city"></div>
-          <div class="field"><label>Province</label><input name="province"></div>
-          <div class="field"><label>Postal code</label><input name="postal_code"></div>
-          <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
-          <div class="field wide checkbox-field"><input type="checkbox" name="is_payer" id="editIsPayer"><label for="editIsPayer">Paying / primary member of this membership</label></div>
-          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
-        </div>
-        <div class="actions">
-          <span id="editMsg" class="msg"></span>
-          <button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="primary">Save changes</button>
-        </div>
-      </form>
-    </div>
+  <!-- ===================== TAB 3: ACTIVITY LOG ===================== -->
+  <div class="tab-panel" id="tab-log">
+    <section class="table-card">
+      <div class="table-head"><h2>📋 Activity Log</h2><span class="muted" id="logCount" style="font-size:13px;"></span></div>
+      <div id="auditEntries"></div>
+      <div class="pagination">
+        <button id="logPrev" onclick="changeLogPage(-1)">← Newer</button>
+        <span class="page-info" id="logPageInfo">Page 1</span>
+        <button id="logNext" onclick="changeLogPage(1)">Older →</button>
+      </div>
+    </section>
   </div>
+</div>
 
-  <!-- Edit Payment dialog -->
-  <div class="modal" id="payModal">
-    <div class="dialog">
-      <h2>Edit payment</h2>
-      <form id="editPayForm">
-        <input type="hidden" id="editPayId">
-        <div class="grid">
-          <div class="field wide"><label>Payer</label><input id="editPayPayer" disabled></div>
-          <div class="field"><label>Amount ($) *</label><input name="amount" type="number" step="0.01" min="0" required></div>
-          <div class="field"><label>Method *</label>
-            <select name="method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select>
-          </div>
-          <div class="field"><label>Date received</label><input name="date_received" type="date"></div>
-          <div class="field"><label>Dues year</label><input name="dues_year" type="number"></div>
-          <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
-        </div>
-        <div class="actions">
-          <span id="editPayMsg" class="msg"></span>
-          <button type="button" class="btn-ghost" onclick="closePayModal()">Cancel</button>
-          <button type="submit" class="primary">Save changes</button>
-        </div>
-      </form>
-    </div>
+<!-- Edit Member modal -->
+<div class="modal" id="modal">
+  <div class="dialog">
+    <h2>Edit member</h2>
+    <form id="editForm">
+      <input type="hidden" id="editId">
+      <div class="grid">
+        <div class="field"><label>First name *</label><input name="first_name" required></div>
+        <div class="field"><label>Last name *</label><input name="last_name" required></div>
+        <div class="field"><label>Pronouns / Title</label><input name="pronouns_title"></div>
+        <div class="field"><label>Membership type</label><select name="membership_type"></select></div>
+        <div class="field"><label>Email</label><input name="email" type="email"></div>
+        <div class="field"><label>Phone</label><input name="phone"></div>
+        <div class="field"><label>Secondary phone</label><input name="phone_secondary"></div>
+        <div class="field"><label>Next due date</label><input name="next_due_date" type="date"></div>
+        <div class="field wide"><label>Street address</label><input name="street_address"></div>
+        <div class="field"><label>City</label><input name="city"></div>
+        <div class="field"><label>Province</label><input name="province"></div>
+        <div class="field"><label>Postal code</label><input name="postal_code"></div>
+        <div class="field"><label>Date joined</label><input name="date_joined" type="date"></div>
+        <div class="field wide checkbox-field"><input type="checkbox" name="is_payer" id="editIsPayer"><label for="editIsPayer">Paying / primary member of this membership</label></div>
+        <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+      </div>
+      <div class="actions"><span id="editMsg" class="msg"></span><button type="button" class="btn-ghost" onclick="closeModal()">Cancel</button><button type="submit" class="primary">Save changes</button></div>
+    </form>
   </div>
+</div>
+
+<!-- Edit Payment modal -->
+<div class="modal" id="payModal">
+  <div class="dialog">
+    <h2>Edit payment</h2>
+    <form id="editPayForm">
+      <input type="hidden" id="editPayId">
+      <div class="grid">
+        <div class="field wide"><label>Payer</label><input id="editPayPayer" disabled></div>
+        <div class="field"><label>Amount ($) *</label><input name="amount" type="number" step="0.01" min="0" required></div>
+        <div class="field"><label>Method *</label><select name="method"><option value="etransfer">E-transfer</option><option value="cash">Cash</option><option value="cheque">Cheque</option></select></div>
+        <div class="field"><label>Date received</label><input name="date_received" type="date"></div>
+        <div class="field"><label>Dues year</label><input name="dues_year" type="number"></div>
+        <div class="field wide"><label>Notes</label><textarea name="notes"></textarea></div>
+      </div>
+      <div class="actions"><span id="editPayMsg" class="msg"></span><button type="button" class="btn-ghost" onclick="closePayModal()">Cancel</button><button type="submit" class="primary">Save changes</button></div>
+    </form>
+  </div>
+</div>
 
 <script>
-const api = (path, opts) => fetch(path, opts).then(async r => {
-  const data = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Error(data.error || ('Request failed: ' + r.status));
-  return data;
+const api=(p,o)=>fetch(p,o).then(async r=>{const d=await r.json().catch(()=>({}));if(!r.ok)throw new Error(d.error||('Request failed: '+r.status));return d;});
+const esc=s=>(s==null?'':String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
+const money=c=>'$'+(c/100).toFixed(2);
+const methodLabel=m=>({etransfer:'E-transfer',cash:'Cash',cheque:'Cheque'}[m]||m);
+
+let membersById={},allMembers=[],typesList=[],editMembershipId=null,allPayments=[],typeFees={};
+
+// ===== TABS =====
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab==='reports') loadReports();
+    if(btn.dataset.tab==='log') loadAuditLog();
+  });
 });
-const esc = (s) => (s == null ? '' : String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])));
-const money = (cents) => '$' + (cents/100).toFixed(2);
-const methodLabel = (m) => ({etransfer:'E-transfer', cash:'Cash', cheque:'Cheque'}[m] || m);
 
-let membersById = {}, allMembers = [], typesList = [], editMembershipId = null;
-let allPayments = [];
-let typeFees = {};
-
-const PER_PAGE = 20;
-let currentPage = 1, sortField = 'name', sortDir = 1, filteredMembers = [];
-
-// ===== Add Member: calc =====
-function updateCalc() {
-  const typeVal = document.getElementById('typeSelect').value;
-  const years = parseInt(document.getElementById('yearsPaid').value) || 1;
-  const fee = typeFees[typeVal] || 2000;
-  const total = (fee * years) / 100;
-  const dueYear = new Date().getFullYear() + years;
-  document.getElementById('calcTotal').textContent = '$' + total.toFixed(2);
-  document.getElementById('calcDue').textContent = 'Jan ' + dueYear;
-  document.getElementById('calcAmountHidden').value = total.toFixed(2);
+// ===== Add Member calc =====
+function updateCalc(){
+  const t=document.getElementById('typeSelect').value;
+  const y=parseInt(document.getElementById('yearsPaid').value)||1;
+  const fee=typeFees[t]||2000;
+  const total=(fee*y)/100;
+  const due=new Date().getFullYear()+y;
+  document.getElementById('calcTotal').textContent='$'+total.toFixed(2);
+  document.getElementById('calcDue').textContent='Jan '+due;
+  document.getElementById('calcAmountHidden').value=total.toFixed(2);
 }
 
 // ===== Members =====
-function getFilteredMembers() {
-  const q = document.getElementById('memberSearch').value.toLowerCase().trim();
-  const typeF = document.getElementById('typeFilter').value;
-  const showInactive = document.getElementById('showInactive').checked;
-  let list = allMembers.filter(m => {
-    if (!showInactive && m.membership_active === 0) return false;
-    if (typeF && m.membership_type !== typeF) return false;
-    if (q) {
-      const h = [m.last_name, m.first_name, m.email, m.city, m.province, m.membership_type].filter(Boolean).join(' ').toLowerCase();
-      return h.includes(q);
-    }
+const PER_PAGE=20; let currentPage=1,sortField='name',sortDir=1,filteredMembers=[];
+
+function getFilteredMembers(){
+  const q=document.getElementById('memberSearch').value.toLowerCase().trim();
+  const tf=document.getElementById('typeFilter').value;
+  const si=document.getElementById('showInactive').checked;
+  let list=allMembers.filter(m=>{
+    if(!si&&m.membership_active===0)return false;
+    if(tf&&m.membership_type!==tf)return false;
+    if(q){const h=[m.last_name,m.first_name,m.email,m.city,m.province,m.membership_type].filter(Boolean).join(' ').toLowerCase();return h.includes(q);}
     return true;
   });
-  list.sort((a, b) => {
-    let va, vb;
-    if (sortField === 'name') { va = (a.last_name||'').toLowerCase()+' '+(a.first_name||'').toLowerCase(); vb = (b.last_name||'').toLowerCase()+' '+(b.first_name||'').toLowerCase(); }
-    else if (sortField === 'type') { va = (a.membership_type||'').toLowerCase(); vb = (b.membership_type||'').toLowerCase(); }
-    else if (sortField === 'due') { va = a.next_due_date || '9999'; vb = b.next_due_date || '9999'; }
-    if (va < vb) return -1 * sortDir; if (va > vb) return 1 * sortDir; return 0;
+  list.sort((a,b)=>{
+    let va,vb;
+    if(sortField==='name'){va=(a.last_name||'').toLowerCase()+' '+(a.first_name||'').toLowerCase();vb=(b.last_name||'').toLowerCase()+' '+(b.first_name||'').toLowerCase();}
+    else if(sortField==='type'){va=(a.membership_type||'').toLowerCase();vb=(b.membership_type||'').toLowerCase();}
+    else if(sortField==='due'){va=a.next_due_date||'9999';vb=b.next_due_date||'9999';}
+    if(va<vb)return -1*sortDir;if(va>vb)return 1*sortDir;return 0;
   });
   return list;
 }
 
-function renderMembers() {
-  filteredMembers = getFilteredMembers();
-  const totalPages = Math.max(1, Math.ceil(filteredMembers.length / PER_PAGE));
-  if (currentPage > totalPages) currentPage = totalPages;
-  const start = (currentPage - 1) * PER_PAGE;
-  const page = filteredMembers.slice(start, start + PER_PAGE);
-  const tbody = document.getElementById('memberRows');
-  const today = new Date().toISOString().slice(0, 10);
-  tbody.innerHTML = page.length
-    ? page.map((m, i) => {
-        const isInactive = m.membership_active === 0;
-        const dueDate = m.next_due_date || '';
-        const isOverdue = dueDate && dueDate < today && !isInactive;
-        const dueDisplay = dueDate ? dueDate.slice(0, 10) : '—';
-        return `<tr class="${isInactive ? 'inactive-row' : ''}" style="animation-delay:${i*20}ms">
-          <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer ? '<span class="badge-payer">Payer</span>' : ''}</span></td>
-          <td><span class="pill ${isInactive ? 'pill-inactive' : ''}">${esc(m.membership_type || '—')}${isInactive ? ' (inactive)' : ''}</span></td>
-          <td class="${isOverdue ? 'overdue' : 'muted'}">${isOverdue ? '⚠ ' : ''}${esc(dueDisplay)}</td>
-          <td class="muted">${[esc(m.city), esc(m.province)].filter(Boolean).join(', ') || '—'}</td>
-          <td class="muted">${esc(m.email) || '—'}</td>
-          <td class="row-actions">
-            <button class="btn-ghost btn-sm" onclick="editMember(${m.member_id})">Edit</button>${
-            isInactive
-              ? `<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id}, ${m.membership_id})">Reactivate</button>`
-              : `<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id}, ${m.membership_id})">Deactivate</button>`
-          }</td></tr>`;
-      }).join('')
-    : '<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
-  const activeCount = allMembers.filter(m => m.membership_active !== 0).length;
-  document.getElementById('memberCount').textContent = activeCount;
-  document.getElementById('memberResultCount').textContent = `Showing ${filteredMembers.length} of ${allMembers.length}`;
-  document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
-  document.getElementById('prevPage').disabled = currentPage <= 1;
-  document.getElementById('nextPage').disabled = currentPage >= totalPages;
-  ['name','type','due'].forEach(f => {
-    const el = document.getElementById('arrow-' + f);
-    el.textContent = f === sortField ? (sortDir === 1 ? '▲' : '▼') : '';
-  });
+function renderMembers(){
+  filteredMembers=getFilteredMembers();
+  const tp=Math.max(1,Math.ceil(filteredMembers.length/PER_PAGE));
+  if(currentPage>tp)currentPage=tp;
+  const s=(currentPage-1)*PER_PAGE;
+  const pg=filteredMembers.slice(s,s+PER_PAGE);
+  const tbody=document.getElementById('memberRows');
+  const today=new Date().toISOString().slice(0,10);
+  tbody.innerHTML=pg.length?pg.map((m,i)=>{
+    const ia=m.membership_active===0;
+    const dd=m.next_due_date||'';
+    const od=dd&&dd<today&&!ia;
+    const disp=dd?dd.slice(0,10):'—';
+    return `<tr class="${ia?'inactive-row':''}" style="animation-delay:${i*20}ms">
+      <td><span class="name">${esc(m.last_name)}, ${esc(m.first_name)}${m.is_payer?'<span class="badge-payer">Payer</span>':''}</span></td>
+      <td><span class="pill ${ia?'pill-inactive':''}">${esc(m.membership_type||'—')}${ia?' (inactive)':''}</span></td>
+      <td class="${od?'overdue':'muted'}">${od?'⚠ ':''}${esc(disp)}</td>
+      <td class="muted">${[esc(m.city),esc(m.province)].filter(Boolean).join(', ')||'—'}</td>
+      <td class="muted">${esc(m.email)||'—'}</td>
+      <td class="row-actions">
+        <button class="btn-ghost btn-sm" onclick="editMember(${m.member_id})">Edit</button>${
+        ia?`<button class="btn-ghost btn-sm" onclick="reactivateMember(${m.member_id},${m.membership_id})">Reactivate</button>`
+          :`<button class="btn-warn btn-sm" onclick="deactivateMember(${m.member_id},${m.membership_id})">Deactivate</button>`
+      }</td></tr>`;
+  }).join(''):'<tr><td colspan="6" class="empty">No members match your search.</td></tr>';
+  const ac=allMembers.filter(m=>m.membership_active!==0).length;
+  document.getElementById('memberCount').textContent=ac;
+  document.getElementById('memberResultCount').textContent=`Showing ${filteredMembers.length} of ${allMembers.length}`;
+  document.getElementById('pageInfo').textContent=`Page ${currentPage} of ${tp}`;
+  document.getElementById('prevPage').disabled=currentPage<=1;
+  document.getElementById('nextPage').disabled=currentPage>=tp;
+  ['name','type','due'].forEach(f=>{document.getElementById('arrow-'+f).textContent=f===sortField?(sortDir===1?'▲':'▼'):'';});
 }
+function changePage(d){currentPage+=d;renderMembers();}
+document.querySelectorAll('th.sortable').forEach(th=>{th.addEventListener('click',()=>{const f=th.dataset.sort;if(sortField===f)sortDir*=-1;else{sortField=f;sortDir=1;}currentPage=1;renderMembers();});});
+document.getElementById('memberSearch').addEventListener('input',()=>{currentPage=1;renderMembers();});
+document.getElementById('typeFilter').addEventListener('change',()=>{currentPage=1;renderMembers();});
+document.getElementById('showInactive').addEventListener('change',()=>{currentPage=1;renderMembers();});
 
-function changePage(delta) { currentPage += delta; renderMembers(); }
-document.querySelectorAll('th.sortable').forEach(th => {
-  th.addEventListener('click', () => {
-    const field = th.dataset.sort;
-    if (sortField === field) sortDir *= -1; else { sortField = field; sortDir = 1; }
-    currentPage = 1; renderMembers();
-  });
-});
-document.getElementById('memberSearch').addEventListener('input', () => { currentPage = 1; renderMembers(); });
-document.getElementById('typeFilter').addEventListener('change', () => { currentPage = 1; renderMembers(); });
-document.getElementById('showInactive').addEventListener('change', () => { currentPage = 1; renderMembers(); });
-
-async function loadTypes() {
-  typesList = await api('/api/membership-types');
-  typeFees = {}; typesList.forEach(t => { typeFees[t.type] = t.annual_fee_cents; });
-  const sel = document.getElementById('typeSelect');
-  const ordered = typesList.filter(t => t.type !== 'Exempt').concat(typesList.filter(t => t.type === 'Exempt'));
-  sel.innerHTML = ordered.map(t => `<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
-  sel.value = 'Individual'; updateCalc();
+async function loadTypes(){
+  typesList=await api('/api/membership-types');
+  typeFees={};typesList.forEach(t=>{typeFees[t.type]=t.annual_fee_cents;});
+  const sel=document.getElementById('typeSelect');
+  const ord=typesList.filter(t=>t.type!=='Exempt').concat(typesList.filter(t=>t.type==='Exempt'));
+  sel.innerHTML=ord.map(t=>`<option value="${esc(t.type)}">${esc(t.type)} — $${(t.annual_fee_cents/100).toFixed(0)}/yr</option>`).join('');
+  sel.value='Individual';updateCalc();
 }
-document.getElementById('typeSelect').addEventListener('change', updateCalc);
-document.getElementById('yearsPaid').addEventListener('change', updateCalc);
+document.getElementById('typeSelect').addEventListener('change',updateCalc);
+document.getElementById('yearsPaid').addEventListener('change',updateCalc);
 
-async function loadMembers() {
-  const paySel = document.getElementById('payMember');
-  try {
-    allMembers = await api('/api/members');
-    membersById = {}; allMembers.forEach(m => { membersById[m.member_id] = m; });
-    currentPage = 1; renderMembers();
-    const active = allMembers.filter(m => m.membership_active !== 0);
-    paySel.innerHTML = active.length
-      ? '<option value="">Select a member…</option>' + active.map(m => `<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type || '?')}</option>`).join('')
-      : '<option value="">No members yet</option>';
-  } catch (e) {
-    document.getElementById('memberRows').innerHTML = `<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;
-  }
+async function loadMembers(){
+  const ps=document.getElementById('payMember');
+  try{
+    allMembers=await api('/api/members');
+    membersById={};allMembers.forEach(m=>{membersById[m.member_id]=m;});
+    currentPage=1;renderMembers();
+    const active=allMembers.filter(m=>m.membership_active!==0);
+    ps.innerHTML=active.length?'<option value="">Select a member…</option>'+active.map(m=>`<option value="${m.member_id}">${esc(m.last_name)}, ${esc(m.first_name)} — ${esc(m.membership_type||'?')}</option>`).join(''):'<option value="">No members yet</option>';
+  }catch(e){document.getElementById('memberRows').innerHTML=`<tr><td colspan="6" class="empty">Couldn't load members: ${esc(e.message)}</td></tr>`;}
 }
 
 // ===== Payments =====
-function renderPayments() {
-  const yearFilter = document.getElementById('payYearFilter').value;
-  const tbody = document.getElementById('payRows');
-  const filtered = yearFilter === 'all' ? allPayments : allPayments.filter(p => String(p.dues_year) === yearFilter);
-  const total = filtered.reduce((s, p) => s + p.amount_cents, 0);
-  document.getElementById('payTotal').textContent = money(total);
-  document.getElementById('payCount').textContent = filtered.length;
-  tbody.innerHTML = filtered.length
-    ? filtered.map((p, i) => {
-        const payer = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ');
-        return `<tr style="animation-delay:${i*20}ms">
-          <td class="muted">${esc(p.date_received)}</td>
-          <td class="name">${esc(payer) || '—'}</td>
-          <td><span class="pill">${esc(p.membership_type || '—')}</span></td>
-          <td class="amount">${money(p.amount_cents)}</td>
-          <td class="muted">${esc(methodLabel(p.method))}</td>
-          <td class="muted">${esc(p.dues_year)}</td>
-          <td class="row-actions"><button class="btn-ghost btn-sm" onclick="editPayment(${p.payment_id})">Edit</button></td>
-        </tr>`;
-      }).join('')
-    : '<tr><td colspan="7" class="empty">No payments for this year.</td></tr>';
+function renderPayments(){
+  const yf=document.getElementById('payYearFilter').value;
+  const tbody=document.getElementById('payRows');
+  const filtered=yf==='all'?allPayments:allPayments.filter(p=>String(p.dues_year)===yf);
+  document.getElementById('payTotal').textContent=money(filtered.reduce((s,p)=>s+p.amount_cents,0));
+  document.getElementById('payCount').textContent=filtered.length;
+  tbody.innerHTML=filtered.length?filtered.map((p,i)=>{
+    const payer=[p.payer_last_name,p.payer_first_name].filter(Boolean).join(', ');
+    return `<tr style="animation-delay:${i*20}ms">
+      <td class="muted">${esc(p.date_received)}</td>
+      <td class="name">${esc(payer)||'—'}</td>
+      <td><span class="pill">${esc(p.membership_type||'—')}</span></td>
+      <td class="amount">${money(p.amount_cents)}</td>
+      <td class="muted">${esc(methodLabel(p.method))}</td>
+      <td class="muted">${esc(p.dues_year)}</td>
+      <td class="row-actions"><button class="btn-ghost btn-sm" onclick="editPayment(${p.payment_id})">Edit</button></td>
+    </tr>`;
+  }).join(''):'<tr><td colspan="7" class="empty">No payments for this period.</td></tr>';
 }
-
-async function loadPayments() {
-  try {
-    allPayments = await api('/api/payments');
-    const years = [...new Set(allPayments.map(p => p.dues_year).filter(Boolean))].sort((a,b) => b - a);
-    const sel = document.getElementById('payYearFilter');
-    const currentYear = new Date().getFullYear();
-    sel.innerHTML = years.map(y => `<option value="${y}"${y === currentYear ? ' selected' : ''}>${y}</option>`).join('') + '<option value="all">All years</option>';
-    if (!years.includes(currentYear)) sel.value = 'all';
+async function loadPayments(){
+  try{
+    allPayments=await api('/api/payments');
+    const years=[...new Set(allPayments.map(p=>p.dues_year).filter(Boolean))].sort((a,b)=>b-a);
+    const sel=document.getElementById('payYearFilter');
+    const cy=new Date().getFullYear();
+    sel.innerHTML=years.map(y=>`<option value="${y}"${y===cy?' selected':''}>${y}</option>`).join('')+'<option value="all">All years</option>';
+    if(!years.includes(cy))sel.value='all';
     renderPayments();
-  } catch (e) {
-    document.getElementById('payRows').innerHTML = `<tr><td colspan="7" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;
-  }
+  }catch(e){document.getElementById('payRows').innerHTML=`<tr><td colspan="7" class="empty">Couldn't load payments: ${esc(e.message)}</td></tr>`;}
 }
-document.getElementById('payYearFilter').addEventListener('change', renderPayments);
+document.getElementById('payYearFilter').addEventListener('change',renderPayments);
 
 // ===== Payment Edit =====
-async function editPayment(id) {
-  const p = await api('/api/payments/' + id);
-  const f = document.getElementById('editPayForm');
-  document.getElementById('editPayId').value = p.payment_id;
-  document.getElementById('editPayPayer').value = [p.payer_last_name, p.payer_first_name].filter(Boolean).join(', ') || 'Unknown';
-  f.amount.value = (p.amount_cents / 100).toFixed(2);
-  f.method.value = p.method;
-  f.date_received.value = p.date_received || '';
-  f.dues_year.value = p.dues_year || '';
-  f.notes.value = p.notes || '';
-  document.getElementById('editPayMsg').textContent = '';
+async function editPayment(id){
+  const p=await api('/api/payments/'+id);
+  const f=document.getElementById('editPayForm');
+  document.getElementById('editPayId').value=p.payment_id;
+  document.getElementById('editPayPayer').value=[p.payer_last_name,p.payer_first_name].filter(Boolean).join(', ')||'Unknown';
+  f.amount.value=(p.amount_cents/100).toFixed(2);
+  f.method.value=p.method;
+  f.date_received.value=p.date_received||'';
+  f.dues_year.value=p.dues_year||'';
+  f.notes.value=p.notes||'';
+  document.getElementById('editPayMsg').textContent='';
   document.getElementById('payModal').classList.add('open');
 }
+function closePayModal(){document.getElementById('payModal').classList.remove('open');}
+document.getElementById('payModal').addEventListener('click',e=>{if(e.target.id==='payModal')closePayModal();});
 
-function closePayModal() { document.getElementById('payModal').classList.remove('open'); }
-document.getElementById('payModal').addEventListener('click', (e) => { if (e.target.id === 'payModal') closePayModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeModal(); closePayModal(); } });
-
-document.getElementById('editPayForm').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const f = ev.target, id = document.getElementById('editPayId').value;
-  const msg = document.getElementById('editPayMsg');
-  try {
-    await api('/api/payments/' + id, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        amount: Number(f.amount.value),
-        method: f.method.value,
-        date_received: f.date_received.value || null,
-        dues_year: f.dues_year.value ? Number(f.dues_year.value) : null,
-        notes: f.notes.value
-      })
-    });
-    closePayModal(); loadPayments(); loadMembers(); loadAuditLog(); loadReports();
-  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+document.getElementById('editPayForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();const f=ev.target,id=document.getElementById('editPayId').value;
+  const msg=document.getElementById('editPayMsg');
+  try{
+    await api('/api/payments/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({amount:Number(f.amount.value),method:f.method.value,date_received:f.date_received.value||null,dues_year:f.dues_year.value?Number(f.dues_year.value):null,notes:f.notes.value})});
+    closePayModal();loadPayments();loadMembers();
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}
 });
 
-// ===== Deactivate / Reactivate =====
-async function deactivateMember(memberId, membershipId) {
-  if (!confirm('Deactivate this member? They will be hidden but all data is preserved.')) return;
-  try {
-    await api('/api/memberships/' + membershipId, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ active: 0 }) });
-    loadMembers(); loadAuditLog(); loadReports();
-  } catch (e) { alert('Could not deactivate: ' + e.message); }
+// ===== Deactivate/Reactivate =====
+async function deactivateMember(mid,msid){
+  if(!confirm('Deactivate this member? They will be hidden but all data is preserved.'))return;
+  try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:0})});loadMembers();}
+  catch(e){alert('Could not deactivate: '+e.message);}
 }
-async function reactivateMember(memberId, membershipId) {
-  try {
-    await api('/api/memberships/' + membershipId, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ active: 1 }) });
-    loadMembers(); loadAuditLog(); loadReports();
-  } catch (e) { alert('Could not reactivate: ' + e.message); }
+async function reactivateMember(mid,msid){
+  try{await api('/api/memberships/'+msid,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({active:1})});loadMembers();}
+  catch(e){alert('Could not reactivate: '+e.message);}
 }
 
 // ===== Edit Member =====
-async function editMember(id) {
-  const m = await api('/api/members/' + id);
-  const f = document.getElementById('editForm');
-  document.getElementById('editId').value = m.member_id;
-  editMembershipId = m.membership_id;
-  ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes']
-    .forEach(k => { f[k].value = m[k] || ''; });
-  f.membership_type.innerHTML = typesList.map(t => `<option value="${esc(t.type)}">${esc(t.type)}</option>`).join('');
-  f.membership_type.value = m.membership_type || 'Individual';
-  f.next_due_date.value = m.next_due_date || '';
-  f.is_payer.checked = !!m.is_payer;
-  document.getElementById('editMsg').textContent = '';
+async function editMember(id){
+  const m=await api('/api/members/'+id);
+  const f=document.getElementById('editForm');
+  document.getElementById('editId').value=m.member_id;editMembershipId=m.membership_id;
+  ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes'].forEach(k=>{f[k].value=m[k]||'';});
+  f.membership_type.innerHTML=typesList.map(t=>`<option value="${esc(t.type)}">${esc(t.type)}</option>`).join('');
+  f.membership_type.value=m.membership_type||'Individual';
+  f.next_due_date.value=m.next_due_date||'';
+  f.is_payer.checked=!!m.is_payer;
+  document.getElementById('editMsg').textContent='';
   document.getElementById('modal').classList.add('open');
 }
-function closeModal() { document.getElementById('modal').classList.remove('open'); }
-document.getElementById('modal').addEventListener('click', (e) => { if (e.target.id === 'modal') closeModal(); });
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeModal();closePayModal();}});
 
-document.getElementById('editForm').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const f = ev.target, id = document.getElementById('editId').value;
-  const msg = document.getElementById('editMsg');
-  const body = {};
-  ['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes']
-    .forEach(k => { body[k] = f[k].value; });
-  body.is_payer = f.is_payer.checked ? 1 : 0;
-  try {
-    await api('/api/members/' + id, { method:'PUT', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-    if (editMembershipId) {
-      await api('/api/memberships/' + editMembershipId, { method:'PUT', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({ type: f.membership_type.value, next_due_date: f.next_due_date.value || null }) });
-    }
-    closeModal(); loadMembers(); loadPayments(); loadAuditLog(); loadReports();
-  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+document.getElementById('editForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();const f=ev.target,id=document.getElementById('editId').value;
+  const msg=document.getElementById('editMsg');
+  const body={};['first_name','last_name','pronouns_title','email','phone','phone_secondary','street_address','city','province','postal_code','date_joined','notes'].forEach(k=>{body[k]=f[k].value;});
+  body.is_payer=f.is_payer.checked?1:0;
+  try{
+    await api('/api/members/'+id,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(editMembershipId){await api('/api/memberships/'+editMembershipId,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:f.membership_type.value,next_due_date:f.next_due_date.value||null})});}
+    closeModal();loadMembers();loadPayments();
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}
 });
 
 // ===== Add member =====
-document.getElementById('addForm').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const msg = document.getElementById('formMsg');
-  msg.textContent = ''; msg.className = 'msg';
-  const form = ev.target, body = {};
-  new FormData(form).forEach((v, k) => { if (v !== '') body[k] = v; });
-  try {
-    await api('/api/members', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-    msg.textContent = 'Added ✓'; msg.className = 'msg ok';
-    form.reset(); document.getElementById('typeSelect').value = 'Individual';
-    document.getElementById('yearsPaid').value = '1'; updateCalc();
-    loadMembers(); loadPayments(); loadAuditLog(); loadReports();
-    setTimeout(() => { msg.textContent = ''; }, 2500);
-  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+document.getElementById('addForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();const msg=document.getElementById('formMsg');msg.textContent='';msg.className='msg';
+  const form=ev.target,body={};new FormData(form).forEach((v,k)=>{if(v!=='')body[k]=v;});
+  try{
+    await api('/api/members',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    msg.textContent='Added ✓';msg.className='msg ok';form.reset();document.getElementById('typeSelect').value='Individual';document.getElementById('yearsPaid').value='1';updateCalc();
+    loadMembers();loadPayments();setTimeout(()=>{msg.textContent='';},2500);
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}
 });
 
 // ===== Record payment =====
-document.getElementById('payForm').addEventListener('submit', async (ev) => {
-  ev.preventDefault();
-  const msg = document.getElementById('payMsg');
-  msg.textContent = ''; msg.className = 'msg';
-  const form = ev.target, memberId = form.member.value;
-  if (!memberId) { msg.textContent = 'Pick a member first.'; msg.className = 'msg err'; return; }
-  const m = membersById[memberId];
-  const body = { membership_id: m.membership_id, paid_by_member_id: Number(memberId), amount: Number(form.amount.value), method: form.method.value };
-  if (form.date_received.value) body.date_received = form.date_received.value;
-  if (form.dues_year.value) body.dues_year = Number(form.dues_year.value);
-  if (form.notes.value) body.notes = form.notes.value;
-  try {
-    await api('/api/payments', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
-    msg.textContent = 'Recorded ✓'; msg.className = 'msg ok';
-    form.reset(); document.getElementById('duesYear').value = new Date().getFullYear();
-    loadPayments(); loadMembers(); loadAuditLog(); loadReports();
-    setTimeout(() => { msg.textContent = ''; }, 2500);
-  } catch (e) { msg.textContent = e.message; msg.className = 'msg err'; }
+document.getElementById('payForm').addEventListener('submit',async ev=>{
+  ev.preventDefault();const msg=document.getElementById('payMsg');msg.textContent='';msg.className='msg';
+  const form=ev.target,mid=form.member.value;
+  if(!mid){msg.textContent='Pick a member first.';msg.className='msg err';return;}
+  const m=membersById[mid];
+  const body={membership_id:m.membership_id,paid_by_member_id:Number(mid),amount:Number(form.amount.value),method:form.method.value};
+  if(form.date_received.value)body.date_received=form.date_received.value;
+  if(form.dues_year.value)body.dues_year=Number(form.dues_year.value);
+  if(form.notes.value)body.notes=form.notes.value;
+  try{
+    await api('/api/payments',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    msg.textContent='Recorded ✓';msg.className='msg ok';form.reset();document.getElementById('duesYear').value=new Date().getFullYear();
+    loadPayments();loadMembers();setTimeout(()=>{msg.textContent='';},2500);
+  }catch(e){msg.textContent=e.message;msg.className='msg err';}
 });
 
 // ===== Reports =====
-async function loadReports() {
-  try {
-    const [summary, revenue, outstanding] = await Promise.all([
-      api('/api/reports/membership-summary'),
-      api('/api/reports/revenue-by-year'),
-      api('/api/reports/dues-outstanding')
-    ]);
+let outstandingData=[],outPage=1;const OUT_PER=15;
 
-    // Summary stats
-    let totalActive = 0, totalInactive = 0, totalMembers = 0;
-    const typeBreakdown = {};
-    summary.forEach(r => {
-      totalMembers += r.member_count;
-      if (r.active) totalActive += r.member_count; else totalInactive += r.member_count;
-      if (r.active) {
-        if (!typeBreakdown[r.type]) typeBreakdown[r.type] = 0;
-        typeBreakdown[r.type] += r.membership_count;
-      }
-    });
+async function loadReports(){
+  try{
+    const [summary,revenue,outstanding]=await Promise.all([api('/api/reports/membership-summary'),api('/api/reports/revenue-by-year'),api('/api/reports/dues-outstanding')]);
+    outstandingData=outstanding;
 
-    const statsHtml = `
+    // Stats
+    let totalActive=0,totalInactive=0;const typeBreak={};
+    summary.forEach(r=>{if(r.active){totalActive+=r.member_count;if(!typeBreak[r.type])typeBreak[r.type]=0;typeBreak[r.type]+=r.membership_count;}else totalInactive+=r.member_count;});
+    document.getElementById('reportStats').innerHTML=`
       <div class="stat-card"><div class="stat-value">${totalActive}</div><div class="stat-label">Active Members</div></div>
       <div class="stat-card"><div class="stat-value">${totalInactive}</div><div class="stat-label">Inactive</div></div>
       <div class="stat-card"><div class="stat-value">${outstanding.length}</div><div class="stat-label">Overdue Payers</div></div>
-      <div class="stat-card"><div class="stat-value">${Object.values(typeBreakdown).reduce((a,b) => a+b, 0)}</div><div class="stat-label">Active Memberships</div></div>
-    `;
-    document.getElementById('reportStats').innerHTML = statsHtml;
+      <div class="stat-card"><div class="stat-value">${Object.values(typeBreak).reduce((a,b)=>a+b,0)}</div><div class="stat-label">Active Memberships</div></div>`;
 
-    // Revenue by year
-    const yearTotals = {};
-    revenue.forEach(r => {
-      if (!yearTotals[r.dues_year]) yearTotals[r.dues_year] = { total: 0, types: {} };
-      yearTotals[r.dues_year].total += r.total_cents;
-      yearTotals[r.dues_year].types[r.membership_type] = r.total_cents;
-    });
-    const sortedYears = Object.keys(yearTotals).sort((a,b) => b - a);
-    const maxRevenue = Math.max(...Object.values(yearTotals).map(y => y.total), 1);
+    // Revenue
+    const yt={};revenue.forEach(r=>{if(!yt[r.dues_year])yt[r.dues_year]={total:0,types:{}};yt[r.dues_year].total+=r.total_cents;yt[r.dues_year].types[r.membership_type]=r.total_cents;});
+    const sy=Object.keys(yt).sort((a,b)=>b-a);
+    const mx=Math.max(...Object.values(yt).map(y=>y.total),1);
+    document.getElementById('revenueByYear').innerHTML=sy.length?sy.map(yr=>{
+      const y=yt[yr];const pct=Math.round((y.total/mx)*100);
+      const td=Object.entries(y.types).map(([t,c])=>`${t}: ${money(c)}`).join(' · ');
+      return `<div class="report-bar"><span class="bar-label">${esc(yr)}</span><div style="flex:1"><div class="bar-fill" style="width:${pct}%"></div></div><span class="bar-value">${money(y.total)}</span></div><div style="padding:0 0 8px 152px;font-size:12px;color:var(--muted);">${td}</div>`;
+    }).join(''):'<div class="empty">No revenue data yet.</div>';
 
-    const revHtml = sortedYears.length
-      ? sortedYears.map(yr => {
-          const yt = yearTotals[yr];
-          const pct = Math.round((yt.total / maxRevenue) * 100);
-          const typeDetail = Object.entries(yt.types).map(([t, c]) => `${t}: ${money(c)}`).join(' · ');
-          return `<div class="report-bar">
-            <span class="bar-label">${esc(yr)}</span>
-            <div style="flex:1;"><div class="bar-fill" style="width:${pct}%"></div></div>
-            <span class="bar-value">${money(yt.total)}</span>
-          </div>
-          <div style="padding:0 0 8px 152px;font-size:12px;color:var(--muted);">${typeDetail}</div>`;
-        }).join('')
-      : '<div class="empty">No revenue data yet.</div>';
-    document.getElementById('revenueByYear').innerHTML = revHtml;
-
-    // Dues outstanding
-    document.getElementById('outstandingCount').textContent = outstanding.length;
-    const outHtml = outstanding.length
-      ? outstanding.map(o => {
-          const dueDate = o.next_due_date ? o.next_due_date.slice(0, 10) : '—';
-          return `<div class="outstanding-row">
-            <span class="or-name">${esc(o.last_name)}, ${esc(o.first_name)}</span>
-            <span class="or-type"><span class="pill">${esc(o.membership_type)}</span></span>
-            <span class="or-due">Due: ${esc(dueDate)}</span>
-            <span class="or-email">${esc(o.email) || '—'}</span>
-          </div>`;
-        }).join('')
-      : '<div class="empty" style="padding:20px;">All payers are current! 🍀</div>';
-    document.getElementById('duesOutstanding').innerHTML = outHtml;
-
-  } catch (e) {
-    document.getElementById('reportStats').innerHTML = `<div class="empty">Couldn't load reports: ${esc(e.message)}</div>`;
-  }
+    // Outstanding year filter
+    const dueYears=[...new Set(outstanding.map(o=>{const y=o.next_due_date?o.next_due_date.slice(0,4):'?';return y;}))].sort();
+    const osel=document.getElementById('outstandingYearFilter');
+    osel.innerHTML='<option value="all">All years</option>'+dueYears.map(y=>`<option value="${y}">${y}</option>`).join('');
+    document.getElementById('outstandingTotal').textContent=`${outstanding.length} payers overdue`;
+    outPage=1;renderOutstanding();
+  }catch(e){document.getElementById('reportStats').innerHTML=`<div class="empty">Couldn't load reports: ${esc(e.message)}</div>`;}
 }
+
+function renderOutstanding(){
+  const yf=document.getElementById('outstandingYearFilter').value;
+  let list=yf==='all'?outstandingData:outstandingData.filter(o=>o.next_due_date&&o.next_due_date.startsWith(yf));
+  const tp=Math.max(1,Math.ceil(list.length/OUT_PER));
+  if(outPage>tp)outPage=tp;
+  const s=(outPage-1)*OUT_PER;
+  const pg=list.slice(s,s+OUT_PER);
+  document.getElementById('outstandingResultCount').textContent=`${list.length} results`;
+  document.getElementById('duesOutstanding').innerHTML=pg.length?pg.map(o=>{
+    const dd=o.next_due_date?o.next_due_date.slice(0,10):'—';
+    return `<div class="outstanding-row"><span class="or-name">${esc(o.last_name)}, ${esc(o.first_name)}</span><span class="or-type"><span class="pill">${esc(o.membership_type)}</span></span><span class="or-due">Due: ${esc(dd)}</span><span class="or-email">${esc(o.email)||'—'}</span></div>`;
+  }).join(''):'<div class="empty" style="padding:20px;">All payers are current! 🍀</div>';
+  document.getElementById('outPageInfo').textContent=`Page ${outPage} of ${tp}`;
+  document.getElementById('outPrev').disabled=outPage<=1;
+  document.getElementById('outNext').disabled=outPage>=tp;
+}
+function changeOutPage(d){outPage+=d;renderOutstanding();}
+document.getElementById('outstandingYearFilter').addEventListener('change',()=>{outPage=1;renderOutstanding();});
 
 // ===== Audit Log =====
-let auditLogOpen = false, logPage = 0;
-const LOG_PER_PAGE = 25;
+let logPage=0;const LOG_PER=25;
 
-function toggleAuditLog() {
-  auditLogOpen = !auditLogOpen;
-  document.getElementById('auditBody').style.display = auditLogOpen ? 'block' : 'none';
-  document.getElementById('logToggle').classList.toggle('open', auditLogOpen);
-  if (auditLogOpen) loadAuditLog();
+async function loadAuditLog(){
+  try{
+    const data=await api(`/api/audit-log?limit=${LOG_PER}&offset=${logPage*LOG_PER}`);
+    const entries=data.entries||[];const total=data.total||0;
+    document.getElementById('logCount').textContent=`${total} entries`;
+    document.getElementById('auditEntries').innerHTML=entries.length?entries.map(e=>{
+      const time=e.timestamp?e.timestamp.replace('T',' ').slice(0,16):'—';
+      const user=e.user_email||'unknown';
+      const us=user.includes('@')?user.split('@')[0]:user;
+      const canRestore=e.old_values&&(e.action==='UPDATE'||e.action==='DEACTIVATE'||e.action==='REACTIVATE');
+      return `<div class="log-entry">
+        <span class="log-time">${esc(time)}</span>
+        <span class="log-user" title="${esc(user)}">${esc(us)}</span>
+        <span class="log-action ${esc(e.action)}">${esc(e.action)}</span>
+        <span class="log-summary">${esc(e.summary||'—')}</span>
+        <span class="log-restore-col">${canRestore?`<button class="btn-restore" onclick="restoreFromLog(${e.log_id})">Restore</button>`:''}</span>
+      </div>`;
+    }).join(''):'<div class="empty">No activity recorded yet.</div>';
+    const tp=Math.max(1,Math.ceil(total/LOG_PER));
+    document.getElementById('logPageInfo').textContent=`Page ${logPage+1} of ${tp}`;
+    document.getElementById('logPrev').disabled=logPage<=0;
+    document.getElementById('logNext').disabled=logPage>=tp-1;
+  }catch(e){document.getElementById('auditEntries').innerHTML=`<div class="empty">Couldn't load log: ${esc(e.message)}</div>`;}
 }
+function changeLogPage(d){logPage+=d;loadAuditLog();}
 
-async function loadAuditLog() {
-  if (!auditLogOpen) return;
-  try {
-    const data = await api(`/api/audit-log?limit=${LOG_PER_PAGE}&offset=${logPage * LOG_PER_PAGE}`);
-    const entries = data.entries || [];
-    const total = data.total || 0;
-    document.getElementById('logCount').textContent = `${total} entries`;
-    const container = document.getElementById('auditEntries');
-    container.innerHTML = entries.length
-      ? entries.map(e => {
-          const time = e.timestamp ? e.timestamp.replace('T', ' ').slice(0, 16) : '—';
-          const user = e.user_email || 'unknown';
-          const userShort = user.includes('@') ? user.split('@')[0] : user;
-          return `<div class="log-entry">
-            <span class="log-time">${esc(time)}</span>
-            <span class="log-user" title="${esc(user)}">${esc(userShort)}</span>
-            <span class="log-action ${esc(e.action)}">${esc(e.action)}</span>
-            <span class="log-summary">${esc(e.summary || '—')}</span>
-          </div>`;
-        }).join('')
-      : '<div class="empty">No activity recorded yet.</div>';
-    const totalPages = Math.max(1, Math.ceil(total / LOG_PER_PAGE));
-    document.getElementById('logPageInfo').textContent = `Page ${logPage + 1} of ${totalPages}`;
-    document.getElementById('logPrev').disabled = logPage <= 0;
-    document.getElementById('logNext').disabled = logPage >= totalPages - 1;
-  } catch (e) {
-    document.getElementById('auditEntries').innerHTML = `<div class="empty">Couldn't load log: ${esc(e.message)}</div>`;
-  }
+async function restoreFromLog(logId){
+  if(!confirm('Restore this record to its previous state? This will undo the change and create a new audit log entry.'))return;
+  try{
+    await api('/api/audit-log/'+logId+'/restore',{method:'POST'});
+    loadAuditLog();loadMembers();loadPayments();
+    alert('Restored successfully ✓');
+  }catch(e){alert('Restore failed: '+e.message);}
 }
-function changeLogPage(delta) { logPage += delta; loadAuditLog(); }
 
 // ===== Init =====
-document.getElementById('duesYear').value = new Date().getFullYear();
-loadTypes();
-loadMembers();
-loadPayments();
-loadReports();
+document.getElementById('duesYear').value=new Date().getFullYear();
+loadTypes();loadMembers();loadPayments();
 </script>
 </body>
 </html>
